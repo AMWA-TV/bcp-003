@@ -1,7 +1,7 @@
 # AMWA NMOS APIs Security Proposal
 
 The AMWA NMOS APIs IS-04, IS-05 and IS-06 are an important building
-block of the future of IP broadcast production. Between them they
+block of the future of broadcast production. Between them they
 provide an open, cross vendor inter-operable solution for discovery and
 registration, connection management, and network control. These APIs
 build on existing web technologies such as HTTP, REST and JSON. One of
@@ -57,7 +57,7 @@ the message, providing both message integrity and authentication. As
 only the sender’s secret key can sign the message hash this
 authenticates the packet as having originated with the sender, with the
 hash itself allows the receiver to check that content has not been
-altered. Finally X509 certificates are presented by the server (and
+altered. Finally X.509 certificates are presented by the server (and
 optionally the client) which are signed by a point of mutual trust. This
 allows for identification of the parties participating in the
 connection.
@@ -84,8 +84,8 @@ to secure NMOS API implementations.
 
 ### TLS 1.2 Cipher Suites
 
-When using TLS 1.2 with NMOS APIs should use the cipher suites listed in
-Appendix 1 in the priority order in which they are
+When using TLS 1.2 with NMOS APIs should use the cipher suites listed in [this
+Appendix](#appendix), in the priority order in which they are
 listed. Where possible servers should be configured to honour this
 ordering. Clients should support all the cipher suites listed, but must
 as a minimum support enough to ensure reliable interoperability.
@@ -221,7 +221,7 @@ In order for this to be implemented the following work is required:
 - Specification of the mDNS/DNS record advertisements used to
     advertise the authentication server.
 
-Summary
+## Summary
 
 This document has laid out a mechanism for securing the AMWA NMOS APIs
 in the following manner:
@@ -239,7 +239,7 @@ in the following manner:
 
 - API permissions controlled by the scope of JSON Web Tokens.
 
-## Apendix
+## Appendix
 
 ### TLS 1.2 Cipher Suite Lists
 

@@ -146,7 +146,7 @@ particular endpoint. The set of claims a particular token contains is
 referred to as being its *scope*. A particular token can contain many
 different claims, allowing it to be used for a variety of actions.
 
-Tokens are cryptographically signed, to allow their provinance to be
+Tokens are cryptographically signed, to allow their provenance to be
 validated. Various algorithms can be used for this, but RSA with SHA-256
 should be used as the signing algorithm for NMOS APIs to ensure
 compatibility.
@@ -177,7 +177,7 @@ client. Tokens are time limited, and must be renewed with the
 authentication server once they expire. This allows permissions to be
 revoked by system administrators if required.
 
-The digram also shows two NMOS Nodes retrieving the
+The diagram also shows two NMOS Nodes retrieving the
 public key from a /certs endpoint. They may use this to check the
 signature on any JSON web tokens they receive, to ensure that they are
 genuine. This operation need only be completed once during the lifetime
@@ -192,7 +192,7 @@ without manual configuration.
 
 Once a client has obtained a web token from the the authentication
 server it may then use that token in API calls it makes. The token is
-placed in the header of the request, but otherwise the request is the
+placed in the authorisation header of the request, but otherwise the request is the
 same as it would normally be when using the API.
 
 As JSON Web Tokens are not encrypted themselves, it is important that

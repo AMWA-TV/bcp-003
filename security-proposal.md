@@ -1,15 +1,12 @@
 # AMWA NMOS APIs Security Proposal
 
 The AMWA NMOS APIs IS-04, IS-05 and IS-06 are an important building
-block of the future of broadcast production. Between them they
-provide an open, cross vendor inter-operable solution for discovery and
-registration, connection management, and network control. These APIs
+block of the future of broadcast production. These APIs
 build on existing web technologies such as HTTP, REST and JSON. One of
-the advantages of this approach is that we can now harness tried and
+the advantages of this approach is that we can harness tried and
 proven web security technologies to secure these APIs.
 
-In order for this work to succeed it is important to consider the
-concepts of confidentiality, identification, integrity, authentication
+This proposal is designed to meet the following objectives with regard to confidentiality, identification, integrity, authentication
 and authorisation:
 
 Confidentiality
@@ -44,7 +41,7 @@ combination of HTTPS, OAuth2 and JSON Web Tokens.
 
 A secure implementation of the AMWA NMOS APIs is dependent on the
 existence of a secure connection between the API server and its client.
-On the web HTTP over TLS (HTTPS) is widely used for ensuring security of
+On the web, HTTP over TLS (HTTPS) is widely used for ensuring security of
 HTTP communications, providing the tools to deliver confidentiality,
 identification, integrity and authentication in one protocol. As the
 NMOS APIs use HTTP they can already be used over HTTPS, but further work
@@ -64,33 +61,47 @@ connection.
 
 When used correctly HTTPS provides an excellent level of security.
 However it is important it is implemented well and in a way that will
-ensure cross vendor inter-operability. More information on the following
-recommendations can be found in [BBC R&D White Paper
-337](https://www.bbc.co.uk/rd/publications/whitepaper337).
+ensure cross vendor inter-operability.
 
 ### TLS Versions
 
 The TLS protocol has four versions. TLS 1.0 and 1.1 are deprecated, and
 should not be used by NMOS API implementations. TLS 1.2 is currently in
-wide usage and is secure providing it is correctly configured, and must
-be supported when using TLS with the NMOS APIs. TLS 1.3 is currently a
+wide usage and is secure, providing it is correctly configured.
+
+TLS 1.2 SHALL be supported when using TLS with the NMOS APIs. TLS 1.3 is currently a
 proposed draft which is expected to be published at some point during
 2018. Once published use of TLS 1.3 will be best security practice, and
 implementers of NMOS APIs and client should be ready to support it.
 
 Note that in the past the SSL protocol has been used to secure HTTP
-traffic. No version of SSL is considered secure, and it must not be used
-to secure NMOS API implementations.
+traffic. No version of SSL is considered secure
+
+
+SSL SHALL NOT be used to secure NMOS API implementations.
 
 ### TLS 1.2 Cipher Suites
 
-When using TLS 1.2 with NMOS APIs should use the cipher suites listed in [this
+When using TLS 1.2, implementations of NMOS APIs SHOULD use the cipher suites listed in [this
 Appendix](#appendix), in the priority order in which they are
-listed. Where possible servers should be configured to honour this
-ordering. Clients should support all the cipher suites listed, but must
+listed.
+
+
+<!-- ToDo> Actually, the last cipher suite is a SHALL - correct? -->
+
+
+Where possible servers should be configured to honour this
+ordering.
+
+
+Clients SHOULD support all the cipher suites listed, but must
 as a minimum support enough to ensure reliable interoperability.
 
-Devices heavily constrained by resources may omit RSA certificate based
+
+<!-- ToDo> the text after the "but must..." above is not definitive -->
+
+
+Devices heavily constrained by resources MAY omit RSA certificate based
 TLS. This does not compromise security, but does reduce backward
 compatibility. It is important to ensure that the device will be
 operating in an environment where ECDHE certificates are available,
@@ -98,9 +109,16 @@ which is not the case for all corporate certificate authorities.
 Omitting RSA certificates results in the list given in
 the Appendix 2.
 
+<!-- ToDo Where is Appendix 2? -->
+
 Where resources are extremely limited, NMOS APIs may choose to support
-the cipher suite in Appendix 3 only. As a result NMOS
-API clients must support this cipher to ensure interoperability.
+the cipher suite in Appendix 3 only.
+
+
+<!-- Where is Appendix 3? -->
+
+
+As a result NMOS API clients **must** support this cipher to ensure interoperability.
 
 Further work will be required to select cipher suites for use with TLS
 1.3 once it has been formally published.
@@ -122,8 +140,8 @@ Servers hosting secure NMOS APIs should:
 
 API server and client implementers should consider how their
 implementations will interact will Public Key Infrastructure. In
-particular implementers must provide a mechanism for deploying and
-revoking subject certificates for API servers. API clients must provide
+particular implementers **shall** provide a mechanism for deploying and
+revoking subject certificates for API servers. API clients **shall** provide
 a way or installing root certificates to API clients to establish a root
 of trust.
 
@@ -137,7 +155,7 @@ HTTPS does not provide the fine grained control over permissions desired
 for the NMOS APIs.
 
 *JSON Web Tokens* are access tokens which can be issued to a client to
-enable them to carry out certain actions on APIs. A tokens is issued to
+enable them to carry out certain actions on APIs. A token is issued to
 the client by an authentication server upon successful authentication of
 the client. The client can then use that token in requests it sends to
 APIs. The token contains *claims* which describe what actions the client
@@ -148,8 +166,10 @@ different claims, allowing it to be used for a variety of actions.
 
 Tokens are cryptographically signed, to allow their provenance to be
 validated. Various algorithms can be used for this, but RSA with SHA-256
-should be used as the signing algorithm for NMOS APIs to ensure
+**should** be used as the signing algorithm for NMOS APIs to ensure
 compatibility.
+
+<!-- So are we allowing other options, or is this "should" above actually a "shall"? -->
 
 ### Client Authentication
 
@@ -188,6 +208,8 @@ manner as the IS-04 APIs. As such client devices may automatically
 discover the authentication server they should use on the network
 without manual configuration.
 
+<--! ToDo - Should any of the language above be converted to SHALL or SHOULD? Right now it is just a discussion -->
+
 ### Client Authorisation
 
 Once a client has obtained a web token from the the authentication
@@ -198,6 +220,8 @@ same as it would normally be when using the API.
 As JSON Web Tokens are not encrypted themselves, it is important that
 these requests are also performed over HTTPS. If not encrypted, the Web
 Token could be intercepted and used to make calls by a third party.
+
+<! ToDo - So again, this reads as a description.  Should any of this be "shall"? -->
 
 ![Client authorisation - image courtesy of Riedel<span
 data-label="fig:clientAuthorisation"></span>](images/nmos_sec_2.png)
@@ -220,6 +244,9 @@ In order for this to be implemented the following work is required:
 
 - Specification of the mDNS/DNS record advertisements used to
     advertise the authentication server.
+    
+<-- ToDo - Is this future work to be performed in a later phase, or is this future work
+that needs to be complete prior to publication of this document? -->
 
 ## Summary
 
@@ -238,6 +265,8 @@ in the following manner:
     OAuth 2.0.
 
 - API permissions controlled by the scope of JSON Web Tokens.
+
+<!-- ToDo: Probably can eliminate the summarl -->
 
 ## Appendix
 
@@ -296,3 +325,5 @@ This cipher suite must be supported by all NMOS clients and servers
 regardless of hardware capability.
 
 TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CCM\_8
+## Bibliography
+[BBC R&D White Paper 337](https://www.bbc.co.uk/rd/publications/whitepaper337).

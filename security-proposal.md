@@ -87,7 +87,7 @@ Appendix](#appendix), in the priority order in which they are
 listed.
 
 
-<!-- ToDo> Actually, the last cipher suite is a SHALL - correct? -->
+> TODO: Actually, the last cipher suite is a SHALL - correct?
 
 
 Where possible servers should be configured to honour this
@@ -97,8 +97,7 @@ ordering.
 Clients SHOULD support all the cipher suites listed, but must
 as a minimum support enough to ensure reliable interoperability.
 
-
-<!-- ToDo> the text after the "but must..." above is not definitive -->
+> TODO: the text after the "but must..." above is not definitive
 
 
 Devices heavily constrained by resources MAY omit RSA certificate based
@@ -109,14 +108,12 @@ which is not the case for all corporate certificate authorities.
 Omitting RSA certificates results in the list given in
 the Appendix 2.
 
-<!-- ToDo Where is Appendix 2? -->
+> TODO: add Appendix 2
 
 Where resources are extremely limited, NMOS APIs may choose to support
 the cipher suite in Appendix 3 only.
 
-
-<!-- Where is Appendix 3? -->
-
+> TODO: Add Appendix 3
 
 As a result NMOS API clients **must** support this cipher to ensure interoperability.
 
@@ -169,7 +166,7 @@ validated. Various algorithms can be used for this, but RSA with SHA-256
 **should** be used as the signing algorithm for NMOS APIs to ensure
 compatibility.
 
-<!-- So are we allowing other options, or is this "should" above actually a "shall"? -->
+> TODO: Are we allowing other options, or is this "should" above actually a "shall"?
 
 ### Client Authentication
 
@@ -208,7 +205,7 @@ manner as the IS-04 APIs. As such client devices may automatically
 discover the authentication server they should use on the network
 without manual configuration.
 
-<--! ToDo - Should any of the language above be converted to SHALL or SHOULD? Right now it is just a discussion -->
+> TODO: Should any of the language above be converted to SHALL or SHOULD? Right now it is just a discussion
 
 ### Client Authorisation
 
@@ -221,7 +218,7 @@ As JSON Web Tokens are not encrypted themselves, it is important that
 these requests are also performed over HTTPS. If not encrypted, the Web
 Token could be intercepted and used to make calls by a third party.
 
-<! ToDo - So again, this reads as a description.  Should any of this be "shall"? -->
+> TODO: Again, this reads as a description.  Should any of this be "shall"?
 
 ![Client authorisation - image courtesy of Riedel<span
 data-label="fig:clientAuthorisation"></span>](images/nmos_sec_2.png)
@@ -244,9 +241,9 @@ In order for this to be implemented the following work is required:
 
 - Specification of the mDNS/DNS record advertisements used to
     advertise the authentication server.
-    
-<-- ToDo - Is this future work to be performed in a later phase, or is this future work
-that needs to be complete prior to publication of this document? -->
+
+> TODO: Is this future work to be performed in a later phase, or is this future work
+that needs to be complete prior to publication of this document?
 
 ## Summary
 
@@ -266,7 +263,7 @@ in the following manner:
 
 - API permissions controlled by the scope of JSON Web Tokens.
 
-<!-- ToDo: Probably can eliminate the summarl -->
+> TODO: eliminate summary?
 
 ## Appendix
 
@@ -325,5 +322,6 @@ This cipher suite must be supported by all NMOS clients and servers
 regardless of hardware capability.
 
 TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CCM\_8
+
 ## Bibliography
 [BBC R&D White Paper 337](https://www.bbc.co.uk/rd/publications/whitepaper337).

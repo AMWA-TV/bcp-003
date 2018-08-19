@@ -75,204 +75,26 @@ proposed draft which is expected to be published at some point during
 implementers of NMOS APIs and client should be ready to support it.
 
 Note that in the past the SSL protocol has been used to secure HTTP
-traffic. No version of SSL is considered secure
-
+traffic. No version of SSL is considered secure.
 
 SSL SHALL NOT be used to secure NMOS API implementations.
 
 ### TLS 1.2 Cipher Suites
 
-When using TLS 1.2, implementations of NMOS APIs SHOULD use the cipher suites listed in [this
-Appendix](#appendix), in the priority order in which they are
-listed.
+TLS allows several different cipher suites; 
+interoperability requires the server and client to support at least one common suite, 
+which needs to be sufficiently secure.
 
+This section applies to implementations of NMOS APIS using TLS 1.2. 
+This section will be updated when TLS 1.3 is published.
 
-> TODO: Actually, the last cipher suite is a SHALL - correct?
+All servers and clients SHALL support this cipher suite:
 
+TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CCM\_8
 
-Where possible servers should be configured to honour this
-ordering.
-
-
-Clients SHOULD support all the cipher suites listed, but must
-as a minimum support enough to ensure reliable interoperability.
-
-> TODO: the text after the "but must..." above is not definitive
-
-
-Devices heavily constrained by resources MAY omit RSA certificate based
-TLS. This does not compromise security, but does reduce backward
-compatibility. It is important to ensure that the device will be
-operating in an environment where ECDHE certificates are available,
-which is not the case for all corporate certificate authorities.
-Omitting RSA certificates results in the list given in
-the Appendix 2.
-
-> TODO: add Appendix 2
-
-Where resources are extremely limited, NMOS APIs may choose to support
-the cipher suite in Appendix 3 only.
-
-> TODO: Add Appendix 3
-
-As a result NMOS API clients **must** support this cipher to ensure interoperability.
-
-Further work will be required to select cipher suites for use with TLS
-1.3 once it has been formally published.
-
-### Server Configuration for TLS 1.2
-
-Servers hosting secure NMOS APIs should:
-
-- Disable SSL Compression
-
-- Use HSTS (RFC 6797) where appropriate (i.e secure HTTP is always
-    in use)
-
-- Not use Public Key Pinning
-
-- Consider Disabling TLS Session Tickets
-
-## Public Key Infrastructure Considerations
-
-API server and client implementers should consider how their
-implementations will interact will Public Key Infrastructure. In
-particular implementers **shall** provide a mechanism for deploying and
-revoking subject certificates for API servers. API clients **shall** provide
-a way or installing root certificates to API clients to establish a root
-of trust.
-
-## Client Identification and Authorisation
-
-HTTPS is the ideal technology for securing the connection between the
-client and API server, and also for identifying the server to the
-client. HTTPS is well proven in these roles. However, while it does have
-some capability to perform client identification and authorisation,
-HTTPS does not provide the fine grained control over permissions desired
-for the NMOS APIs.
-
-*JSON Web Tokens* are access tokens which can be issued to a client to
-enable them to carry out certain actions on APIs. A token is issued to
-the client by an authentication server upon successful authentication of
-the client. The client can then use that token in requests it sends to
-APIs. The token contains *claims* which describe what actions the client
-is allowed to do against the API, for example reading or writing to a
-particular endpoint. The set of claims a particular token contains is
-referred to as being its *scope*. A particular token can contain many
-different claims, allowing it to be used for a variety of actions.
-
-Tokens are cryptographically signed, to allow their provenance to be
-validated. Various algorithms can be used for this, but RSA with SHA-256
-**should** be used as the signing algorithm for NMOS APIs to ensure
-compatibility.
-
-> TODO: Are we allowing other options, or is this "should" above actually a "shall"?
-
-### Client Authentication
-
-Before tokens can be issued to an API client it must first authenticate
-with the authentication server. Clients would use *OAuth 2.0* to
-authenticate. OAuth 2.0 is a widely used authorisation mechanism which
-has been used to provide authentication for issuing JSON Web Tokens on
-other systems.
-
-![Token acquisition - image courtesy of Riedel<span
-data-label="fig:tokenAquisition"></span>](images/nmos_sec_1.png)
-
-The token request and grant process is illustrated above.
-This diagram shows a client system
-requesting an access token which it could use to, for example, control
-IS-05 interfaces on the Node. As the diagram shows, passwords must be
-sent to the authentication server. As such it is absolutely vital that
-HTTPS is in use as it is important that these passwords cannot be
-intercepted.
-
-Once authentication has been successfully completed, and the
-authentication server is happy the client has permissions required for
-the scope of token it has requested, it will issue the token to the
-client. Tokens are time limited, and must be renewed with the
-authentication server once they expire. This allows permissions to be
-revoked by system administrators if required.
-
-The diagram also shows two NMOS Nodes retrieving the
-public key from a /certs endpoint. They may use this to check the
-signature on any JSON web tokens they receive, to ensure that they are
-genuine. This operation need only be completed once during the lifetime
-of the key used by the authentication server to sign the tokens.
-
-The authentication server advertises itself using DNS-SD in the same
-manner as the IS-04 APIs. As such client devices may automatically
-discover the authentication server they should use on the network
-without manual configuration.
-
-> TODO: Should any of the language above be converted to SHALL or SHOULD? Right now it is just a discussion
-
-### Client Authorisation
-
-Once a client has obtained a web token from the the authentication
-server it may then use that token in API calls it makes. The token is
-placed in the authorisation header of the request, but otherwise the request is the
-same as it would normally be when using the API.
-
-As JSON Web Tokens are not encrypted themselves, it is important that
-these requests are also performed over HTTPS. If not encrypted, the Web
-Token could be intercepted and used to make calls by a third party.
-
-> TODO: Again, this reads as a description.  Should any of this be "shall"?
-
-![Client authorisation - image courtesy of Riedel<span
-data-label="fig:clientAuthorisation"></span>](images/nmos_sec_2.png)
-
-The process of using the Web Token is illustrated above.
-On receiving a Web Token for the
-first time the API server will check the validity of the token with the
-authentication server’s public key. The API server will then check that
-the scope of the web token is sufficient to carry out the operation
-requested, and if it is it will then carry out the API request and
-respond as normal. API servers do not need to contact the authentication
-server directly to authenticate the token, provided they have previously
-obtained its public key.
-
-## Future Work
-
-In order for this to be implemented the following work is required:
-
-- Definition of claims required for operations on existing AMWA APIs.
-
-- Specification of the mDNS/DNS record advertisements used to
-    advertise the authentication server.
-
-> TODO: Is this future work to be performed in a later phase, or is this future work
-that needs to be complete prior to publication of this document?
-
-## Summary
-
-This document has laid out a mechanism for securing the AMWA NMOS APIs
-in the following manner:
-
-- HTTP over TLS 1.2 to secure all API connections.
-
-- Be ready for changes introduced in TLS 1.3
-
-- Make use of cipher suites listed in the appendix.
-
-- Use of an authentication server to issue JSON Web Tokens.
-
-- Authentication of clients with the authentication server using
-    OAuth 2.0.
-
-- API permissions controlled by the scope of JSON Web Tokens.
-
-> TODO: eliminate summary?
-
-## Appendix
-
-### TLS 1.2 Cipher Suite Lists
-
-#### Full Cipher Suite Set
-
-This set of cipher suites should be supported by NMOS API servers unless
-hardware limitations make this impractical.
+All servers SHOULD support the following cipher suites,
+unless hardware limitations make this impractical.
+Servers SHOULD be configured to use the priority order listed:
 
 TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_GCM\_SHA256
 
@@ -298,13 +120,9 @@ TLS\_DHE\_RSA\_WITH\_AES\_128\_CBC\_SHA256
 
 TLS\_DHE\_RSA\_WITH\_AES\_256\_CBC\_SHA256
 
-TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CCM\_8
-
-#### ECDSA only Cipher Suite Set
-
-This set of cipher suites may be supported by NMOS API servers not
+This reduced set of cipher suites MAY be supported by NMOS API servers not
 requiring wishing to reduce hardware resource by supporting only ECDSA
-certificates.
+certificates (omitting RSA certificates).
 
 TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_GCM\_SHA256
 
@@ -314,14 +132,127 @@ TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CBC\_SHA256
 
 TLS\_ECDHE\_ECDSA\_WITH\_AES\_256\_CBC\_SHA384
 
-TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CCM\_8
+This SHOULD only be used where the device is operating in an environment
+where ECDHE certificates are available, which is not the case for all
+corporate certificate authorities. 
 
-#### CCM Based Cipher Suite
+Note: where resources are extremely limited, the mandatory suite
+TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CCM\_8 ensures interoperability.
 
-This cipher suite must be supported by all NMOS clients and servers
-regardless of hardware capability.
+### Server Configuration for TLS 1.2
 
-TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CCM\_8
+Servers hosting secure NMOS APIs should:
 
-## Bibliography
-[BBC R&D White Paper 337](https://www.bbc.co.uk/rd/publications/whitepaper337).
+- Disable SSL Compression
+
+- Use HSTS (RFC 6797) where appropriate (i.e secure HTTP is always
+    in use)
+
+- Not use Public Key Pinning
+
+- Consider Disabling TLS Session Tickets
+
+## Public Key Infrastructure Considerations
+
+It is important that API server and client implementers consider how their
+implementations will interact will Public Key Infrastructure. In
+particular implementers SHALL provide a mechanism for deploying and
+revoking subject certificates for API servers. API clients SHALL provide
+a way or installing root certificates to API clients to establish a root
+of trust.
+
+## Client Identification and Authorisation
+
+HTTPS is the ideal technology for securing the connection between the
+client and API server, and also for identifying the server to the
+client. HTTPS is well proven in these roles. However, while it does have
+some capability to perform client identification and authorisation,
+HTTPS does not provide the fine grained control over permissions desired
+for the NMOS APIs.
+
+*JSON Web Tokens* are access tokens which can be issued to a client to
+enable them to carry out certain actions on APIs. A token is issued to
+the client by an authentication server upon successful authentication of
+the client. The client can then use that token in requests it sends to
+APIs. The token contains *claims* which describe what actions the client
+is allowed to do against the API, for example reading or writing to a
+particular endpoint. The set of claims a particular token contains is
+referred to as being its *scope*. A particular token can contain many
+different claims, allowing it to be used for a variety of actions.
+
+Tokens are cryptographically signed, to allow their provenance to be
+validated. Various algorithms can be used for this, but RSA with SHA-256
+SHOULD be used as the signing algorithm for NMOS APIs to ensure
+compatibility.
+
+> TODO: Are we allowing other options, or is this "should" above actually a "shall"?
+
+### Client Authentication
+
+Before tokens can be issued to an API client it SHALL first authenticate
+with the authentication server. Clients SHOULD use *OAuth 2.0* to
+authenticate. OAuth 2.0 is a widely used authorisation mechanism which
+has been used to provide authentication for issuing JSON Web Tokens on
+other systems.
+
+![Token acquisition - image courtesy of Riedel<span
+data-label="fig:tokenAquisition"></span>](images/nmos_sec_1.png)
+
+The token request and grant process is illustrated above.
+This diagram shows a client system
+requesting an access token which it could use to, for example, control
+IS-05 interfaces on the Node. As the diagram shows, passwords SHALL be
+sent to the authentication server. HTTPS SHALL be used; this is absolutely vital
+that so that these passwords cannot be intercepted.
+
+Once authentication has been successfully completed, the
+authentication server SHOULD confirm that the client has permissions required for
+the scope of token it has requested. The authentication server SHALL then issue the token to the
+client. Tokens are time limited, and SHALL be renewed with the
+authentication server once they expire. This allows permissions to be
+revoked by system administrators if required.
+
+The diagram also shows two NMOS Nodes retrieving the
+public key from a /certs endpoint. They SHOULD use this to check the
+signature on any JSON web tokens they receive, to ensure that they are
+genuine. This operation need only be completed once during the lifetime
+of the key used by the authentication server to sign the tokens.
+
+The authentication server SHOULD advertise itself using DNS-SD in the same
+manner as the IS-04 APIs. Client devices SHOULD automatically
+discover the authentication server without manual configuration.
+
+### Client Authorisation
+
+Once a client has obtained a web token from the the authentication
+server it SHOULD use that token in API calls it makes. The token SHALL be
+placed in the authorisation header of the request, but otherwise the request is the
+same as it would normally be when using the API.
+
+As JSON Web Tokens are not encrypted themselves, these requests SHALL be made over HTTPS.
+If not encrypted, the Web Token could be intercepted and used to make calls by a third party.
+
+![Client authorisation - image courtesy of Riedel<span
+data-label="fig:clientAuthorisation"></span>](images/nmos_sec_2.png)
+
+The process of using the Web Token is illustrated above.
+On receiving a Web Token for the
+first time the API server SHALL check the validity of the token with the
+authentication server’s public key. The API server SHALL then check that
+the scope of the web token is sufficient to carry out the operation
+requested, and SHOULD only respond as normal if the check is successful.
+API servers do not need to contact the authentication
+server directly to authenticate the token, provided they have previously
+obtained its public key.
+
+## Future Work
+
+In order for this to be implemented the following work is required:
+
+- Definition of claims required for operations on existing AMWA APIs.
+
+- Specification of the mDNS/DNS record advertisements used to
+    advertise the authentication server.
+
+> TODO: Is this future work to be performed in a later phase, or is this future work
+that needs to be complete prior to publication of this document?

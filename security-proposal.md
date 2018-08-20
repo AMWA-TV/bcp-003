@@ -6,40 +6,29 @@ build on existing web technologies such as HTTP, REST and JSON. One of
 the advantages of this approach is that we can harness tried and
 proven web security technologies to secure these APIs.
 
-This proposal is designed to meet the following objectives with regard to confidentiality, identification, integrity, authentication
-and authorisation:
+This proposal is designed to meet the following objectives:
 
-Confidentiality
-
-- Data passing between client and the APIs is unreadable to
+- **Confidentiality**: Data passing between client and the APIs is unreadable to
     third parties.
-
-Identification
-
-- The client can check whether the API it is interacting with is owned
-    by a trusted party.
-
-Integrity
-
-- It must be clear if data travelling to or from the API been
+- **Identification**: The client can check whether the API it is interacting with
+    is owned by a trusted party.
+- **Integrity**: It must be clear if data travelling to or from the API been
     tampered with.
-
-Authentication
-
-- The client can check if packets actually came from the API it is
+- **Authentication**: The client can check if packets actually came from the API it is
     interacting with, and vice versa.
-
-Authorisation
-
-- The API can determine whether the client interacting with it has
+- **Authorisation**: The API can determine whether the client interacting with it has
     authorisation to carry out the operation requested.
 
-This document will outline a method of achieving these goals using a
-combination of HTTPS, OAuth2 and JSON Web Tokens.
+This document outlines a method of achieving these goals using a
+combination of HTTPS, OAuth2 and JSON Web Tokens, and proposes normative specification using the terms "SHALL", "SHOULD", "MAY", "SHALL NOT".
+
+In this proposal the terms "implementation", "server" and "client" refer to secure use of NMOS APIs.
 
 ## Connection Security - HTTP over TLS (HTTPS)
 
-A secure implementation of the AMWA NMOS APIs is dependent on the
+Implementations SHALL use HTTP over TLS.
+
+Security depends on the
 existence of a secure connection between the API server and its client.
 On the web, HTTP over TLS (HTTPS) is widely used for ensuring security of
 HTTP communications, providing the tools to deliver confidentiality,
@@ -65,28 +54,22 @@ ensure cross vendor inter-operability.
 
 ### TLS Versions
 
-The TLS protocol has four versions. TLS 1.0 and 1.1 are deprecated, and
-should not be used by NMOS API implementations. TLS 1.2 is currently in
+Implementations SHALL support TLS 1.2.  This version is currently in
 wide usage and is secure, providing it is correctly configured.
 
-TLS 1.2 SHALL be supported when using TLS with the NMOS APIs. TLS 1.3 is currently a
-proposed draft which is expected to be published at some point during
-2018. Once published use of TLS 1.3 will be best security practice, and
-implementers of NMOS APIs and client should be ready to support it.
+Implementations SHALL NOT use TLS 1.0 and 1.1, which are deprecated.
 
-Note that in the past the SSL protocol has been used to secure HTTP
-traffic. No version of SSL is considered secure.
+TLS 1.3 is currently a proposed draft which is expected to be published during 2018. Once published use of TLS 1.3 will be best security practice, and this proposal will be updated. NMOS implementers are advised to prepare for it.
 
-SSL SHALL NOT be used to secure NMOS API implementations.
+Implementations SHALL NOT use SSL. Although the SSL protocol has previously been used to secure HTTP traffic, no version of SSL is now considered secure.
 
 ### TLS 1.2 Cipher Suites
 
-TLS allows several different cipher suites; 
+TLS allows several different cipher suites;
 interoperability requires the server and client to support at least one common suite, 
 which needs to be sufficiently secure.
 
-This section applies to implementations of NMOS APIS using TLS 1.2. 
-This section will be updated when TLS 1.3 is published.
+This section applies to implementations using TLS 1.2. It will be updated when TLS 1.3 is published.
 
 All servers and clients SHALL support this cipher suite:
 
@@ -141,7 +124,7 @@ TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CCM\_8 ensures interoperability.
 
 ### Server Configuration for TLS 1.2
 
-Servers hosting secure NMOS APIs should:
+Servers SHOULD:
 
 - Disable SSL Compression
 
@@ -163,35 +146,33 @@ of trust.
 
 ## Client Identification and Authorisation
 
-HTTPS is the ideal technology for securing the connection between the
-client and API server, and also for identifying the server to the
-client. HTTPS is well proven in these roles. However, while it does have
+HTTPS is well proven to secure the connection between the client and server, and to indentify the server to the client. However, while it does have
 some capability to perform client identification and authorisation,
 HTTPS does not provide the fine grained control over permissions desired
 for the NMOS APIs.
 
 *JSON Web Tokens* are access tokens which can be issued to a client to
-enable them to carry out certain actions on APIs. A token is issued to
-the client by an authentication server upon successful authentication of
-the client. The client can then use that token in requests it sends to
-APIs. The token contains *claims* which describe what actions the client
+enable them to carry out certain actions on APIs. An authentication server
+SHALL issue a token to a client upon successful authentication. 
+The client SHALL then use that token in requests it sends to
+APIs. 
+
+The token contains *claims* which describe what actions the client
 is allowed to do against the API, for example reading or writing to a
 particular endpoint. The set of claims a particular token contains is
-referred to as being its *scope*. A particular token can contain many
+referred to as being its *scope*. A particular token MAY contain many
 different claims, allowing it to be used for a variety of actions.
 
-Tokens are cryptographically signed, to allow their provenance to be
-validated. Various algorithms can be used for this, but RSA with SHA-256
-SHOULD be used as the signing algorithm for NMOS APIs to ensure
-compatibility.
-
-> TODO: Are we allowing other options, or is this "should" above actually a "shall"?
+Tokens SHALL be signed using RSA with SHA-256, to allow their provenance to be
+validated in a compatible way.
 
 ### Client Authentication
 
 Before tokens can be issued to an API client it SHALL first authenticate
-with the authentication server. Clients SHOULD use *OAuth 2.0* to
-authenticate. OAuth 2.0 is a widely used authorisation mechanism which
+with the authentication server. 
+
+Clients SHALL use *OAuth 2.0* to authenticate. 
+OAuth 2.0 is a widely used authorisation mechanism which
 has been used to provide authentication for issuing JSON Web Tokens on
 other systems.
 
@@ -201,14 +182,16 @@ data-label="fig:tokenAquisition"></span>](images/nmos_sec_1.png)
 The token request and grant process is illustrated above.
 This diagram shows a client system
 requesting an access token which it could use to, for example, control
-IS-05 interfaces on the Node. As the diagram shows, passwords SHALL be
-sent to the authentication server. HTTPS SHALL be used; this is absolutely vital
+IS-05 interfaces on the Node. 
+
+In this example, clients send passwords to the authentication server. 
+
+HTTPS SHALL be used to send passwords; this is absolutely vital
 that so that these passwords cannot be intercepted.
 
 Once authentication has been successfully completed, the
 authentication server SHOULD confirm that the client has permissions required for
-the scope of token it has requested. The authentication server SHALL then issue the token to the
-client. Tokens are time limited, and SHALL be renewed with the
+the scope of token it has requested. The authentication server SHALL then issue the token to the client. Tokens are time limited, and SHALL be renewed with the
 authentication server once they expire. This allows permissions to be
 revoked by system administrators if required.
 

@@ -10,12 +10,16 @@ This proposal is designed to meet the following objectives:
 
 - **Confidentiality**: Data passing between client and the APIs is unreadable to
     third parties.
+
 - **Identification**: The client can check whether the API it is interacting with
     is owned by a trusted party.
+
 - **Integrity**: It must be clear if data travelling to or from the API been
     tampered with.
+
 - **Authentication**: The client can check if packets actually came from the API it is
     interacting with, and vice versa.
+
 - **Authorisation**: The API can determine whether the client interacting with it has
     authorisation to carry out the operation requested.
 
@@ -59,14 +63,18 @@ wide usage and is secure, providing it is correctly configured.
 
 Implementations SHALL NOT use TLS 1.0 and 1.1, which are deprecated.
 
-TLS 1.3 is currently a proposed draft which is expected to be published during 2018. Once published use of TLS 1.3 will be best security practice, and this proposal will be updated. NMOS implementers are advised to prepare for it.
+TLS 1.3 is currently a proposed draft which is expected to be published during 2018.
+Once published use of TLS 1.3 will be best security practice,
+and this proposal will be updated. Implementers are advised to prepare for it.
 
-Implementations SHALL NOT use SSL. Although the SSL protocol has previously been used to secure HTTP traffic, no version of SSL is now considered secure.
+Implementations SHALL NOT use SSL. 
+Although the SSL protocol has previously been used to secure HTTP traffic, 
+no version of SSL is now considered secure.
 
 ### TLS 1.2 Cipher Suites
 
 TLS allows several different cipher suites;
-interoperability requires the server and client to support at least one common suite, 
+interoperability requires the server and client to support at least one common suite,
 which needs to be sufficiently secure.
 
 This section applies to implementations using TLS 1.2. It will be updated when TLS 1.3 is published.
@@ -103,7 +111,7 @@ TLS\_DHE\_RSA\_WITH\_AES\_128\_CBC\_SHA256
 
 TLS\_DHE\_RSA\_WITH\_AES\_256\_CBC\_SHA256
 
-This reduced set of cipher suites MAY be supported by NMOS API servers not
+This reduced set of cipher suites MAY be supported by servers not
 requiring wishing to reduce hardware resource by supporting only ECDSA
 certificates (omitting RSA certificates).
 
@@ -117,7 +125,7 @@ TLS\_ECDHE\_ECDSA\_WITH\_AES\_256\_CBC\_SHA384
 
 This SHOULD only be used where the device is operating in an environment
 where ECDHE certificates are available, which is not the case for all
-corporate certificate authorities. 
+corporate certificate authorities.
 
 Note: where resources are extremely limited, the mandatory suite
 TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CCM\_8 ensures interoperability.
@@ -146,32 +154,34 @@ of trust.
 
 ## Client Identification and Authorisation
 
-HTTPS is well proven to secure the connection between the client and server, and to indentify the server to the client. However, while it does have
+HTTPS is well proven to secure the connection between the client and server,
+and to indentify the server to the client. However, while it does have
 some capability to perform client identification and authorisation,
 HTTPS does not provide the fine grained control over permissions desired
 for the NMOS APIs.
 
 *JSON Web Tokens* are access tokens which can be issued to a client to
-enable them to carry out certain actions on APIs. An authentication server
-SHALL issue a token to a client upon successful authentication. 
-The client SHALL then use that token in requests it sends to
-APIs. 
+enable them to carry out certain actions on APIs. 
 
-The token contains *claims* which describe what actions the client
-is allowed to do against the API, for example reading or writing to a
+A token contains *claims* that describe what actions the client
+is allowed to make against the API, for example reading or writing to a
 particular endpoint. The set of claims a particular token contains is
-referred to as being its *scope*. A particular token MAY contain many
-different claims, allowing it to be used for a variety of actions.
+referred to as being its *scope*.
+
+In this proposal an "authentication server" issues tokens.
+
+The token's scope MAY relate to multiple claims.
 
 Tokens SHALL be signed using RSA with SHA-256, to allow their provenance to be
 validated in a compatible way.
 
 ### Client Authentication
 
-Before tokens can be issued to an API client it SHALL first authenticate
-with the authentication server. 
+A client SHALL authenticate with an authentication server before making API requests.
 
-Clients SHALL use *OAuth 2.0* to authenticate. 
+The authentication server SHALL NOT issue tokens without authentication.
+
+Clients SHALL use *OAuth 2.0* to authenticate.
 OAuth 2.0 is a widely used authorisation mechanism which
 has been used to provide authentication for issuing JSON Web Tokens on
 other systems.
@@ -180,20 +190,19 @@ other systems.
 data-label="fig:tokenAquisition"></span>](images/nmos_sec_1.png)
 
 The token request and grant process is illustrated above.
-This diagram shows a client system
-requesting an access token which it could use to, for example, control
-IS-05 interfaces on the Node. 
+This diagram shows a client system requesting an access token which it could use to,
+for example, control IS-05 interfaces on the Node.
 
-In this example, clients send passwords to the authentication server. 
+In this example, clients send passwords to the authentication server.
 
 HTTPS SHALL be used to send passwords; this is absolutely vital
 that so that these passwords cannot be intercepted.
 
 Once authentication has been successfully completed, the
 authentication server SHOULD confirm that the client has permissions required for
-the scope of token it has requested. The authentication server SHALL then issue the token to the client. Tokens are time limited, and SHALL be renewed with the
-authentication server once they expire. This allows permissions to be
-revoked by system administrators if required.
+the scope of token it has requested. The authentication server SHALL then issue the token to the client.
+Tokens are time limited, and SHALL be renewed with the authentication server once they expire.
+This allows permissions to be revoked by system administrators if required.
 
 The diagram also shows two NMOS Nodes retrieving the
 public key from a /certs endpoint. They SHOULD use this to check the
@@ -208,9 +217,10 @@ discover the authentication server without manual configuration.
 ### Client Authorisation
 
 Once a client has obtained a web token from the the authentication
-server it SHOULD use that token in API calls it makes. The token SHALL be
-placed in the authorisation header of the request, but otherwise the request is the
-same as it would normally be when using the API.
+server it SHALL use that token in API calls it makes. 
+
+The token SHALL be placed in the `Authorization` header of the HTTP request,
+but otherwise the request is the same as it would normally be when using the API.
 
 As JSON Web Tokens are not encrypted themselves, these requests SHALL be made over HTTPS.
 If not encrypted, the Web Token could be intercepted and used to make calls by a third party.
@@ -220,13 +230,13 @@ data-label="fig:clientAuthorisation"></span>](images/nmos_sec_2.png)
 
 The process of using the Web Token is illustrated above.
 On receiving a Web Token for the
-first time the API server SHALL check the validity of the token with the
-authentication server’s public key. The API server SHALL then check that
+first time the server SHALL check the validity of the token with the
+authentication server’s public key. The server SHALL then check that
 the scope of the web token is sufficient to carry out the operation
 requested, and SHOULD only respond as normal if the check is successful.
-API servers do not need to contact the authentication
-server directly to authenticate the token, provided they have previously
-obtained its public key.
+
+Servers do not need to contact the authentication server directly to authenticate the token,
+provided they have previously obtained its public key.
 
 ## Future Work
 

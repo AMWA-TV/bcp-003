@@ -63,9 +63,10 @@ wide usage and is secure, providing it is correctly configured.
 
 Implementations SHALL NOT use TLS 1.0 and 1.1, which are deprecated.
 
-TLS 1.3 is currently a proposed draft which is expected to be published during 2018.
-Once published use of TLS 1.3 will be best security practice,
-and this proposal will be updated. Implementers are advised to prepare for it.
+At time of writing, TLS 1.3 has just been published as [RFC 8446](https://datatracker.ietf.org/doc/rfc8446/), 
+and is now considered best security practice.
+This proposal will be updated soon to include information on suitable cipher suites.
+Implementers are advised to prepare for TLS 1.3.
 
 Implementations SHALL NOT use SSL. 
 Although the SSL protocol has previously been used to secure HTTP traffic, 
@@ -241,6 +242,8 @@ provided they have previously obtained its public key.
 ## Future Work
 
 In order for this to be implemented the following work is required:
+
+- Update cipher suites following recent publication of TLS 1.3
 
 - Definition of claims required for operations on existing AMWA APIs.
 

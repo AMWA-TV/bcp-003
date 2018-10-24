@@ -1,5 +1,45 @@
 # [Work In Progress] AMWA Best Current Practice for use of TLS and PKI with NMOS APIs.
 
+[//]: # (ToC goes after this comment. Create it with "gh-md-toc --hide-header --depth=3")
+
+* [[Work In Progress] AMWA Best Current Practice for use of TLS and PKI with NMOS APIs\.](#work-in-progress-amwa-best-current-practice-for-use-of-tls-and-pki-with-nmos-apis)
+  * [Scope](#scope)
+  * [Normative References](#normative-references)
+  * [Definitions](#definitions)
+    * [API](#api)
+    * [Server](#server)
+    * [Client](#client)
+    * [API Message](#api-message)
+    * [Message Sender](#message-sender)
+    * [Message Receiver](#message-receiver)
+  * [Introduction (informative)](#introduction-informative)
+  * [Certificate Authority](#certificate-authority)
+  * [X\.509 Certificates](#x509-certificates)
+  * [TLS](#tls)
+    * [TLS Versions](#tls-versions)
+    * [TLS 1\.3 Cipher Suites](#tls-13-cipher-suites)
+    * [TLS 1\.2 Cipher Suites](#tls-12-cipher-suites)
+  * [Server Behaviour](#server-behaviour)
+    * [Certificates](#certificates)
+    * [HTTP](#http)
+    * [WebSockets](#websockets)
+    * [Other protocols](#other-protocols)
+    * [DNS\-SD](#dns-sd)
+  * [Client Behaviour](#client-behaviour)
+    * [Certificates](#certificates-1)
+    * [HTTP](#http-1)
+    * [WebSockets](#websockets-1)
+    * [Other Protocols](#other-protocols-1)
+    * [DNS\-SD](#dns-sd-1)
+  * [Other considerations](#other-considerations)
+    * [DHCP](#dhcp)
+    * [DNS](#dns)
+  * [Recommendations for future Interface Specifications](#recommendations-for-future-interface-specifications)
+  * [Further reading](#further-reading)
+
+[//]: # (ToC goes before this comment)
+
+
 ## Scope
 
 This document specifies how to secure communications used for HTTP and WebSocket communications within NMOS APIs.
@@ -19,15 +59,8 @@ Use of HTTP/2 is not in scope (although is discussed in [BBC-WHP337])
 
 ## Normative References
 
-[RFC 8446](https://datatracker.ietf.org/doc/rfc8446/): 
-Transport Layer Security 1.3
-
-[RFC 5280](https://datatracker.ietf.org/doc/rfc5280): 
-Internet X.509 Public Key Infrastructure Certificate
-and Certificate Revocation List (CRL) Profile
-
-[RFC 6797](https://datatracker.ietf.org/doc/rfc6797/):
-HTTP Strict Transport Security (HSTS) 
+These appear at the end of the Markdown source for this document,
+and are referenced as hyperlinks within the main body.
 
 ## Definitions
 
@@ -50,9 +83,7 @@ The entity that is using the API, for example:
 
 - a Node using the IS-04 Registration API
 - a monitoring application using the IS-04 Query API
-- a connection controll applciation using the IS-05 Connection API
-
-_Note: In the parts of (Full Stack) that concern IS-04 and IS-05 "Media Node" has a similar meaning._
+- a connection control application using the IS-05 Connection API
 
 ### API Message
 
@@ -110,8 +141,6 @@ and in a way that will ensure cross vendor inter-operability.
 
 A later document will cover **authorisation**, i.e. how the Server can determine whether the Client should be allowed to carry out the requested operation.
 
-
-
 ## Certificate Authority
 
 There SHALL be at least one X.509 Certificate Authority (CA) available.
@@ -143,7 +172,7 @@ no version of SSL is now considered secure.
 ### TLS 1.3 Cipher Suites
 
 Note: TLS allows several different cipher suites;
-interoperability requires the server and client to support at least one common suite,
+interoperability requires the Server and Client to support at least one common suite,
 which needs to be sufficiently secure.
 
 This section applies to implementations using TLS 1.3. It is consistent with [RFC 8446].
@@ -227,13 +256,12 @@ Servers SHALL provide a means of installing a Root CA.
 
 - Some more text about CA chains?
 
-### HTTP
+### HTTP requests
 
-See [TLS](#TLS) for 
+Servers SHALL accept and respond to HTTPS requests, 
+using a TLS version and cipher suite allowed by [TLS](#tls)
 
-Servers SHALL accept HTTP over TLS requests.
-
-Servers SHALL NOT accept plain HTTP requests.
+Servers SHALL NOT accept or respond to plain HTTP requests.
 
 Servers SHOULD use the Strict-Transport-Security header as per [RFC 6797] 
 to declare that they only will communicate with secure connections.
@@ -251,7 +279,6 @@ Servers SHOULD check requests are not too large (HTTP response 413)
 
 Servers SHOULD log invalid requests, to help check for broken/malicious clients.
 
-
 And maybe, Servers:
 
 - SHOULD NOT use SSL compression
@@ -262,39 +289,73 @@ CORS?
 
 ### WebSockets
 
-Servers that implement WebSocket connections SHALL use TLS.
+This section applies to Servers providing WebSocket connections as part of an API,
+for example for subscription to an AMWA IS-04 Query API, 
+or providing a WebSocket connection for transport of data, 
+for example AMWA IS-07 events.
+
+Servers SHALL provide an encrypted WebSocket connection (wss: URL scheme), 
+using a TLS version and cipher suite allowed by [TLS](#tls)
+
+Note: this is default for IS-04 WebSocket subscriptions when using HTTPS for the Query API.
+
+Servers SHALL NOT provided unencrypted WebSocket connection (ws: URL scheme).
 
 ### Other protocols
 
-Where possible, TLS should be used 
+Other protocols used in APIs SHOULD be secured using TLS, where this is supported.
 
+- For instance, MQTT supports use of TLS 1.2. 
+  - This is an alternative transport for IS-07 events.
+
+Security of protocols where TLS is not available is outside the scope of this document.
+Security of ST 2110 streams is outside the scope of this document. 
 
 
 
 ### DNS-SD
 
-Servers SHOULD use unicast DNS-SD, not multicast DNS-SD to advertise their API endpoints.  
-
-Servers SHALL NOT advertise 
+Servers SHOULD use unicast DNS-SD to advertise their API endpoints.  
 
 _The Full Stack draft makes this a SHALL._
 
-However, ...
-
+Servers SHOULD NOT use multicast DNS-SD, except where it is not possible to provide a DNS server.
 
 ## Client Behaviour
+
+
 
 ### Certificates
 
 ### HTTP
 
+Clients SHALL make API requests using HTTPS,
+using a TLS version and cipher suite allowed by [TLS](#tls)
+
+Clients SHALL NOT make API requests using plain HTTP.
+
+...
+
 ### WebSockets
+
+This section applies to Clients requesting WebSocket connections as part of an API,
+for example for subscription to an AMWA IS-04 Query API, 
+or WebSocket connections for transport of data, for example AMWA IS-07 events.
+
+Clients SHALL require encrypted WebSocket connections (wss:), 
+using a TLS version and cipher suite allowed by [TLS](#tls)
+
+Clients SHALL NOT use unencrypted WebSocket connections (ws:) 
+
+...
 
 ### Other Protocols
 
 ### DNS-SD
 
 Clients SHOULD use unicast DNS-SD in preference to multicast DNS-SD to find API endpoints from a server.
+
+...
 
 ## Other considerations
 
@@ -311,26 +372,56 @@ As it is an inherently insecure protocol, it is insufficient to secure
 an environment without the other provisions of this document. 
 
 
-## Recommendations for future NMOS APIs
+## Recommendations for future Interface Specifications
 
-Read the OWASP Cheat Sheets.
+Creators of new AMWA Interface Specifcations SHOULD ensure that the recommendations
+of this document are included in the Specification itself. 
+
+Organisers of interoperabily testing of new Specifications SHOULD include tests of
+whether implementations meet the recommendations of this document.
+
+All those involved in creating and testing new Specifications SHOULD be aware of the
+general recommendations and "Cheat Sheets" of the 
+[Open Web Application Security Project (OWASP)](https://www.owasp.org).
+These go futher than the scope of this document, and cover areas such as
+access control, security tokens and audit logs. See [Further Reading](#further-reading).
 
 ## Further reading
 
 The IETF RFCs referenced here provide much more information.
 
-The [OWASP-REST] Security Cheat Sheet provides further guidance for API implementers.
-- With even more information in [OWASP-TRANSPORT], [OWASP-XML], and other Cheat Sheets.
+OWASP provides a number of useful "Cheat Sheets", 
+including [REST Security][OWASP-REST] and 
+[Transport Layer Protection][OWASP-TRANSPORT].
 
-BBC R&D White Papers 337 and 338 provide more information about securing NMOS APIs with TLS and PKI, and many references to online resources and test tools.
+BBC R&D White Papers [337][BBC-WHP337] and [338][BBC-WHP338] provide more information about
+securing NMOS APIs with TLS and PKI, and many references to online resources and 
+test tools.
 
 _Does this match what is actually in the NMOS documentation?_
 
-## References (informative)
+[//]: ## (References)
 
+[//]: ### (Normative)
 
-[BBC-WHP337](https://www.bbc.co.uk/rd/publications/whitepaper337)
+[RFC-8446]: https://datatracker.ietf.org/doc/rfc8446/ 
+"Transport Layer Security 1.3"
 
-[BBC-WHP338](https://www.bbc.co.uk/rd/publications/whitepaper338)
+[RFC 5280]: https://datatracker.ietf.org/doc/rfc5280/ 
+"Internet X.509 Public Key Infrastructure Certificate and
+Certificate Revocation List (CRL) Profile"
 
-[OWASP-REST](https://www.owasp.org/index.php/REST_Security_Cheat_Sheet)
+[RFC 6797]: https://datatracker.ietf.org/doc/rfc6797/
+"HTTP Strict Transport Security (HSTS)"
+
+[//]: ### (Informative)
+
+[BBC-WHP337]: https://www.bbc.co.uk/rd/publications/whitepaper337 "HTTPS Configuration for the AMWA NMOS APIs"
+
+[BBC-WHP338]: https://www.bbc.co.uk/rd/publications/whitepaper338 ""
+
+[OWASP-REST]: https://www.owasp.org/index.php/REST_Security_Cheat_Sheet
+"OWASP REST Security Cheat Sheet"
+
+[OWASP-TRANSPORT]: https://www.owasp.org/index.php/Transport_Layer_Protection_Cheat_Sheet
+"OWASP Transport Layer Protection Cheat Sheet"

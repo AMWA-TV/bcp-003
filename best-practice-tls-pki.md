@@ -125,28 +125,95 @@ _Something about looking after keys?_
 
 Certificates shall conform with X.509 v3 [RFC 5280]
 
-
 ## TLS
 
 ### TLS Versions
 
-Implementations SHOULD support TLS 1.3. 
-If this is not possible they SHALL support TLS 1.2. 
+Implementations SHOULD support TLS 1.3 and SHALL support TLS 1.2.
 
 Note: TLS 1.3 has only recently been finalised, so is not yet mandatory here.
-However, implementors should be ready to upgrade,
-and TLS 1.2 may be deprecated in a future version of this best practice.
+However, implementors should be ready to upgrade, as 1.3 may be mandatory in a future revision.
 
-Implementations SHALL not use TLS 1.0 and 1.1. These are deprecated.
+Implementations SHALL NOT use TLS 1.0 or 1.1. These are deprecated.
 
-Implemenations SHALL NOT use SSL. 
-Although the SSL protocol has previously been used to secure HTTP traffic, 
+Implemenations SHALL NOT use SSL.
+Although the SSL protocol has previously been used to secure HTTP traffic,
 no version of SSL is now considered secure.
 
+### TLS 1.3 Cipher Suites
 
-### TLS Cipher Suites
+Note: TLS allows several different cipher suites;
+interoperability requires the server and client to support at least one common suite,
+which needs to be sufficiently secure.
 
-_Copy from security-proposal.md, update for TLS 1.3._
+This section applies to implementations using TLS 1.3. It is consistent with [RFC 8446].
+
+All Servers and Clients SHALL support this cipher suite:
+
+TLS_AES_128_GCM_SHA256
+
+All Servers SHOULD support the following cipher suites:
+
+TLS_AES_256_GCM_SHA384
+
+TLS_CHACHA20_POLY1305_SHA256
+
+_Note: the above needs discussion by the group._
+
+### TLS 1.2 Cipher Suites
+
+This section applies to implementations using TLS 1.2.
+
+All Servers and Clients SHALL support this cipher suite:
+
+TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CCM\_8
+
+All Servers SHOULD support the following cipher suites,
+unless hardware limitations make this impractical.
+Servers SHOULD be configured to use the priority order listed:
+
+TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_GCM\_SHA256
+
+TLS\_ECDHE\_ECDSA\_WITH\_AES\_256\_GCM\_SHA384
+
+TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CBC\_SHA256
+
+TLS\_ECDHE\_ECDSA\_WITH\_AES\_256\_CBC\_SHA384
+
+TLS\_ECDHE\_RSA\_WITH\_AES\_128\_GCM\_SHA256
+
+TLS\_ECDHE\_RSA\_WITH\_AES\_256\_GCM\_SHA384
+
+TLS\_DHE\_RSA\_WITH\_AES\_128\_GCM\_SHA256
+
+TLS\_DHE\_RSA\_WITH\_AES\_256\_GCM\_SHA384
+
+TLS\_ECDHE\_RSA\_WITH\_AES\_128\_CBC\_SHA256
+
+TLS\_ECDHE\_RSA\_WITH\_AES\_256\_CBC\_SHA384
+
+TLS\_DHE\_RSA\_WITH\_AES\_128\_CBC\_SHA256
+
+TLS\_DHE\_RSA\_WITH\_AES\_256\_CBC\_SHA256
+
+This reduced set of cipher suites MAY be supported by servers not
+requiring wishing to reduce hardware resource by supporting only ECDSA
+certificates (omitting RSA certificates):
+
+TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_GCM\_SHA256
+
+TLS\_ECDHE\_ECDSA\_WITH\_AES\_256\_GCM\_SHA384
+
+TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CBC\_SHA256
+
+TLS\_ECDHE\_ECDSA\_WITH\_AES\_256\_CBC\_SHA384
+
+The above set SHOULD only be used where the device is operating in an environment
+where ECDHE certificates are available, which is not the case for all
+corporate certificate authorities.
+
+Note: where resources are extremely limited, the mandatory suite
+TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CCM\_8 ensures interoperability.
 
 ## Server Behaviour
 

@@ -1,41 +1,37 @@
 # [Work In Progress] AMWA Best Current Practice for use of TLS and PKI with NMOS APIs
 
-[//]: # (ToC goes after this comment. Create it with: ``gh-md-toc --hide-header --depth=3 this-file | sed 's/\* \[/- [/'``)
+[//]: # (ToC goes after this comment. Generate with gen-toc.sh <this-file> and paste in.)
 
-- [[Work In Progress] AMWA Best Current Practice for use of TLS and PKI with NMOS APIs](#work-in-progress-amwa-best-current-practice-for-use-of-tls-and-pki-with-nmos-apis)
-  - [Scope](#scope)
-  - [Normative References](#normative-references)
-  - [Definitions](#definitions)
-    - [API](#api)
-    - [Server](#server)
-    - [Client](#client)
-    - [API Message](#api-message)
-    - [Message Sender](#message-sender)
-    - [Message Receiver](#message-receiver)
-  - [Introduction (informative)](#introduction-informative)
-  - [Certificate Authority](#certificate-authority)
-  - [X\.509 Certificates](#x509-certificates)
-  - [TLS](#tls)
-    - [TLS Versions](#tls-versions)
-    - [TLS 1\.3 Cipher Suites](#tls-13-cipher-suites)
-    - [TLS 1\.2 Cipher Suites](#tls-12-cipher-suites)
-  - [Server Behaviour](#server-behaviour)
-    - [Certificates](#certificates)
-    - [HTTP requests](#http-requests)
-    - [WebSockets](#websockets)
-    - [Other protocols](#other-protocols)
-    - [DNS\-SD](#dns-sd)
-  - [Client Behaviour](#client-behaviour)
-    - [Certificates](#certificates-1)
-    - [HTTP](#http)
-    - [WebSockets](#websockets-1)
-    - [Other Protocols](#other-protocols-1)
-    - [DNS\-SD](#dns-sd-1)
-  - [Other considerations](#other-considerations)
-    - [DHCP](#dhcp)
-    - [DNS](#dns)
-  - [Recommendations for future Interface Specifications](#recommendations-for-future-interface-specifications)
-  - [Further reading](#further-reading)
+- [Scope](#scope)
+- [Normative References](#normative-references)
+- [Definitions](#definitions)
+  - [API](#api)
+  - [Server](#server)
+  - [Client](#client)
+  - [Message](#message)
+- [Introduction (informative)](#introduction-informative)
+- [TLS](#tls)
+  - [TLS Versions](#tls-versions)
+  - [TLS 1\.3 Cipher Suites](#tls-13-cipher-suites)
+  - [TLS 1\.2 Cipher Suites](#tls-12-cipher-suites)
+  - [X\.509 Certificates and Certificate Authority](#x509-certificates-and-certificate-authority)
+- [Server Behaviour](#server-behaviour)
+  - [Certificate Management: Server](#certificate-management-server)
+  - [HTTP: Server](#http-server)
+  - [WebSockets: Server](#websockets-server)
+  - [Other Protocols: Server](#other-protocols-server)
+  - [DNS\-SD: Server](#dns-sd-server)
+- [Client Behaviour](#client-behaviour)
+  - [Certificate Management: Client](#certificate-management-client)
+  - [HTTP: Client](#http-client)
+  - [WebSockets: Client](#websockets-client)
+  - [Other Protocols: Client](#other-protocols-client)
+  - [DNS\-SD: Client](#dns-sd-client)
+- [Other Considerations](#other-considerations)
+  - [DHCP](#dhcp)
+  - [DNS](#dns)
+- [Recommendations for Future Interface Specifications](#recommendations-for-future-interface-specifications)
+- [Further Reading](#further-reading)
 
 [//]: # (ToC goes before this comment)
 
@@ -85,59 +81,57 @@ The entity that is using the API, for example:
 - a monitoring application using the IS-04 Query API
 - a connection control application using the IS-05 Connection API
 
-### API Message
+### Message
 
-Information sent according to an API, e.g.:
+Information sent according to an NMOS API, e.g.:
 
 - an HTTP request
 - an HTTP response
 - a WebSocket message
-- an MQTT message
 
-### Message Sender
+A Message can also carry payload data related to an NMOS API.
 
-The Server or Client that is sending API Messages.
-
-_Note: this corresponds to "Sender" in RFC 8446, but that term has a specific meaning in AMWA IS-04 and IS-05._
-
-### Message Receiver
-
-The Server or Client that is receiving API Messages.
-
-_Note: this corresponds to "Receiver" in RFC 8446, but that term has a specific meaning in AMWA IS-04 and IS-05._
+- For example the draft IS-07 specification uses WebSocket and MQTT transport to carry event data.
+  These can be considered as Messages for the purposes of this document.
+  - Although ST 2110 payload information is not considered a Message here.
 
 ## Introduction (informative)
 
-The AMWA NMOS Interface Specfications use HTTP and WebSockets for API communications between Nodes, network services and control applications.
+The AMWA NMOS Interface Specfications use HTTP and WebSockets for API communications between Nodes,
+network services and control applications.
 
 This document identifies best practice for providing these communications with:
 
 - **Confidentiality**:
-    API Messages passing between the Client and Server is unreadable to third parties.
+    Messages passing between the Client and Server is unreadable to third parties.
 
 - **Identification**:
     The Client can check whether the Server is owned by a trusted party.
 
 - **Integrity**:
-    It must be clear if API Messages have been tampered with.
+    It must be clear if Messages have been tampered with.
 
 - **Authentication**:
-    The Client can check if API Messages actually came from the Server it is
-    interacting with, and vice versa.
+    The Client can check if Messages actually came from the Server it is
+    interacting with, and vice versa
 
 This is achieved as follows:
 
 - HTTP and WebSocket communications are tunneled over TLS (i.e. they use HTTPS and WSS).
-- The Message Sender includes a signed hash in the API Message to authticate that it has originated it.
-- The Message Receiver uses the hash to check that the API Message has not been altered.
-- The Server (and optionally Client) presents X.509 certificates signed by a point of mutual trust.
-  - This allows for identification of the parties.
+- The Server or Client sending each Message includes in it a signed hash to authticate that it is the originator.
+- The other party checks the hash to check that the Message has not been altered.
+- The Server (and optionally Client) presents X.509 certificates, preferably signed by a Certificate Authority
+  - This provides a point of mutual trust to identify the parties
 
 When used correctly HTTPS provides an excellent level of security.
 However it is important it is implemented well, with up-to-date versions,
 and in a way that will ensure cross vendor inter-operability.
 
-A later document will cover **authorisation**, i.e. how the Server can determine whether the Client should be allowed to carry out the requested operation.
+A later document will cover **authorisation**,
+i.e. how the Server can determine whether the Client should be allowed to carry out the requested operation.
+
+These recommendations only provide an overview.
+See [Further Reading](#further-reading) for more detailed information.
 
 ## TLS
 
@@ -219,8 +213,10 @@ TLS\_DHE\_RSA\_WITH\_AES\_256\_CBC\_SHA256
 
 Implementations SHALL use TLS with X.509 v3 certificates, as per [RFC 5280][RFC-5280].
 
-Certificates SHOULD be signed by a Certificate Authority (CA);
-this provides a point of trust for a system.
+A Certificate Authority (CA) SHOULD be available to sign certificates.
+
+- This provides a point of trust for the environment.
+
 The CA root certificate SHALL be available to Servers and Clients.
 
 Implementers SHOULD consider using a trusted CA service;
@@ -233,22 +229,28 @@ Wildcard certificates SHOULD NOT be used.
 
 There SHALL be a way of revoking Certificates that are no longer needed or compromised.
 
+The CA SHOULD support OCSP requests as per [RFC 6960][RFC-6960]
+and OCSP stapling (see so that Clients can check whether certificates are compromised.
+
 ## Server Behaviour
 
-### X.509 Certificates
+### Certificate Management: Server
 
 Servers SHALL provide a means of installing X.509 certificates.
+These SHOULD be signed by the CA, unless "self-signed" certificates are being used
+
+- See comments above.
 
 Servers SHALL support installation of multiple certificates,
 and SHALL support both RSA and ECDSA certificates.
 
 - ECDSA certificates are suited to the hardware-limited cases discussed above.
 
-Servers SHALL provide a means of installing a Root CA.
-
 Servers SHALL provide a mechanism for revoking certificates.
 
-### HTTP Requests
+Servers SHALL store the private key for their certificates securely.
+
+### HTTP: Server
 
 Servers SHALL accept and respond to HTTPS requests,
 using a TLS version and cipher suite allowed by [TLS](#tls)
@@ -281,14 +283,16 @@ And maybe, Servers:
 
 Servers SHOULD be as specific as possible in the use of CORS.
 
-- The examples in the IS-04 and IS-05 documentation are "very relaxed", and SHOULD NOT be used without considering whether they are appropriate.
+- The examples in the IS-04 and IS-05 documentation are "very relaxed",
+  and SHOULD NOT be used without considering whether they are appropriate.
 
-### WebSockets
+### WebSockets: Server
 
-This section applies to Servers providing WebSocket connections as part of an API,
-for example for subscription to an AMWA IS-04 Query API,
-or providing a WebSocket connection for transport of data,
-for example AMWA IS-07 events.
+This section applies to Servers providing Messages through a WebSocket connection,
+for example for subscription to an AMWA IS-04 Query API.
+
+- It SHOULD also be used to secure WebSocket connections for transport of data,
+  for example AMWA IS-07 events.
 
 Servers SHALL provide an encrypted WebSocket connection (wss: URL scheme),
 using a TLS version and cipher suite allowed by [TLS](#tls)
@@ -297,9 +301,9 @@ Note: this is default for IS-04 WebSocket subscriptions when using HTTPS for the
 
 Servers SHALL NOT provided unencrypted WebSocket connection (ws: URL scheme).
 
-### Other protocols
+### Other Protocols: Server
 
-Other protocols used in APIs SHOULD be secured using TLS, where this is supported.
+Other protocols used for Messages SHOULD be secured using TLS, where this is supported.
 
 - For instance, MQTT supports use of TLS 1.2.
   - This is an alternative transport for IS-07 events.
@@ -307,23 +311,40 @@ Other protocols used in APIs SHOULD be secured using TLS, where this is supporte
 Security of protocols where TLS is not available is outside the scope of this document.
 Security of ST 2110 streams is outside the scope of this document.
 
-### DNS-SD
+### DNS-SD: Server
 
-Servers SHOULD use unicast DNS-SD to advertise their API endpoints.  
+Servers SHALL support unicast DNS-SD to advertise their API endpoints.  
 
-_The Full Stack draft makes this a SHALL._
+Servers SHOULD NOT advertise multicast DNS-SD, except where a DNS server is not available.
 
-Servers SHOULD NOT use multicast DNS-SD, except where it is not possible to provide a DNS server.
+- In practice, a DNS server can be expected to be available for "engineered networks".
+  Multicast DNS-SD can be useful for small or temporary networks, but presents a security risk.
+  Servers SHALL NOT advertise using multicast DNS-SD outside the local network.
+  - As of version v1.2, AMWA IS-04 includes DNS-SD announcements of Node APIs.
+    However, these may be deprecated and removed from later versions of the spec.
 
 ## Client Behaviour
 
-### X.509 Certificates
+### Certificate Management: Client
 
-Clients SHALL provide a means of installing a root certificate.
+Clients SHALL provide a means of installing a root certificate,
+and SHALL use this to check the validity of Server certificates.
 
-Clients SHALL check Server certificates against the root certificate.
+Clients SHALL provide a way of removing root certificates.
 
-### HTTP
+Client SHOULD use OCSP Stapling to identify revoked certificates.
+
+- For TLS 1.2 this is defined in [RFC 6961][RFC-6961]
+- For TLS 1.3 it is included in the main spec [RFC 8446][RFC-8446]
+
+It SHOULD be possible for a user to perform these operations.
+
+- Having to return equipment to the manufacturer is not acceptable.
+  Having to install firmware updates is undesirable.
+
+_What do we want to say on client certs?_
+
+### HTTP: Client
 
 Clients SHALL make API requests using HTTPS,
 using a TLS version and cipher suite allowed by [TLS](#tls)
@@ -332,7 +353,7 @@ Clients SHALL NOT make API requests using plain HTTP.
 
 ...
 
-### WebSockets
+### WebSockets: Client
 
 This section applies to Clients requesting WebSocket connections as part of an API,
 for example for subscription to an AMWA IS-04 Query API,
@@ -345,15 +366,17 @@ Clients SHALL NOT use unencrypted WebSocket connections (ws:).
 
 ...
 
-### Other Protocols
+### Other Protocols: Client
 
-### DNS-SD
+### DNS-SD: Client
 
 Clients SHOULD use unicast DNS-SD in preference to multicast DNS-SD to find API endpoints from a Server.
 
-...
+Clients SHOULD NOT rely on DNS-SD announcements of Node API endpoints for correct operation.
 
-## Other considerations
+- These may be deprecated and removed from later versions of the spec.
+
+## Other Considerations
 
 ### DHCP
 
@@ -367,7 +390,7 @@ The Full Stack draft requires the Network Environment to provide DNS.
 As it is an inherently insecure protocol, it is insufficient to secure
 an environment without the other provisions of this document.
 
-## Recommendations for future Interface Specifications
+## Recommendations for Future Interface Specifications
 
 Creators of new AMWA Interface Specifcations SHOULD ensure that the recommendations
 of this document are included in the Specification itself.
@@ -382,7 +405,7 @@ These go futher than the scope of this document, and cover areas such as
 access control, security tokensl, audit logs and carriage of sensitive information.
 See [Further Reading](#further-reading).
 
-## Further reading
+## Further Reading
 
 The IETF RFCs referenced here provide much more information.
 
@@ -400,15 +423,21 @@ _Does this match what is actually in the NMOS documentation?_
 
 [//]: ### (Normative)
 
-[RFC-8446]: https://datatracker.ietf.org/doc/rfc8446/
-"Transport Layer Security 1.3"
-
 [RFC-5280]: https://datatracker.ietf.org/doc/rfc5280/
 "Internet X.509 Public Key Infrastructure Certificate and
 Certificate Revocation List (CRL) Profile"
 
-[RFC 6797]: https://datatracker.ietf.org/doc/rfc6797/
+[RFC-6797]: https://datatracker.ietf.org/doc/rfc6797/
 "HTTP Strict Transport Security (HSTS)"
+
+[RFC-6960]: https://datatracker.ietf.org/doc/rfc6960/
+"X.509 Internet Public Key Infrastructure Online Certificate Status Protocol - OCSP"
+
+[RFC-6961]: https://datatracker.ietf.org/doc/rfc6961/
+"The Transport Layer Security (TLS) Multiple Certificate Status Request Extension"
+
+[RFC-8446]: https://datatracker.ietf.org/doc/rfc8446/
+"Transport Layer Security 1.3"
 
 [//]: ### (Informative)
 

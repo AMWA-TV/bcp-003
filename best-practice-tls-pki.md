@@ -1,6 +1,6 @@
 # [Work In Progress] AMWA Best Current Practice for use of TLS and PKI with NMOS APIs
 
-[//]: # (ToC goes after this comment. Create it with: gh-md-toc --hide-header --depth=3 this-file | sed 's/\* \[/- [/')
+[//]: # (ToC goes after this comment. Create it with: ``gh-md-toc --hide-header --depth=3 this-file | sed 's/\* \[/- [/'``)
 
 - [[Work In Progress] AMWA Best Current Practice for use of TLS and PKI with NMOS APIs](#work-in-progress-amwa-best-current-practice-for-use-of-tls-and-pki-with-nmos-apis)
   - [Scope](#scope)
@@ -139,7 +139,6 @@ and in a way that will ensure cross vendor inter-operability.
 
 A later document will cover **authorisation**, i.e. how the Server can determine whether the Client should be allowed to carry out the requested operation.
 
-
 ## TLS
 
 ### TLS Versions
@@ -161,7 +160,7 @@ Note: TLS allows several different cipher suites;
 interoperability requires the Server and Client to support at least one common suite,
 which needs to be sufficiently secure.
 
-This section applies to implementations using TLS 1.3. It is consistent with [RFC 8446].
+This section applies to implementations using TLS 1.3. It is consistent with [RFC 8446][RFC-8446].
 
 All Servers and Clients SHALL support this cipher suite:
 
@@ -185,6 +184,11 @@ TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CCM\_8
 
 All Servers SHOULD support the following cipher suites,
 unless hardware limitations make this impractical.
+In such a case Servers SHOULD support the first four listed suites,
+which are used with ECDSA certificates.
+
+- Where resources are extremely limited, the mandatory suite above ensures interoperability.
+
 Servers SHOULD be configured to use the priority order listed:
 
 TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_GCM\_SHA256
@@ -211,33 +215,12 @@ TLS\_DHE\_RSA\_WITH\_AES\_128\_CBC\_SHA256
 
 TLS\_DHE\_RSA\_WITH\_AES\_256\_CBC\_SHA256
 
-_the below should be expressed differently vvv_
-
-This reduced set of cipher suites MAY be supported by Servers not
-requiring to reduce hardware resource by supporting only ECDSA
-certificates (omitting RSA certificates):
-
-TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_GCM\_SHA256
-
-TLS\_ECDHE\_ECDSA\_WITH\_AES\_256\_GCM\_SHA384
-
-TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CBC\_SHA256
-
-TLS\_ECDHE\_ECDSA\_WITH\_AES\_256\_CBC\_SHA384
-
-The above set SHOULD only be used where the device is operating in an environment
-where ECDHE certificates are available, which is not the case for all
-corporate certificate authorities.
-
-Note: where resources are extremely limited, the mandatory suite
-TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CCM\_8 ensures interoperability.
-
 ### X.509 Certificates and Certificate Authority
 
 Implementations SHALL use TLS with X.509 v3 certificates, as per [RFC 5280][RFC-5280].
 
-Certificates SHOULD be signed by a Certificate Authority (CA); 
-this provides a point of trust for a system. 
+Certificates SHOULD be signed by a Certificate Authority (CA);
+this provides a point of trust for a system.
 The CA root certificate SHALL be available to Servers and Clients.
 
 Implementers SHOULD consider using a trusted CA service;
@@ -256,8 +239,10 @@ There SHALL be a way of revoking Certificates that are no longer needed or compr
 
 Servers SHALL provide a means of installing X.509 certificates.
 
-Servers SHOULD support installation of multiple certificates,
-including those of different types (e.g. RSA and ECDSA).
+Servers SHALL support installation of multiple certificates,
+and SHALL support both RSA and ECDSA certificates.
+
+- ECDSA certificates are suited to the hardware-limited cases discussed above.
 
 Servers SHALL provide a means of installing a Root CA.
 
@@ -429,7 +414,7 @@ Certificate Revocation List (CRL) Profile"
 
 [BBC-WHP337]: https://www.bbc.co.uk/rd/publications/whitepaper337 "HTTPS Configuration for the AMWA NMOS APIs"
 
-[BBC-WHP338]: https://www.bbc.co.uk/rd/publications/whitepaper338 ""
+[BBC-WHP338]: https://www.bbc.co.uk/rd/publications/whitepaper338 "Public Key Infrastructure for IP Production for Broadcast"
 
 [OWASP-REST]: https://www.owasp.org/index.php/REST_Security_Cheat_Sheet
 "OWASP REST Security Cheat Sheet"

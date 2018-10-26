@@ -46,7 +46,7 @@ The recommendations are also suitable for other APIs beyond NMOS.
 Use of insecure communication (plain HTTP etc.) is forbidden within the scope of this document.
 
 Fine-grained Client authorisation --
-providing a mechanism to determin what actions a Client may take against an API --
+providing a mechanism to determine what actions a Client may take against an API --
 is not in scope, but may be part of a future revision.
 
 Use of HTTP/2 is not in scope, but may be part of a future revision.

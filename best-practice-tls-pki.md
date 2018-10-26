@@ -123,15 +123,15 @@ This is achieved as follows:
 - The Server (and optionally Client) presents X.509 certificates, preferably signed by a Certificate Authority
   - This provides a point of mutual trust to identify the parties
 
-When used correctly HTTPS provides an excellent level of security.
-However it is important it is implemented well, with up-to-date versions,
-and in a way that will ensure cross vendor inter-operability.
-
 A later document will cover **authorisation**,
 i.e. how the Server can determine whether the Client should be allowed to carry out the requested operation.
 
-These recommendations only provide an overview.
-See [Further Reading](#further-reading) for more detailed information.
+When used correctly HTTPS provides an excellent level of security.
+However it is important it is implemented well, with up-to-date versions,
+and in a way that will ensure cross vendor inter-operability.
+These recommendations only provide an overview of this rapidly-changing field,
+and readers should see [Further Reading](#further-reading) for more detail,
+and information about test software and other resources.
 
 ## TLS
 
@@ -246,9 +246,10 @@ and SHALL support both RSA and ECDSA certificates.
 
 - ECDSA certificates are suited to the hardware-limited cases discussed above.
 
-Servers SHALL provide a mechanism for revoking certificates.
+Servers SHALL provide a secure mechanism to install and store the private key(s) 
+and key chain for their certificates.
 
-Servers SHALL store the private key for their certificates securely.
+It SHOULD be possible for a user to perform the above operations.
 
 ### HTTP: Server
 
@@ -351,7 +352,12 @@ using a TLS version and cipher suite allowed by [TLS](#tls)
 
 Clients SHALL NOT make API requests using plain HTTP.
 
-...
+Clients SHALL NOT continue communication with a Server after a failed handshake,
+except with the express permission of the user.
+
+- This is similar to the "Add Exception" that web browsers present.
+  If the user wishes to continue it is at his/her own risk.
+  Clients SHOULD allow a system adminstrator the option to disable such exceptions.
 
 ### WebSockets: Client
 
@@ -372,23 +378,31 @@ Clients SHALL NOT use unencrypted WebSocket connections (ws:).
 
 Clients SHOULD use unicast DNS-SD in preference to multicast DNS-SD to find API endpoints from a Server.
 
+- However, this does not make unicast DNS-SD a substitute for a secure API.
+  For instance, if the Server fails to provide a valid Certificate, the Client must not use its endpoint.
+  
 Clients SHOULD NOT rely on DNS-SD announcements of Node API endpoints for correct operation.
 
 - These may be deprecated and removed from later versions of the spec.
+
 
 ## Other Considerations
 
 ### DHCP
 
-The Full Stack draft requires the Network Environment to provide DHCP.
-As it is an inherently insecure protocol, it is insufficient to secure
-an environment without the other provisions of this document.
+In most cases DHCP will be available on the network. However, it is an
+insecure protocol and should not be considered as means of providing security
+without the other provisions of this document.
 
 ### DNS
 
-The Full Stack draft requires the Network Environment to provide DNS.
-As it is an inherently insecure protocol, it is insufficient to secure
-an environment without the other provisions of this document.
+In most cases DNS will be available on the network. However in many cases
+it should be considered insecure, and should not be considered as means of providing security
+without the other provisions of this document.
+
+- See also comments about DNS-SD [above](#dns-sd-client)
+
+Secure deployment of DNS is currently outside the scope of this document.
 
 ## Recommendations for Future Interface Specifications
 

@@ -276,11 +276,13 @@ Servers SHOULD check requests are not too large (HTTP response 413)
 
 Servers SHOULD log invalid requests, to help check for broken/malicious clients.
 
-And maybe, Servers:
+Servers:
 
 - SHOULD NOT use SSL compression
 - SHOULD NOT use Public Key Pinning
 - SHOULD NOT use TLS Session Tickets
+
+_TODO: add more detail to the above_
 
 Servers SHOULD be as specific as possible in the use of CORS.
 
@@ -370,9 +372,11 @@ using a TLS version and cipher suite allowed by [TLS](#tls).
 
 Clients SHALL NOT use unencrypted WebSocket connections (ws:).
 
-...
-
 ### Other Protocols: Client
+
+Other protocols used for Messages SHOULD be secured using TLS, where this is supported.
+
+- For example MQTT (see comments re Server).
 
 ### DNS-SD: Client
 
@@ -430,8 +434,6 @@ including [REST Security][OWASP-REST] and
 BBC R&D White Papers [337][BBC-WHP337] and [338][BBC-WHP338] provide more information about
 securing NMOS APIs with TLS and PKI, and many references to online resources and
 test tools. [337][BBC-WHP337] also discusses IPv6.
-
-_Does this match what is actually in the NMOS documentation?_
 
 [//]: ## (References)
 

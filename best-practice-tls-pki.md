@@ -121,7 +121,7 @@ This document identifies best practice for providing these communications with:
 This is achieved as follows:
 
 - HTTP and WebSocket communications are tunneled over TLS (i.e. they use HTTPS and WSS).
-- The Server or Client sending each Message includes in it a signed hash to authticate that it is the originator.
+- The Server or Client sending each Message includes in it a signed hash to authenticate that it is the originator.
 - The other party checks the hash to check that the Message has not been altered.
 - The Server (and optionally Client) presents X.509 certificates, preferably signed by a Certificate Authority
   - This provides a point of mutual trust to identify the parties
@@ -147,7 +147,7 @@ However, implementors should be ready to upgrade, as 1.3 may be mandatory in a f
 
 Implementations SHALL NOT use TLS 1.0 or 1.1. These are deprecated.
 
-Implemenations SHALL NOT use SSL.
+Implementations SHALL NOT use SSL.
 Although the SSL protocol has previously been used to secure HTTP traffic,
 no version of SSL is now considered secure.
 
@@ -237,7 +237,7 @@ Wildcard certificates SHOULD NOT be used.
 There SHALL be a way of revoking Certificates that are no longer needed or compromised.
 
 The CA SHOULD support OCSP requests as per [RFC 6960][RFC-6960]
-and OCSP stapling (see so that Clients can check whether certificates are compromised.
+and OCSP stapling (see so that Clients can check whether certificates are compromised.)
 
 ## Server Behaviour
 
@@ -271,7 +271,7 @@ Secure presentation of web pages to users is not in scope.
 Servers SHOULD use the Strict-Transport-Security header as per [RFC 6797]
 to declare that they only will communicate with secure connections.
 
-Servers SHALL reject all requests not explcitly allowed by the API
+Servers SHALL reject all requests not explicitly allowed by the API
 with HTTP response code 405 Method not allowed.
 
 - NMOS Specifications typically define the allowed requests using RAML
@@ -369,7 +369,7 @@ except with the express permission of the user.
 
 - This is similar to the "Add Exception" that web browsers present.
   If the user wishes to continue it is at his/her own risk.
-  Clients SHOULD allow a system adminstrator the option to disable such exceptions.
+  Clients SHOULD allow a system administrator the option to disable such exceptions.
 
 ### WebSockets: Client
 
@@ -386,7 +386,7 @@ Clients SHALL NOT use unencrypted WebSocket connections (ws:).
 
 Other protocols used for Messages SHOULD be secured using TLS, where this is supported.
 
-- For example MQTT (see comments re Server).
+- For example MQTT (see comments re: Server).
 
 ### DNS-SD: Client
 
@@ -429,8 +429,8 @@ whether implementations meet the recommendations of this document.
 All those involved in creating and testing new Specifications SHOULD be aware of the
 general recommendations and "Cheat Sheets" of the
 [Open Web Application Security Project (OWASP)](https://www.owasp.org).
-These go futher than the scope of this document, and cover areas such as
-access control, security tokensl, audit logs and carriage of sensitive information.
+These go further than the scope of this document, and cover areas such as
+access control, security tokens, audit logs and carriage of sensitive information.
 See [Further Reading](#further-reading).
 
 ## Further Reading

@@ -53,6 +53,9 @@ Use of HTTP/2 is not in scope, but may be part of a future revision.
 
 Securing video and audio transport is not in scope.
 
+Although security of web pages presented to users is also important,
+this is outside the scope of this document, which is concerned only with APIs.
+
 ## Normative References
 
 These appear at the end of the Markdown source for this document,
@@ -223,7 +226,11 @@ Implementers SHOULD consider using a trusted CA service;
 if a self-managed CA is used it is important to keep its private key very safe.
 
 If a CA cannot be provided, then "self-signed" certificates MAY be exchanged
-directly between Clients and Servers. This SHOULD NOT be used for large installations.
+directly between Clients and Servers. However such an approach does not scale at
+all well beyond the simple case with a single Client and Server (e.g. a camera and
+and control unit), as it requires each Client and Server to be provisioned with the
+certifcate of each and every other party with which it communicates,
+and certificate revocation can be a significant overhead.
 
 Wildcard certificates SHOULD NOT be used.
 
@@ -246,17 +253,20 @@ and SHALL support both RSA and ECDSA certificates.
 
 - ECDSA certificates are suited to the hardware-limited cases discussed above.
 
-Servers SHALL provide a secure mechanism to install and store the private key(s) 
+Servers SHALL provide a secure mechanism to install and store the private key(s)
 and key chain for their certificates.
 
 It SHOULD be possible for a user to perform the above operations.
 
 ### HTTP: Server
 
+_Note: as discussed in the [scope](#scope) this applies to API requests.
+Secure presentation of web pages to users is not in scope._
+
 Servers SHALL accept and respond to HTTPS requests,
 using a TLS version and cipher suite allowed by [TLS](#tls)
 
-Servers SHALL NOT accept or respond to plain HTTP requests.
+Servers SHALL NOT accept or respond to plain HTTP requests
 
 Servers SHOULD use the Strict-Transport-Security header as per [RFC 6797]
 to declare that they only will communicate with secure connections.
@@ -267,22 +277,23 @@ with HTTP response code 405 Method not allowed.
 - NMOS Specifications typically define the allowed requests using RAML
 
 Servers SHALL validate all request payloads and reject those that are invalid
-with HTTP response code xxx.
+with an appropriate 4xx Client Error code.
 
 - NMOS Specifications typically define the allowed payloads using JSON Schema
   - This includes, for example, checking string inputs with regexps.
-
-Servers SHOULD check requests are not too large (HTTP response 413)
+- Servers SHOULD check requests are not too large (HTTP response 413)
+- See OWAST's [REST Security][OWASP-REST] page for advice on appropriate codes.
 
 Servers SHOULD log invalid requests, to help check for broken/malicious clients.
 
-Servers:
+Servers SHOULD NOT use SSL compression, as this has a known vulnerability.
 
-- SHOULD NOT use SSL compression
-- SHOULD NOT use Public Key Pinning
-- SHOULD NOT use TLS Session Tickets
+Implementers SHOULD consider the impact of TLS Session Tickets (RFC 5077) on performance.
 
-_TODO: add more detail to the above_
+Implementers SHOULD be aware of OWASP's recommendations on
+[Server Protocol and Cipher Configuration](OWASP-TRANSPORT).
+
+_What about Public Key Pinning (RFC 7469)? Is there consensus?_
 
 Servers SHOULD be as specific as possible in the use of CORS.
 
@@ -389,7 +400,6 @@ Clients SHOULD NOT rely on DNS-SD announcements of Node API endpoints for correc
 
 - These may be deprecated and removed from later versions of the spec.
 
-
 ## Other Considerations
 
 ### DHCP
@@ -411,7 +421,7 @@ Secure deployment of DNS is currently outside the scope of this document.
 ## Recommendations for Future Interface Specifications
 
 Creators of new AMWA Interface Specifcations SHOULD ensure that the recommendations
-of this document are included in the Specification itself.
+of this document are followed in the Specification itself.
 
 Organisers of interoperabily testing of new Specifications SHOULD include tests of
 whether implementations meet the recommendations of this document.

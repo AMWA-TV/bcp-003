@@ -295,7 +295,7 @@ Implementers SHOULD be aware of OWASP's recommendations on
 
 _What about Public Key Pinning (RFC 7469)? Is there consensus?_
 
-Servers SHOULD be as specific as possible in the use of CORS.
+Servers SHOULD be as specific as possible in the use of CORS (cross-origin resource sharing).
 
 - The examples in the IS-04 and IS-05 documentation are "very relaxed",
   and SHOULD NOT be used without considering whether they are appropriate.

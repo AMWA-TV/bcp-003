@@ -56,6 +56,10 @@ Securing video and audio transport is not in scope.
 Although security of web pages presented to users is also important,
 this is outside the scope of this document, which is concerned only with APIs.
 
+## Use of Normative Language
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL, "NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
+
 ## Normative References
 
 These appear at the end of the Markdown source for this document,

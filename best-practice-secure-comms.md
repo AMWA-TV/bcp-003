@@ -1,8 +1,9 @@
-# [Work In Progress] AMWA Best Current Practice for use of TLS and PKI with NMOS APIs
+# [Work In Progress] Securing communications in NMOS APIs (future BCP-003)
 
 [//]: # (ToC goes after this comment. Generate with gen-toc.sh <this-file> and paste in.)
 
 - [Scope](#scope)
+- [Use of Normative Language](#use-of-normative-language)
 - [Normative References](#normative-references)
 - [Definitions](#definitions)
   - [API](#api)
@@ -299,7 +300,7 @@ Implementers SHOULD be aware of OWASP's recommendations on
 
 _What about Public Key Pinning (RFC 7469)? Is there consensus?_
 
-Servers SHOULD be as specific as possible in the use of CORS (cross-origin resource sharing).
+Servers SHOULD be as specific as possible in the use of CORS.
 
 - The examples in the IS-04 and IS-05 documentation are "very relaxed",
   and SHOULD NOT be used without considering whether they are appropriate.

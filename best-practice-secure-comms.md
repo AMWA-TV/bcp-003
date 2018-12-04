@@ -1,4 +1,4 @@
-# [Work In Progress] Securing communications in NMOS APIs (future BCP-003)
+# [Work In Progress] Securing communications in NMOS APIs (future BCP-003-01)
 
 [//]: # (ToC goes after this comment. Generate with gen-toc.sh <this-file> and paste in.)
 

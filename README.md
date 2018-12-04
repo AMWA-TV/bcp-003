@@ -9,4 +9,4 @@ A proposed approach is based on TLS 1.2, X.509 PKI, OAuth 2.0 and JSON Web Token
 ## Documentation
 
 - [Initial Security Proposal](security-proposal.md)
-- [Best Practice for Securing Communications (future BCP-003)](best-practice-secure-comms.md)
+- [Best Practice for Securing Communications (future BCP-003-01)](best-practice-secure-comms.md)

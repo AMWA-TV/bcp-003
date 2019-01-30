@@ -394,7 +394,7 @@ RECOMMENDED to attempt a refresh at least 15 seconds before expiry
 
 ### AMWA NMOS IS-04
 
-TODO: Discuss this with Andrew B
+TODO: Needs further discussion with IS-04 group
 
 [//]: ## (References)
 

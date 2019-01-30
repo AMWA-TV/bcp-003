@@ -2,37 +2,38 @@
 
 [//]: # (ToC goes after this comment. Generate with gen-toc.sh <this-file> and paste in.)
 
-- [Scope](#scope)
-- [Use of Normative Language](#use-of-normative-language)
-- [Normative References](#normative-references)
-- [Definitions](#definitions)
-  - [API](#api)
-  - [Server](#server)
-  - [Client](#client)
-  - [Message](#message)
-- [Introduction (informative)](#introduction-informative)
-- [TLS](#tls)
-  - [TLS Versions](#tls-versions)
-  - [TLS 1\.3 Cipher Suites](#tls-13-cipher-suites)
-  - [TLS 1\.2 Cipher Suites](#tls-12-cipher-suites)
-  - [X\.509 Certificates and Certificate Authority](#x509-certificates-and-certificate-authority)
-- [Server Behaviour](#server-behaviour)
-  - [Certificate Management: Server](#certificate-management-server)
-  - [HTTP: Server](#http-server)
-  - [WebSockets: Server](#websockets-server)
-  - [Other Protocols: Server](#other-protocols-server)
-  - [DNS\-SD: Server](#dns-sd-server)
-- [Client Behaviour](#client-behaviour)
-  - [Certificate Management: Client](#certificate-management-client)
-  - [HTTP: Client](#http-client)
-  - [WebSockets: Client](#websockets-client)
-  - [Other Protocols: Client](#other-protocols-client)
-  - [DNS\-SD: Client](#dns-sd-client)
-- [Other Considerations](#other-considerations)
-  - [DHCP](#dhcp)
-  - [DNS](#dns)
-- [Recommendations for Future Interface Specifications](#recommendations-for-future-interface-specifications)
-- [Further Reading](#further-reading)
+- [[Work In Progress] Securing communications in NMOS APIs (future BCP-003-01)](#work-in-progress-securing-communications-in-nmos-apis-future-bcp-003-01)
+  - [Scope](#scope)
+  - [Use of Normative Language](#use-of-normative-language)
+  - [Normative References](#normative-references)
+  - [Definitions](#definitions)
+    - [API](#api)
+    - [Server](#server)
+    - [Client](#client)
+    - [Message](#message)
+  - [Introduction (informative)](#introduction-informative)
+  - [TLS](#tls)
+    - [TLS Versions](#tls-versions)
+    - [TLS 1.3 Cipher Suites](#tls-13-cipher-suites)
+    - [TLS 1.2 Cipher Suites](#tls-12-cipher-suites)
+    - [X.509 Certificates and Certificate Authority](#x509-certificates-and-certificate-authority)
+  - [Server Behaviour](#server-behaviour)
+    - [Certificate Management: Server](#certificate-management-server)
+    - [HTTP: Server](#http-server)
+    - [WebSockets: Server](#websockets-server)
+    - [Other Protocols: Server](#other-protocols-server)
+    - [DNS-SD: Server](#dns-sd-server)
+  - [Client Behaviour](#client-behaviour)
+    - [Certificate Management: Client](#certificate-management-client)
+    - [HTTP: Client](#http-client)
+    - [WebSockets: Client](#websockets-client)
+    - [Other Protocols: Client](#other-protocols-client)
+    - [DNS-SD: Client](#dns-sd-client)
+  - [Other Considerations](#other-considerations)
+    - [DHCP](#dhcp)
+    - [DNS](#dns)
+  - [Recommendations for Future Interface Specifications](#recommendations-for-future-interface-specifications)
+  - [Further Reading](#further-reading)
 
 [//]: # (ToC goes before this comment)
 
@@ -239,6 +240,11 @@ and certificate revocation can be a significant overhead.
 
 Wildcard certificates SHOULD NOT be used.
 
+Certificates SHOULD contain the Subject Alternate Name extension. The Subject Alternate Name
+field SHOULD contain the Common Name, and any other names the server is known by.
+
+Certificates SHOULD NOT use IP addresses as the Common Name or as a Subject Alternate Name.
+
 There SHALL be a way of revoking Certificates that are no longer needed or compromised.
 
 The CA SHOULD support OCSP requests as per [RFC 6960][RFC-6960]
@@ -341,6 +347,9 @@ Servers SHOULD NOT advertise multicast DNS-SD, except where a DNS server is not 
   Servers SHALL NOT advertise using multicast DNS-SD outside the local network.
   - As of version v1.2, AMWA IS-04 includes DNS-SD announcements of Node APIs.
     However, these may be deprecated and removed from later versions of the spec.
+
+Servers SHALL use a name listed in the Common Name and/or Subject Alternate Name fields of its certificate
+in DNS-SD advertisements whether unicast or multicast.
 
 ## Client Behaviour
 

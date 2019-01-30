@@ -304,6 +304,19 @@ implementations MUST reject a token where the iat claim is greater than the curr
 Authorisation servers SHOULD NOT issue a token with an `iat` claim that is significantly greater or
 less than the UTC time at which the token is issued.
 
+#### Public Claims
+
+[RFC 7519](RFC-7519) allows for “public claims”. The name of a public claim should be "collision resistant". Additionally, the name may be registered in the IANA "JSON Web Token Claims".
+
+The following claim is used for an access policy to be included whose effective permisisons will be added to those of the identity established with a given token.
+
+##### x-nmos-api-policy
+_Contains a resource access policy particular to NMOS_
+
+The `x•-nmos-•policy` claim MAY be included in the token. The value of the claim is a JSON object, the contents of which are defined by AMWA specifications.
+
+The only entry in this object required by this specification is the “version” field. This should be the version of the resource access policy language defined by AMWA specifications.
+
 #### Private Claims
 
 [RFC 7519](RFC-7519) allows for “private claims”. The following claim is used to identify the API

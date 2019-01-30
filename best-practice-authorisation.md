@@ -8,7 +8,7 @@ This is based on best practice used for RESTful APIs, and is intended to promote
 
 Use of insecure communication (plain HTTP etc.) is forbidden within the scope of this document.
 
-Implementation of [BCP-003-01](best-practice-secure-comms.md) is a recommended pre-requisit to implementing this document.
+Implementation of [BCP-003-01](best-practice-secure-comms.md) is a recommended prerequisite to implementing this document.
 
 Although security of web pages presented to users is also important,
 this is outside the scope of this document, which is concerned only with APIs.
@@ -66,14 +66,12 @@ A short lived JSON Web Token that may be used by a client to access privileged r
 
 ### Bearer Token
 
-Bearer tokens are longer lived in access tokens. They are passed from the authorisation server to the client after successful authentication of client credentials, and contain an access token. Bearer tokens can be used to retrieve further access tokens from the authorisation server once the original access token expires.
-
-### Bearer Token
+Bearer tokens are longer lived in access tokens. They are passed from the Authorisation Server to the client after successful authentication of client credentials, and contain an access token. Bearer tokens can be used to retrieve further access tokens from the Authorisation Server once the original access token expires.
 
 ## Introduction (informative)
 
-This document covers client authorisation, the mechanism by which an AMWA NMOS API may verify that a client accessing
-it has the privileges required to access or modify some or all of the content in the API.
+This document covers client authorisation, the mechanism by which an AMWA NMOS API Resource Server may verify that a client accessing
+it has the privileges required to access or modify some or all of the content using the API.
 
 This document is not concerned with the security of the connection used to carry out authorisation or subsequently authorised interactions, but for the authorisation mechanisms described in this document to be effective the connection used must be secured, ideally using the recommendations covered in [BCP-003-01](best-practice-secure-comms.md).
 
@@ -83,15 +81,15 @@ The client authentication mechanism described in this document is based on the O
 
 A simplified illustration of the authorisation flow is shown below. The API client, in this case a broadcast control system, provides the client's credentials to the Authorisation Server, which verifies them. The mechanism used to verify client credentials is out of scope for this document, but may involve widely used authentication technologies such as a corporate Single Sign On, Kerberos or Microsoft Active Directory for example.
 
-In its request the client will also indicate what privileges it wants included in a token. If the authorisation server is happy that a given client may be permitted the privileges requested it will grant a Bearer Token, containing an Authorisation Token whose "claims" include the requested privileges.
+In its request the client will also indicate what privileges it wants included in a token. If the Authorisation Server concurs that a given client may be permitted the privileges requested, it will grant a Bearer Token containing an Authorisation Token whose "claims" include the requested privileges.
 
-The client uses the token it has been issued with when it makes requests to protected resources on the resource server using the Authorisation Token. The resource server then validates the token, using the public key of the authorisation server. If the client is satisfied the token is valid for the protected resource to be accessed it will carry out the API request as normal.
+The client uses the token it has been issued with when it makes requests to protected resources on the Resource Server using the Authorisation Token. The Resource Server then validates the token, using the public key of the Authorisation Server. If the Resource Server finds that the token is valid for the protected resource to be accessed, it will allow the API request to proceed.
 
 ![Authorisation Flow](images/nmos_sec_3.png)
 
-Tokens are signed using a long-lived private key held by the authorisation server. The authorisation server makes available its public key to resource servers, to allow them to validate tokens using that key.
+Tokens are signed using a long-lived private key held by the Authorisation Server. The Authorisation Server makes available its public key to Resource Servers, to allow them to validate tokens using that key.
 
-The Bearer Token issued by the authorisation server are much shorter lived than the Authorisation Server secret key, but longer lived than the Access Token. This means that the client may readily regularly the access token without needing to ask the end-user for their credentials, but allows system administrators the opportunity to revoke access to the protected resources by the client by refusing to issue a new access token when asked for a renewal.
+The Bearer Token issued by the Authorisation Server are much shorter lived than the Authorisation Server secret key, but longer lived than the Access Token. This means that the client may readily regularly the access token without needing to ask the end-user for their credentials, but allows system administrators the opportunity to revoke access to the protected resources by the client by refusing to issue a new access token when asked for a renewal.
 
 ## Authorisation Server Specification
 
@@ -107,19 +105,19 @@ The Authorisation Server must otherwise be implemented as per [RFC 6749](RFC-674
 
 The Authorisation Server MUST support advertising itself using DNS-SD as per [RFC 6763](RFC-6763). It MUST support advertisement over both mDNS and unicast service but MAY allow the operator to disable one or other of these discovery modes as a configuration option.
 
-The authorisation server MUST advertise itself with the following service type:
+The Authorisation Server MUST advertise itself with the following service type:
 
 ```
 _nmos-security._tcp
 ```
 
-The hostname and port of the Authorisation Server MUST be identified via the DNS-SD advertisement, with the full HTTPS path then being resolved via the standard NMOS API path documentation. A DNS A record MUST be provided to allow the hostname to be resolved. The hostname and domain used MUST match one of the Subject Alternate Names provided in the TLS certificate of the authorisation server. The hostname and domain used SHOULD be the Common Name on the TLS certificate of the authorisation server.
+The hostname and port of the Authorisation Server MUST be identified via the DNS-SD advertisement, with the full HTTPS path then being resolved via the standard NMOS API path documentation. A DNS A record MUST be provided to allow the hostname to be resolved. The hostname and domain used MUST match one of the Subject Alternate Names provided in the TLS certificate of the Authorisation Server. The hostname and domain used SHOULD be the Common Name on the TLS certificate of the Authorisation Server.
 
 Multiple DNS-SD advertisements for the same API are permitted where the API is exposed via multiple ports and/or protocols.
 
 Clients and Resource Servers MUST support discovering the Authorisation Server through use of DNS-SD service discovery, as described in [RFC 6763](RFC-6763). Clients and Resource Servers MAY allow discovery using mDNS to be disabled such that the server may only be discovered through unicast DNS records.
 
-Clients and Resource Servers MUST verify the TLS certificate of the authorisation server. Clients MUST check that the address of the Authorisation Server matches either a Subject Alternate Name or Common Name on the TLS certificate. Clients and Resource Servers MUST provide a mechanism for installing root CA certificates used for verifying the TLS certificate of Authorisation servers. HTTPS MUST be used for all connections to the Authorisation Server. Clients and Resource Servers MUST NOT interact with Authorisation servers if the TLS certificate of the Authorisation server cannot be validated.
+Clients and Resource Servers MUST verify the TLS certificate of the Authorisation Server. Clients MUST check that the address of the Authorisation Server matches either a Subject Alternate Name or Common Name on the TLS certificate. Clients and Resource Servers MUST provide a mechanism for installing root CA certificates used for verifying the TLS certificate of Authorisation Servers. HTTPS MUST be used for all connections to the Authorisation Server. Clients and Resource Servers MUST NOT interact with Authorisation Servers if the TLS certificate of the Authorisation Server cannot be validated.
 
 #### DNS-SD TXT Records
 
@@ -133,40 +131,40 @@ The DNS-SD advertisement MUST include a TXT record with key 'pri' and an integer
 
 ### Authorisation Server Public Key
 
-The Authorisation Server MUST provide all public keys used for signing tokens at the ``certs`` endpoint of the API. The Authorisation MAY present more than one key on this endpoint, with each key being an entry in an array.
+The Authorisation Server MUST provide all public keys used for signing tokens at the ``certs`` endpoint of the API. The Authorisation Server MAY present more than one key on this endpoint, with each key being an entry in an array.
 
 All  public keys must be presented using the text representation used by The Secure Shell (SSH) Public Key File Format in [RFC 4716](RFC-4716). Each public key presented will be one entry in the array provided by the `certs` endpoint.
 
-Clients SHOULD seek to fetch public keys from the Authorisation Server at least once every hour. If clients are un-able to contact the Authorisation Server they MUST implement an exponential back-of to avoid over-loading the Authorisation server in the event of a system re-start. If the client is un-able to contact an Authorisation Server it may assume currently held public keys remain valid until it is able to re-establish a connection to an authorisation server.
+Clients SHOULD seek to fetch public keys from the Authorisation Server at least once every hour. If a client is unable to contact the Authorisation Server, the client MUST implement an exponential back-of to avoid over-loading the Authorisation Server in the event of a system re-start. Also if a client is unable to contact an Authorisation Server, the client MAY assume currently held public keys remain valid until it is able to re-establish a connection to an Authorisation Server.
 
-Clients SHOULD attempt to verify tokens against every public key presented at its Authorisation Server's `certs` endpoint, until it finds a public key that verifies the token, or until no keys are left. If the client has tried all public keys available and failed to verify it MUST reject the token.
+Clients SHOULD attempt to verify tokens against every public key presented at its Authorisation Server's `certs` endpoint, until a client finds a public key that verifies the token, or until no keys are left. If a client fails to veryify all public keys available, the client MUST reject the token.
 
 #### Changing Keys
 
-When transitioning to a new public/private key pair used for signing tokens the Authorisation Server SHOULD provide both the old and new public key at the `certs` endpoint until all tokens that may be verified by the old public key would have expired. However, if a private key is known to be compromised the authorisation server MUST remove it from the `certs` endpoint immediately.
+When transitioning to a new public/private key pair used for signing tokens the Authorisation Server SHOULD provide both the old and new public key at the `certs` endpoint until all tokens that may be verified by the old public key would have expired. However, if a private key is known to be compromised, the Authorisation Server MUST remove it from the `certs` endpoint immediately.
 
-Authorisation servers SHOULD provide new public keys on the `certs` endpoint for at least 2 hours, before issuing tokens signed by the corresponding private key, to allow time for clients to cache the new public key.
+Authorisation Servers SHOULD provide new public keys on the `certs` endpoint for at least 2 hours before issuing tokens signed by the corresponding private key to allow time for clients to cache the new public key.
 
 ## Client Registration
 
-Clients MUST be registered with the authorisation server before initiating the OAuth 2.0 protocol as per
+Clients MUST be registered with the Authorisation Server before initiating the OAuth 2.0 protocol as per
 Section 2 of [RFC 6749](RFC-6749).
-The authorisation server MUST NOT accept un-registered clients.
+The Authorisation Server MUST NOT accept un-registered clients.
 
-Authorisation servers SHOULD support a manual mechanism for registering clients (e.g an HTML web form)
+Authorisation Servers SHOULD support a manual mechanism for registering clients (e.g an HTML web form)
 allowing the client type and re-direct URIs to be provided. Clients SHOULD support a mechanism for providing
 the information required for OAuth 2.0 registration (e.g a web page containing the required details).
 
 Clients operating with a client password SHOULD support using HTTP Basic Authentication, as per Section 2
 of [RFC 2617](RFC-2617), to authenticate with the Authorisation Server
-in the manner described in Section 2.3.1 of [RFC 6749](RFC-6749). Authorisation servers SHOULD provide
+in the manner described in Section 2.3.1 of [RFC 6749](RFC-6749). Authorisation Servers SHOULD provide
 support for such registrations.
 
-Clients and Authorisation servers are RECOMMENDED to provide for the OAuth 2.0 Dynamic
+Clients and Authorisation Servers are RECOMMENDED to provide for the OAuth 2.0 Dynamic
 Client Registration Protocol [RFC 7591](RFC-7591).
 
 AMWA NMOS Specifications MAY specify additional registration parameters where they require them.
-Where clients and authorisation servers that support OAuth 2.0 with these specifications
+Where clients and Authorisation Servers that support OAuth 2.0 with these specifications
 they SHALL use these parameters in all OAuth 2.0 registration mechanisms they support.
 
 ## OAuth Grants
@@ -216,9 +214,9 @@ privileged software. This may be the case for native application broadcast contr
 implemented in the user-agent (e.g browser). This grant is not suitable for NMOS Node type clients.
 
 The client authentication grant is suitable for confidential clients, but requires the resource owner 
-arrange for the authorisation server to allow access to protected resources out of band rather than as part 
+arrange for the Authorisation Server to allow access to protected resources out of band rather than as part 
 of the grant process.
-This may be suitable for use with NMOS, especially where the authorisation server forms part of a
+This may be suitable for use with NMOS, especially where the Authorisation Server forms part of a
 larger broadcast control system.
 
 Individual AMWA NMOS specifications MAY specify the grants permitted for the API clients involved in the
@@ -230,7 +228,7 @@ Authorisation Server SHOULD support all four grant flows.
 
 ### Authorisation Server Response
 
-Successful authorisation requests shall be serviced by the authorisation server as defined in
+Successful authorisation requests shall be serviced by the Authorisation Server as defined in
 [RFC 6749](RFC-6749) Section 5.1.
 Additionally the `expires_in` and `refresh_token` fields MUST be included in the response.
 
@@ -262,16 +260,16 @@ Registered claims are defined in the authorisation JSON Web Token specification 
 _Identifies principal that issued the JWT_
 
 The `iss` (issuer) claim MUST be included in the token. The claim MUST contain the DNS
-name and port of the authorisation server accessible to the audience of the token.
+name and port of the Authorisation Server accessible to the audience of the token.
 The contents of this claim MUST match one entry in the common name field or alternate
-names fields in all TLS certificates used by the authorisation server for securing the authorisation
-API, in order to allow the verifier of the token to fetch the public key of the authorisation server.
+names fields in all TLS certificates used by the Authorisation Server for securing the authorisation
+API, in order to allow the verifier of the token to fetch the public key of the Authorisation Server.
 
 ##### sub
 _Identifies the subject of the JWT_
 
 The sub (subject) claim MUST be included in the token. This claim MUST contain a unique identifier assigned
-to the client by the authorisation server. For example, this may be a username in the system, or an
+to the client by the Authorisation Server. For example, this may be a username in the system, or an
 email address of the user. This is primarily intended for audit use (e.g to appear in logs), and as such
 should be meaningful in that context.
 
@@ -284,7 +282,7 @@ Specification the token is to be used with requires it.
 AMWA NMOS APIs are free to specify their own audience claims, but in the absence of specification resource
 servers SHOULD assume that the audience claim contains the fully resolved domain name of the intended
 recipient. If the `aud` claim is present and does not match the fully resolved domain name of the resource
-server the resource server MUST reject the token.
+server the Resource Server MUST reject the token.
 
 ##### exp
 _Expiration time of the token_
@@ -301,7 +299,7 @@ _Token issued at time_
 
 The `iat` (issued at) claim MAY be included in the token. As with the `exp` claim this claim uses UTC. API
 implementations MUST reject a token where the iat claim is greater than the current UTC time.
-Authorisation servers SHOULD NOT issue a token with an `iat` claim that is significantly greater or
+Authorisation Servers SHOULD NOT issue a token with an `iat` claim that is significantly greater or
 less than the UTC time at which the token is issued.
 
 #### Private Claims
@@ -346,7 +344,7 @@ An example of the resulting x­nmos­api claim  is shown below.
 }
 ```
 
-Authorisation servers MAY only have support for certain NMOS API specifications, and MAY only
+Authorisation Servers MAY only have support for certain NMOS API specifications, and MAY only
 support certain versions of such APIs.
 
 #### Size Considerations
@@ -382,11 +380,11 @@ and use it itself maliciously.
 While the precise duration of token validity should be left to implementers and administrators based on risk
 profile, these tokens SHOULD ideally be set to be valid for no more than one hour.
 
-However, if tokens are too short lived, the number of refresh requests to the authorisation server for new
+However, if tokens are too short lived, the number of refresh requests to the Authorisation Server for new
 tokens starts to become a significant overhead, and any latency involved in using a token may cause it to
 become invalid during transit. As such it is RECOMMENDED that tokens be valid for at least 30 seconds.
 Clients SHOULD ensure tokens are refreshed sufficiently in advance of their expiry.
-While the exact time will depend on the implementation of the client and authorisation server, it is
+While the exact time will depend on the implementation of the client and Authorisation Server, it is
 RECOMMENDED to attempt a refresh at least 15 seconds before expiry
 (i.e the half life of the shortest possible lived token).
 

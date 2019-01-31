@@ -89,7 +89,7 @@ The client uses the token it has been issued with when it makes requests to prot
 
 Tokens are signed using a long-lived private key held by the Authorisation Server. The Authorisation Server makes available its public key to Resource Servers, to allow them to validate tokens using that key.
 
-The Bearer Token issued by the Authorisation Server are much shorter lived than the Authorisation Server secret key, but longer lived than the Access Token. This means that the client may readily regularly the access token without needing to ask the end-user for their credentials, but allows system administrators the opportunity to revoke access to the protected resources by the client by refusing to issue a new access token when asked for a renewal.
+The Bearer Token issued by the Authorisation Server are much shorter lived than the Authorisation Server secret key, but longer lived than the Access Token. This means that the client may readily employ the access token without needing to ask the end-user for their credentials, but allows system administrators the opportunity to revoke access to the protected resources by the client by refusing to issue a new access token when asked for a renewal.
 
 ## Authorisation Server Specification
 

@@ -1,0 +1,152 @@
+#%RAML 1.0
+
+# AMWA NMOS BCP-003 Security: NMOS OAuth API with JSON Web Tokens
+# (c) AMWA 2019
+
+title: NMOS Oauth
+baseUri: http://example.api.com/x-nmos/oauth/{version}
+version: v1.0
+mediaType: application/json
+securitySchemes: !include SecuritySchemes.raml
+
+documentation:
+  - title: Overview
+    content: |
+      The NMOS Oauth Security API is exposed by an NMOS Authorization Server as a standard interface for requesting, revoking, and managing tokens and client registration
+  - title: Endpoint Discovery
+    content: |
+      The NMOS OAuth Authorization Server URL is discoverable using unicast and/or multicast DNS using the '_nmos-security._tcp' service name
+
+traits:
+  hasHeaders:
+    headers:
+      Authorization:
+        displayName: Basic Authorization
+        description: Basic authentication (base-64 encoded string) of username (client ID) and Password (Client Secret)
+        type: string
+        required: true
+
+/:
+  displayName: Base
+  get:
+    description: The home page of the Authorization Server. This will likely be a login page in order to keep OAuth Client credentials confidential and limit tasks.
+    responses:
+      200:
+        body:
+          text/html:
+            type: file
+
+/register_client:
+  displayName: Register Clients
+  get:
+    description: Resource for GUI for entering registration details for oauth clients with the auth server
+    responses:
+      200:
+        body:
+          text/html:
+            type: file
+  post:
+    description: Resource for registering clients with auth server
+    body:
+      application/x-www-form-urlencoded:
+        properties:
+          client_name:
+            description: Name of Client
+            type: string
+            required: true
+          client_uri:
+            description: URI of client
+            type: string
+            required: true
+          scope:
+            description: List of possible scopes, space-separated
+            type: string
+            required: true
+          grant_type:
+            description: The type of permissable OAuth grants
+            type: string
+            required: true
+
+
+/token:
+  /password:
+    displayName: Request Token Resource (Password)
+    post:
+      description: Method for requesting OAuth Bearer Token (Password Grant)
+      securedBy: [ basic ]
+      is: ["hasHeaders"]
+      body:
+        application/x-www-form-urlencoded:
+          properties:
+            grant_type:
+              description: The OAuth grant type of the request
+              type: string
+              required: true
+            username:
+              description: Username for the Password Credentials Grant
+              type: string
+              required: true
+            password:
+              description: Password for the Password Credentials grant_type
+              type: string
+              required: true
+            scope:
+              description: A single scope entry to define the scope of the request_token
+              type: string
+              required: true
+      responses:
+        200:
+          description: Successful request to obtain a Bearer Token, consisting of the access token and optionally a refresh token to be used to request further access tokens.
+          body:
+            type: !include schemas/token_response.json
+            example: !include ../examples/token_response_example.json
+  /authorization:
+    displayName: Request Token Resource (Authorization)
+    post:
+      description: Method for requesting OAuth Bearer Token (Authorization Grant)
+      securedBy: [ basic ]
+      is: ["hasHeaders"]
+      body:
+        application/x-www-form-urlencoded:
+          properties:
+            grant_type:
+              description: The OAuth grant type of the request
+              type: string
+              required: true
+            scope:
+              description: A single scope entry to define the scope of the request_token
+              type: string
+              required: false
+      responses:
+        200:
+          description: Successful request to obtain a Bearer Token, consisting of the access token and optionally a refresh token to be used to request further access tokens.
+          body:
+
+/certs:
+  displayName: Certificates Resource
+  get:
+    description: Request the contents of the certs endpoints
+    body:
+    responses:
+      200:
+        description: Successful request to obtain JSON dictionary of available public keys to validate token against
+        body:
+          type: !include schemas/certs_response.json
+          example: !include ../examples/certs_response_example.json
+
+/authorize:
+  displayName: Authorization Code Resource
+  get:
+    description: The confirmation page enabling the authorization server to release an authorization code to the client
+    responses:
+      200:
+        body:
+          text/html:
+            type: file
+  post:
+    description: Endpoint for requesting Authorization code
+
+/revoke:
+  displayName: Token Revocation Resource
+  post:
+    description: Endpoint for revoking specific access/refresh tokens

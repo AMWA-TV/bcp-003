@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "",
+  "description": "",
+  "title": "",
+  "items": {
+    "type": "",
+    "enum": [
+      "",
+      ""
+    ],
+    "minItems": 2,
+    "maxItems": 2,
+    "uniqueItems": true
+  }
+}

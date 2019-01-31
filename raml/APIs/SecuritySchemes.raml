@@ -1,0 +1,36 @@
+#%RAML 1.0 securitySchemes
+basic:
+  type: Basic Authentication
+  description: |
+    This API supports Basic Authentication.
+
+oauth_2_0:
+  type: OAuth 2.0
+  description: |
+    OAuth 2.0 for authenticating NMOS API requests.
+  describedBy:
+    headers:
+      Authorization:
+        description: |
+           Used to send a valid OAuth 2 access token. Do not use
+           with the "access_token" query string parameter.
+        type: string
+    queryParameters:
+      access_token:
+        description: |
+           Used to send a valid OAuth 2 access token. Do not use with
+           the "Authorization" header.
+        type: string
+    responses:
+      401:
+        description: |
+            Bad or expired token. This can happen if the user or owner
+            revoked or expired an access token.
+      403:
+        description: |
+            Bad OAuth request.
+  settings:
+    authorizationUri: http://example.api.com/x-nmos/{version}/authorize
+    accessTokenUri:  http://example.api.com/x-nmos/{version}/token
+    authorizationGrants: [ authorization_code, password ]
+    scopes: is04 is05

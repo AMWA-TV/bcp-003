@@ -1,0 +1,218 @@
+<!DOCTYPE HTML><html><head><title>NMOS Oauth API documentation</title><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="generator" content="https://github.com/raml2html/raml2html 7.2.1"><link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"><script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script><script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script><script type="text/javascript">
+      $(document).ready(function() {
+  $('.page-header pre code, .top-resource-description pre code, .modal-body pre code').each(function(i, block) {
+    hljs.highlightBlock(block);
+  });
+
+  $('[data-toggle]').click(function() {
+    var selector = $(this).data('target') + ' pre code';
+    $(selector).each(function(i, block) {
+      hljs.highlightBlock(block);
+    });
+  });
+
+  // open modal on hashes like #_action_get
+  $(window).bind('hashchange', function(e) {
+    var anchor_id = document.location.hash.substr(1); //strip #
+    var element = $('#' + anchor_id);
+
+    // do we have such element + is it a modal?  --> show it
+    if (element.length && element.hasClass('modal')) {
+      element.modal('show');
+    }
+  });
+
+  // execute hashchange on first page load
+  $(window).trigger('hashchange');
+
+  // remove url fragment on modal hide
+  $('.modal').on('hidden.bs.modal', function() {
+    try {
+      if (history && history.replaceState) {
+          history.replaceState({}, '', '#');
+      }
+    } catch(e) {}
+  });
+});
+    </script><style>
+      .hljs {
+  background: transparent;
+}
+.parent {
+  color: #999;
+}
+.list-group-item > .badge {
+  float: none;
+  margin-right: 6px;
+}
+.panel-title > .methods {
+  float: right;
+}
+.badge {
+  border-radius: 0;
+  text-transform: uppercase;
+  width: 70px;
+  font-weight: normal;
+  color: #f3f3f6;
+  line-height: normal;
+}
+.badge_get {
+  background-color: #63a8e2;
+}
+.badge_post {
+  background-color: #6cbd7d;
+}
+.badge_put {
+  background-color: #22bac4;
+}
+.badge_delete {
+  background-color: #d26460;
+}
+.badge_patch {
+  background-color: #ccc444;
+}
+.list-group,
+.panel-group {
+  margin-bottom: 0;
+}
+.panel-group .panel+.panel-white {
+  margin-top: 0;
+}
+.panel-group .panel-white {
+  border-bottom: 1px solid #F5F5F5;
+  border-radius: 0;
+}
+.panel-white:last-child {
+  border-bottom-color: white;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.panel-white .panel-heading {
+  background: white;
+}
+.tab-pane ul {
+  padding-left: 2em;
+}
+.tab-pane h1 {
+  font-size: 1.3em;
+}
+.tab-pane h2 {
+  font-size: 1.2em;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #ddd;
+}
+.tab-pane h3 {
+  font-size: 1.1em;
+}
+.tab-content {
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  padding: 10px;
+}
+#sidebar {
+  margin-top: 30px;
+  padding-right: 5px;
+  overflow: auto;
+  height: 90%;
+}
+.top-resource-description {
+  border-bottom: 1px solid #ddd;
+  background: #fcfcfc;
+  padding: 15px 15px 0 15px;
+  margin: -15px -15px 10px -15px;
+}
+.resource-description {
+  border-bottom: 1px solid #fcfcfc;
+  background: #fcfcfc;
+  padding: 15px 15px 0 15px;
+  margin: -15px -15px 10px -15px;
+}
+.resource-description p:last-child {
+  margin: 0;
+}
+.list-group .badge {
+  float: left;
+}
+.method_description {
+  margin-left: 85px;
+}
+.method_description p:last-child {
+  margin: 0;
+}
+.list-group-item {
+  cursor: pointer;
+}
+.list-group-item:hover {
+  background-color: #f5f5f5;
+}
+pre code {
+  overflow: auto;
+  word-wrap: normal;
+  white-space: pre;
+}
+.items {
+  background: #f5f5f5;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 9.5px;
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 1.42857143;
+}
+.examples {
+  margin-left: 0.5em;
+}
+.resource-modal li > ul {
+  margin-bottom: 1em;
+}
+    </style></head><body data-spy="scroll" data-target="#sidebar"><div class="container"><div class="row"><div class="col-md-9" role="main"><div class="page-header"><h1>NMOS Oauth API documentation <small>version v1.0</small></h1><p>http://example.api.com/x-nmos/oauth/{version}</p><ul><li><strong>version</strong>: <em>required (v1.0)</em></li></ul><h3 id="overview"><a href="#overview">Overview</a></h3><p>The NMOS Oauth Security API is exposed by an NMOS Authorization Server as a standard interface for requesting, revoking, and managing tokens and client registration</p><h3 id="endpoint_discovery"><a href="#endpoint_discovery">Endpoint Discovery</a></h3><p>The NMOS OAuth Authorization Server URL is discoverable using unicast and/or multicast DNS using the &#39;_nmos-security._tcp&#39; service name</p></div><div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title">Base</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_"><span class="parent"></span>/</a> <span class="methods"><a href="#_get"><span class="badge badge_get">get</span></a></span></h4></div><div id="panel_" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#_get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><p>The home page of the Authorization Server. This will likely be a login page in order to keep OAuth Client credentials confidential and limit tasks.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="_get"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent"></span>/</h4></div><div class="modal-body"><div class="alert alert-info"><p>The home page of the Authorization Server. This will likely be a login page in order to keep OAuth Client credentials confidential and limit tasks.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#_get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: text/html</p><p><strong>Type</strong>: file</p></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="register_client" class="panel-title">Register Clients</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_register_client"><span class="parent"></span>/register_client</a> <span class="methods"><a href="#register_client_get"><span class="badge badge_get">get</span></a> <a href="#register_client_post"><span class="badge badge_post">post</span></a></span></h4></div><div id="panel_register_client" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#register_client_get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><p>Resource for GUI for entering registration details for oauth clients with the auth server</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#register_client_post'" class="list-group-item"><span class="badge badge_post">post</span><div class="method_description"><p>Resource for registering clients with auth server</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="register_client_get"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent"></span>/register_client</h4></div><div class="modal-body"><div class="alert alert-info"><p>Resource for GUI for entering registration details for oauth clients with the auth server</p></div><ul class="nav nav-tabs"><li class="active"><a href="#register_client_get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="register_client_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: text/html</p><p><strong>Type</strong>: file</p></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="register_client_post"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post</span> <span class="parent"></span>/register_client</h4></div><div class="modal-body"><div class="alert alert-info"><p>Resource for registering clients with auth server</p></div><ul class="nav nav-tabs"><li class="active"><a href="#register_client_post_request" data-toggle="tab">Request</a></li></ul><div class="tab-content"><div class="tab-pane active" id="register_client_post_request"><h3>Body</h3><p><strong>Media type</strong>: application/x-www-form-urlencoded</p><p><strong>Type</strong>: object</p><strong>Properties</strong><ul><li><strong>client_name</strong>: <em>required (string)</em><p>Name of Client</p></li><li><strong>client_uri</strong>: <em>required (string)</em><p>URI of client</p></li><li><strong>scope</strong>: <em>required (string)</em><p>List of possible scopes, space-separated</p></li><li><strong>grant_type</strong>: <em>required (string)</em><p>The type of permissable OAuth grants</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="token" class="panel-title">/token</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_token_password"><span class="parent">/token</span>/password</a> <span class="methods"><a href="#token_password_post"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_token_password" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#token_password_post'" class="list-group-item"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Method for requesting OAuth Bearer Token (Password Grant)</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="token_password_post"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/token</span>/password</h4></div><div class="modal-body"><div class="alert alert-info"><p>Method for requesting OAuth Bearer Token (Password Grant)</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>basic</b><p>This API supports Basic Authentication.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#token_password_post_request" data-toggle="tab">Request</a></li><li><a href="#token_password_post_response" data-toggle="tab">Response</a></li><li><a href="#token_password_post_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="token_password_post_request"><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>Basic authentication (base-64 encoded string) of username (client ID) and Password (Client Secret)</p></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/x-www-form-urlencoded</p><p><strong>Type</strong>: object</p><strong>Properties</strong><ul><li><strong>grant_type</strong>: <em>required (string)</em><p>The OAuth grant type of the request</p></li><li><strong>username</strong>: <em>required (string)</em><p>Username for the Password Credentials Grant</p></li><li><strong>password</strong>: <em>required (string)</em><p>Password for the Password Credentials grant_type</p></li><li><strong>scope</strong>: <em>required (string)</em><p>A single scope entry to define the scope of the request_token</p></li></ul></div><div class="tab-pane" id="token_password_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Successful request to obtain a Bearer Token, consisting of the access token and optionally a refresh token to be used to request further access tokens.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>:</p><pre><code>{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Token Response",
+  "description": "OAuth2 Response for the request of a Bearer Token",
+  "type": "object",
+  "properties": {
+    "access_token": {
+      "description": "Access Token to be used in accessing protected endpoints",
+      "type": "string"
+    },
+    "expires_in": {
+      "description": "The UTC time in which the Bearer Token will expire",
+      "type": "integer"
+    },
+    "refresh_token": {
+      "description": "Refresh Token to be used to obtain further Access Tokens",
+      "type": "string"
+    },
+    "scope": {
+      "description": "The scope of the Access Token",
+      "type": "string"
+    },
+    "token_type": {
+      "description": "The form of the Token",
+      "type": "string"
+    }
+  },
+  "required": ["access_token", "expires_in", "token_type"]
+}
+</code></pre><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkYW5ueW0iLCJleHAiOjE1NDg4Njc3NDksInNjb3BlIjoiaXMtMDQiLCJpc3MiOiJodHRwczovL29hdXRoLnJkLmJiYy5jby51ayIsImlhdCI6MTU0ODg2NzcxOSwieC1ubW9zLWFwaSI6eyJhY2Nlc3MiOiJyZWFkIiwibmFtZSI6ImlzLTA0In0sIm5iZiI6MTU0ODg2NzcxOSwiYXVkIjpbIklTLTA0IiwiUmVhZCIsIkFjY2VzcyJdfQ.KdWfqabvUXMsHcsQVOwdEyTw98BXkJx8yQ9TYSqSf2Of0n3vBtJGyy1UXH3qhnTYSpS200B8XMsK0Fm1lVuSL6ZEMkPB0nFyUXFXma5XPdZgULJcyDernoRneVbwjPL7hQYu74kbYu9ozLke55hzicA5TaB1VJTa7cMfuE5My_KV_rOMXLzhzotLjOs7fne1o9J4687cGfT04cC0WnehKnGG6A1Exi2-zOQYN9l4BWP-lzMimvPYQ-HeikoljkF31vT5-NJJuK7yMLKVAD2LD6XoET9CsX6zN6yXifHs6hx7VRYvbsrNJECoLnwGQYQXOhsopLw0MypI6oYxbmFo9g",
+  "expires_in": 864000,
+  "refresh_token": "2PLfDfqSy4SSP46jilviCyw8lXRNc1FTInUCO9uTEAN8jOrz",
+  "scope": "is04",
+  "token_type": "Bearer"
+}
+</code></pre></div></div><div class="tab-pane" id="token_password_post_securedby"><h1>Secured by basic</h1></div></div></div></div></div></div></div><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_token_authorization"><span class="parent">/token</span>/authorization</a> <span class="methods"><a href="#token_authorization_post"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_token_authorization" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#token_authorization_post'" class="list-group-item"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Method for requesting OAuth Bearer Token (Authorization Grant)</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="token_authorization_post"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/token</span>/authorization</h4></div><div class="modal-body"><div class="alert alert-info"><p>Method for requesting OAuth Bearer Token (Authorization Grant)</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>basic</b><p>This API supports Basic Authentication.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#token_authorization_post_request" data-toggle="tab">Request</a></li><li><a href="#token_authorization_post_response" data-toggle="tab">Response</a></li><li><a href="#token_authorization_post_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="token_authorization_post_request"><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>required (string)</em><p>Basic authentication (base-64 encoded string) of username (client ID) and Password (Client Secret)</p></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/x-www-form-urlencoded</p><p><strong>Type</strong>: object</p><strong>Properties</strong><ul><li><strong>grant_type</strong>: <em>required (string)</em><p>The OAuth grant type of the request</p></li><li><strong>scope</strong>: <em>(string)</em><p>A single scope entry to define the scope of the request_token</p></li></ul></div><div class="tab-pane" id="token_authorization_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Successful request to obtain a Bearer Token, consisting of the access token and optionally a refresh token to be used to request further access tokens.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: any</p></div><div class="tab-pane" id="token_authorization_post_securedby"><h1>Secured by basic</h1></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="certs" class="panel-title">Certificates Resource</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_certs"><span class="parent"></span>/certs</a> <span class="methods"><a href="#certs_get"><span class="badge badge_get">get</span></a></span></h4></div><div id="panel_certs" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#certs_get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><p>Request the contents of the certs endpoints</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="certs_get"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent"></span>/certs</h4></div><div class="modal-body"><div class="alert alert-info"><p>Request the contents of the certs endpoints</p></div><ul class="nav nav-tabs"><li class="active"><a href="#certs_get_request" data-toggle="tab">Request</a></li><li><a href="#certs_get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="certs_get_request"><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: any</p></div><div class="tab-pane" id="certs_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Successful request to obtain JSON dictionary of available public keys to validate token against</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>:</p><pre><code>{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Certificate Response",
+  "description": "Array of certificates to validate Access Token",
+  "type": "array",
+  "minItems": 1,
+  "items": {
+      "type": "string"
+  }
+}
+</code></pre><p><strong>Example</strong>:</p><div class="examples"><pre><code>["-----BEGIN CERTIFICATE-----\nMIIDYzCCAkugAwIBAgIJAM4B197z9USgMA0GCSqGSIb3DQEBCwUAMEgxCzAJBgNV\nBAYTAlVLMRMwEQYDVQQHDApNYW5jaGVzdGVyMQwwCgYDVQQKDANCQkMxFjAUBgNV\nBAMMDXd3dy5iYmMuY28udWswHhcNMTkwMTMwMTQzNjMwWhcNMjAwMTMwMTQzNjMw\nWjBIMQswCQYDVQQGEwJVSzETMBEGA1UEBwwKTWFuY2hlc3RlcjEMMAoGA1UECgwD\nQkJDMRYwFAYDVQQDDA13d3cuYmJjLmNvLnVrMIIBIjANBgkqhkiG9w0BAQEFAAOC\nAQ8AMIIBCgKCAQEAzJcxYAuuoO13rjhqkR28nGZat3vJdfTeYhBcFg2DDPjeOXR0\nOdSaW87vNCsJJYfuhBRNGWgvyVch69RJFULV6pzvS4dqys+masvhKgkNhT7v/3IJ\nPZsefrqpk5+zr/IDCzpj7rDUVCaw0y+ba5eiVr8LIH5mQrU/WCOpU9lYrmvSWO2P\nUptH5osUOmT45gwwPNWLV90oj+dWdJRfavXYWroR4SFjgiO9BHSSSi/zb+HzN85D\nrB5fqgakkBX3BpPU/9H1CxTxljAoVAQHpNu71Hrk1WpVNCoKiSJ+2uOQkMPIC5ZQ\n2Q8heuSTzo8Hur9qWCunLoSxdFKBVWUg9aXDcwIDAQABo1AwTjAdBgNVHQ4EFgQU\nEB73uKP3kYWFMNGhgfEqwIeWOjgwHwYDVR0jBBgwFoAUEB73uKP3kYWFMNGhgfEq\nwIeWOjgwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAB2/bfwQ6MXWI\nzk6kfZYjRC3MgmFW5zc+p0PY7WpMFAlpdGPnSmgCCsD0EkUni/3wgDVG51EDZ/oH\n9e5c+IKmPHer8TTxFuvixoSqH5DSg4Jhzrf0LL+eCM9symZctdnHHv47mD5KrZ4V\nGX7JLy6pH18KKLKpjvxF0L8lFX/XOQQ506qtbSzRt2h1fU7pZpyyYsCVzdzwiBCO\nG6JfMrihfh+M5d10Jo2WNZACHdlI8R0BpYqFojaoYoKGzz3eOkbIK4wG61b+DNO0\nOGYCQ9fk66bVcKdduyT6zTbcQ8rM/9ZtUREQ06R1vvvQV+AwB8rBnByb6y29aW5h\nPhWAEoq26g==\n-----END CERTIFICATE-----\n"
+]
+</code></pre></div></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="authorize" class="panel-title">Authorization Code Resource</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_authorize"><span class="parent"></span>/authorize</a> <span class="methods"><a href="#authorize_get"><span class="badge badge_get">get</span></a> <a href="#authorize_post"><span class="badge badge_post">post</span></a></span></h4></div><div id="panel_authorize" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#authorize_get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><p>The confirmation page enabling the authorization server to release an authorization code to the client</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#authorize_post'" class="list-group-item"><span class="badge badge_post">post</span><div class="method_description"><p>Endpoint for requesting Authorization code</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="authorize_get"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent"></span>/authorize</h4></div><div class="modal-body"><div class="alert alert-info"><p>The confirmation page enabling the authorization server to release an authorization code to the client</p></div><ul class="nav nav-tabs"><li class="active"><a href="#authorize_get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="authorize_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: text/html</p><p><strong>Type</strong>: file</p></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="authorize_post"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post</span> <span class="parent"></span>/authorize</h4></div><div class="modal-body"><div class="alert alert-info"><p>Endpoint for requesting Authorization code</p></div><ul class="nav nav-tabs"></ul><div class="tab-content"></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="revoke" class="panel-title">Token Revocation Resource</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_revoke"><span class="parent"></span>/revoke</a> <span class="methods"><a href="#revoke_post"><span class="badge badge_post">post</span></a></span></h4></div><div id="panel_revoke" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#revoke_post'" class="list-group-item"><span class="badge badge_post">post</span><div class="method_description"><p>Endpoint for revoking specific access/refresh tokens</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="revoke_post"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post</span> <span class="parent"></span>/revoke</h4></div><div class="modal-body"><div class="alert alert-info"><p>Endpoint for revoking specific access/refresh tokens</p></div><ul class="nav nav-tabs"></ul><div class="tab-content"></div></div></div></div></div></div></div></div></div></div><div class="col-md-3"><div id="sidebar" class="hidden-print affix" role="complementary"><ul class="nav nav-pills nav-stacked"><li><a href="#">Base</a></li><li><a href="#register_client">Register Clients</a></li><li><a href="#token">/token</a></li><li><a href="#certs">Certificates Resource</a></li><li><a href="#authorize">Authorization Code Resource</a></li><li><a href="#revoke">Token Revocation Resource</a></li></ul></div></div></div></div></body></html>

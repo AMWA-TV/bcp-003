@@ -18,13 +18,114 @@ documentation:
       The NMOS OAuth Authorization Server URL is discoverable using unicast and/or multicast DNS using the '_nmos-security._tcp' service name
 
 traits:
-  hasHeaders:
+  OAuthBasic:
     headers:
       Authorization:
-        displayName: Basic Authorization
+        displayName: OAuth Basic Authorization
         description: Basic authentication (base-64 encoded string) of username (client ID) and Password (Client Secret)
         type: string
         required: true
+
+  authorizeReq:
+    queryParameters:
+      response_type:
+        description: Type of OAuth response. MUST be set to "code"
+        required: true
+      client_id:
+        description: The identifier of the client authenticating
+        required: true
+      redirect_uri:
+        description: URI to direct resource owners user-agent back to clients
+        required: false
+      scope:
+        description: The scope of the access request_token
+        required: false
+      state:
+        description: Value used by client to maintain state between request and callback
+        required: false
+
+types:
+  tokenAuthorizeReq:
+    properties:
+      grant_type:
+        description: The OAuth grant type of the request
+        type: string
+        required: true
+      code:
+        description:  The authorization code received from the authorization server
+        type: string
+        required: true
+      redirect_uri:
+        description: The "redirect_uri" parameter that was included in the authorization request
+        type: string
+      client_id:
+        description: The identifier of the client authenticating
+        type: string
+
+  tokenPasswordReq:
+    properties:
+      grant_type:
+        description: The OAuth grant type of the request
+        type: string
+        required: true
+      username:
+        description: Username for the Password Credentials Grant
+        type: string
+        required: true
+      password:
+        description: Password for the Password Credentials grant_type
+        type: string
+        required: true
+      scope:
+        description: A single scope entry to define the scope of the request_token
+        type: string
+        required: true
+
+  tokenRefreshReq:
+    properties:
+        grant_type:
+          description: MUST be set to "refresh_token"
+          required: true
+        refresh_token:
+          description: The refresh token issued to the client inside the bearer token
+          required: true
+        scope:
+          description: The scope of the access request
+          required: false
+
+  registerClientReq:
+    properties:
+      client_name:
+        description: Name of Client
+        type: string
+      client_uri:
+        description: URI of client
+        type: string
+      scope:
+        description: List of possible scopes, space-separated
+        type: string
+      redirect_uri:
+        description: used by the authorization server to return responses containing authorization credentials to the client
+        type: array
+        required: true
+      grant_types:
+        description: The type of permissable OAuth grants
+        type: array
+        items:
+          enum: [ authorization_code, implicit, password, client_credentials, refresh_token, urn:ietf:params:oauth:grant-type:jwt-bearer ]
+        default: [ authorization_code ]
+      response_types:
+        description: Used to define the valid response types of the client
+        type: array
+        items:
+          enum: [ code, token ]
+        default: [ code ]
+      token_endpoint_auth_method:
+        description: Defines whether client credentials are passed via Basic Auth or via POST body
+        type: string
+        enum: [ client_secret_post, client_secret_basic, none ]
+
+
 
 /:
   displayName: Base
@@ -38,8 +139,9 @@ traits:
 
 /register_client:
   displayName: Register Clients
+  securedBy: [ basic ]
   get:
-    description: Resource for GUI for entering registration details for oauth clients with the auth server
+    description: UI / Web Form for registering details of OAuth clients with the Auth Server
     responses:
       200:
         body:
@@ -49,78 +151,47 @@ traits:
     description: Resource for registering clients with auth server
     body:
       application/x-www-form-urlencoded:
-        properties:
-          client_name:
-            description: Name of Client
-            type: string
-            required: true
-          client_uri:
-            description: URI of client
-            type: string
-            required: true
-          scope:
-            description: List of possible scopes, space-separated
-            type: string
-            required: true
-          grant_type:
-            description: The type of permissable OAuth grants
-            type: string
-            required: true
-
+        type: registerClientReq
+        examples:
+          RegisterClient:
+            client_name:	R&D+Web+Router
+            client_uri:	http://ipstudio-master.rd.bbc.co.uk/ips-web/#/web-router
+            scope: is04
+            redirect_uri:	[http://ipstudio-master.rd.bbc.co.uk/ips-web/#/web-router]
+            grant_types:	[password]
+            response_types: [code]
+            token_endpoint_auth_method:	client_secret_basic
 
 /token:
-  /password:
-    displayName: Request Token Resource (Password)
-    post:
-      description: Method for requesting OAuth Bearer Token (Password Grant)
-      securedBy: [ basic ]
-      is: ["hasHeaders"]
-      body:
-        application/x-www-form-urlencoded:
-          properties:
-            grant_type:
-              description: The OAuth grant type of the request
-              type: string
-              required: true
-            username:
-              description: Username for the Password Credentials Grant
-              type: string
-              required: true
-            password:
-              description: Password for the Password Credentials grant_type
-              type: string
-              required: true
-            scope:
-              description: A single scope entry to define the scope of the request_token
-              type: string
-              required: true
-      responses:
-        200:
-          description: Successful request to obtain a Bearer Token, consisting of the access token and optionally a refresh token to be used to request further access tokens.
-          body:
-            type: !include schemas/token_response.json
-            example: !include ../examples/token_response_example.json
-  /authorization:
-    displayName: Request Token Resource (Authorization)
-    post:
-      description: Method for requesting OAuth Bearer Token (Authorization Grant)
-      securedBy: [ basic ]
-      is: ["hasHeaders"]
-      body:
-        application/x-www-form-urlencoded:
-          properties:
-            grant_type:
-              description: The OAuth grant type of the request
-              type: string
-              required: true
-            scope:
-              description: A single scope entry to define the scope of the request_token
-              type: string
-              required: false
-      responses:
-        200:
-          description: Successful request to obtain a Bearer Token, consisting of the access token and optionally a refresh token to be used to request further access tokens.
-          body:
+  displayName: Request Token Resource (Password)
+  post:
+    description: Method for requesting OAuth Bearer Token
+    securedBy: [ basic ]
+    is: ["OAuthBasic"]
+    body:
+      application/x-www-form-urlencoded:
+        type: tokenPasswordReq | tokenAuthorizeReq | tokenRefreshReq
+        examples:
+          PasswordGrant:
+            grant_type: password
+            username: Joe Bloggs
+            password: Password
+            scope: is04
+          AuthCodeGrant:
+            grant_type: code
+            code: SplxlOBeZQQYbYS6WxSbIA&state
+            redirect_uri: http://client.example.com/
+            client_id: ttwCD9hb4OckmcGDnmC3J3Jr
+          RefreshToken:
+            grant_type: refresh_token
+            refresh_token: tGzv3JOkF0XG5Qx2TlKWIA
+
+    responses:
+      200:
+        description: Successful request to obtain a Bearer Token, consisting of the access token and optionally a refresh token to be used to request further access tokens.
+        body:
+          type: !include schemas/token_response.json
+          example: !include ../examples/token_response_example.json
 
 /certs:
   displayName: Certificates Resource
@@ -137,16 +208,46 @@ traits:
 /authorize:
   displayName: Authorization Code Resource
   get:
-    description: The confirmation page enabling the authorization server to release an authorization code to the client
+    description: The confirmation page enabling the resource owner to approve the client
+    is: ["authorizeReq"]
     responses:
       200:
         body:
           text/html:
             type: file
   post:
-    description: Endpoint for requesting Authorization code
+    description: Means of confirming Resource Owner approval
+    queryParameters:
+      confirm:
+        description: Boolean comfirmation of approval
+        type: boolean
+        required: true
+    responses:
+      302:
+        description: Redirection of endpoint to client URI
+        headers:
+          Location:
+            description: The redirect URI with the Auth Code and State parameters added to the query component of the redirection URI
+            type: string
+            required: true
+            example: |
+              HTTP/1.1 302 Found
+              Location: https://client.example.com/cb?code=SplxlOBeZQQYbYS6WxSbIA&state=xyz
+
 
 /revoke:
   displayName: Token Revocation Resource
+  securedBy: basic
+  is: ["OAuthBasic"]
   post:
     description: Endpoint for revoking specific access/refresh tokens
+    body:
+      application/x-www-form-urlencoded:
+        properties:
+          access_token:
+            description: The token (access / refresh) that the client wants to revoke
+            required: true
+          token_type_hint:
+            description: A hint about the type of the token submitted for revocation
+            required: true
+            enum: [ access_token, refresh_token ]

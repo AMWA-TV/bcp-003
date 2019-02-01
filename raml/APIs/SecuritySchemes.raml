@@ -30,7 +30,7 @@ oauth_2_0:
         description: |
             Bad OAuth request.
   settings:
-    authorizationUri: http://example.api.com/x-nmos/{version}/authorize
-    accessTokenUri:  http://example.api.com/x-nmos/{version}/token
+    authorizationUri: http://example.api.com/x-nmos/oauth/{version}/authorize
+    accessTokenUri:  http://example.api.com/x-nmos/oauth/{version}/token
     authorizationGrants: [ authorization_code, password ]
-    scopes: is04 is05
+    scopes: [ is04, is05 ]

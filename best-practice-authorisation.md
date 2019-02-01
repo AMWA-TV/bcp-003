@@ -103,8 +103,8 @@ The Authorisation Server must otherwise be implemented as per [RFC 6749](RFC-674
 
 ### DNS-SD Advertisement
 
-The Authorisation Server MUST support advertising itself using DNS-SD as per [RFC 6763](RFC-6763). It MUST support advertisement over both mDNS and unicast service but MAY allow the operator to disable one or other of these discovery modes as a configuration option.
-
+The Authorisation Server MUST support advertising itself using unicast DNS-SD as per [RFC 6763](RFC-6763).
+The Authorisation Server SHOULD NOT be advertised of mDNS based DNS-SD.
 The Authorisation Server MUST advertise itself with the following service type:
 
 ```
@@ -115,7 +115,7 @@ The hostname and port of the Authorisation Server MUST be identified via the DNS
 
 Multiple DNS-SD advertisements for the same API are permitted where the API is exposed via multiple ports and/or protocols.
 
-Clients and Resource Servers MUST support discovering the Authorisation Server through use of DNS-SD service discovery, as described in [RFC 6763](RFC-6763). Clients and Resource Servers MAY allow discovery using mDNS to be disabled such that the server may only be discovered through unicast DNS records.
+Clients and Resource Servers MUST support discovering the Authorisation Server through use of unicast DNS-SD service discovery, as described in [RFC 6763](RFC-6763).
 
 Clients and Resource Servers MUST verify the TLS certificate of the Authorisation Server. Clients MUST check that the address of the Authorisation Server matches either a Subject Alternate Name or Common Name on the TLS certificate. 
 Clients MUST verify the entire chain of trust of the Authorisation Server TLS certificate, back to a trusted root certificate.

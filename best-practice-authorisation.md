@@ -138,9 +138,13 @@ The Authorisation Server MUST provide all public keys used for signing tokens at
 
 All  public keys must be presented using the text representation used by The Secure Shell (SSH) Public Key File Format in [RFC 4716](RFC-4716). Each public key presented will be one entry in the array provided by the `certs` endpoint.
 
-Clients SHOULD seek to fetch public keys from the Authorisation Server at least once every hour. If a client is unable to contact the Authorisation Server, the client MUST implement an exponential back-of to avoid over-loading the Authorisation Server in the event of a system re-start. Also if a client is unable to contact an Authorisation Server, the client MAY assume currently held public keys remain valid until it is able to re-establish a connection to an Authorisation Server.
+Resource Servers SHOULD seek to fetch public keys from the Authorisation Server at least once every hour.
+Resource Servers MUST vary their retrieval interval at random by up to at least one minute to avoid over-loading the Authorisation Server due to Resource
+Servers synchronising their retrieval time.
+If a Resource Server is unable to contact the Authorisation Server, the Resource Server MUST implement a random back-off mechanism to avoid over-loading the Authorisation Server in the event of a system re-start.
+Also if a Resource Server is unable to contact an Authorisation Server, the Resource Server MAY assume currently held public keys remain valid until it is able to re-establish a connection to an Authorisation Server.
 
-Clients SHOULD attempt to verify tokens against every public key presented at its Authorisation Server's `certs` endpoint, until a client finds a public key that verifies the token, or until no keys are left. If a client fails to verify all public keys available, the client MUST reject the token.
+Resource Servers SHOULD attempt to verify tokens against every public key presented at its Authorisation Server's `certs` endpoint, until the Resource Server finds a public key that verifies the token, or until no keys are left. If a client fails to verify all public keys available, the client MUST reject the token.
 
 #### Changing Keys
 

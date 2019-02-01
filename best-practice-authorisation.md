@@ -388,6 +388,28 @@ While the exact time will depend on the implementation of the client and Authori
 RECOMMENDED to attempt a refresh at least 15 seconds before expiry
 (i.e the half life of the shortest possible lived token).
 
+### Accessing Protected Resources
+
+When accessing protected resources clients MUST include the authorisation token in the
+request using the Authorization Request Header Field method described in Section 2.1
+of [RFC 6750](RFC-6750). Clients MUST NOT use any of the other methods specified in Section 2.0
+of [RFC 6750](RFC-6750).
+
+When a protected resources receives a token it MUST validate the claims of the token.
+If a token is invalid the resource server MUST reject the request with the appropriate
+HTTP error code as defined by [RFC 6750](RFC-6750).
+
+### Operation with WebSockets
+
+Where OAuth 2.0 is to be used with WebSockets clients SHALL provide the access token
+in the HTTP GET request that initiates the Websocket handshake defined in
+[RFC 6455][RFC-6455] in the same manner as a normal HTTP request as described in
+[Accessing Protected Resources](###Accessing-Protected-Resources).
+
+The Authorisation SHALL validate such tokens in the same manner as it would for a normal
+protected HTTP resources. The Authorisation server SHALL NOT upgrade the connection to a
+WebSocket if the token is deemed invalid.
+
 ## Interaction With Other AMWA Specifications
 
 ### AMWA NMOS IS-04
@@ -424,3 +446,9 @@ TODO: Needs further discussion with IS-04 group
 
 [RFC-7591]: https://tools.ietf.org/html/rfc7591
 "OAuth 2.0 Dynamic Client Registration Protocol"
+
+[RFC-6750]: https://tools.ietf.org/html/rfc6750
+"The OAuth 2.0 Authorization Framework: Bearer Token Usage"
+
+[RFC-6455]: https://tools.ietf.org/html/rfc6455
+"The WebSocket Protocol"

@@ -391,6 +391,9 @@ While the exact time will depend on the implementation of the client and Authori
 RECOMMENDED to attempt a refresh at least 15 seconds before expiry
 (i.e the half life of the shortest possible lived token).
 
+Authorisation Servers MUST issue refresh tokens in the Bearer token returned after the completion of an
+authentication flow. Refresh tokens MAY be valid indefinitely or MAY be time limited.
+
 ### Accessing Protected Resources
 
 When accessing protected resources clients MUST include the authorisation token in the

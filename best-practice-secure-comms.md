@@ -241,7 +241,8 @@ and certificate revocation can be a significant overhead.
 Wildcard certificates SHOULD NOT be used.
 
 Certificates SHOULD contain the Subject Alternate Name extension. The Subject Alternate Name
-field SHOULD contain the Common Name, and any other names the server is known by.
+field SHOULD contain the Common Name, and any other names the server is known by,
+[to ensure client compatibility][Digicert].
 
 Certificates SHOULD NOT use IP addresses as the Common Name or as a Subject Alternate Name.
 
@@ -490,3 +491,6 @@ Certificate Revocation List (CRL) Profile"
 
 [OWASP-TRANSPORT]: https://www.owasp.org/index.php/Transport_Layer_Protection_Cheat_Sheet
 "OWASP Transport Layer Protection Cheat Sheet"
+
+[Digicert]: https://www.digicert.com/subject-alternative-name-compatibility.htm
+"Subject Alternative Names: Compatibility"

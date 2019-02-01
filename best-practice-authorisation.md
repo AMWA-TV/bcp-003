@@ -117,7 +117,10 @@ Multiple DNS-SD advertisements for the same API are permitted where the API is e
 
 Clients and Resource Servers MUST support discovering the Authorisation Server through use of DNS-SD service discovery, as described in [RFC 6763](RFC-6763). Clients and Resource Servers MAY allow discovery using mDNS to be disabled such that the server may only be discovered through unicast DNS records.
 
-Clients and Resource Servers MUST verify the TLS certificate of the Authorisation Server. Clients MUST check that the address of the Authorisation Server matches either a Subject Alternate Name or Common Name on the TLS certificate. Clients and Resource Servers MUST provide a mechanism for installing root CA certificates used for verifying the TLS certificate of Authorisation Servers. HTTPS MUST be used for all connections to the Authorisation Server. Clients and Resource Servers MUST NOT interact with Authorisation Servers if the TLS certificate of the Authorisation Server cannot be validated.
+Clients and Resource Servers MUST verify the TLS certificate of the Authorisation Server. Clients MUST check that the address of the Authorisation Server matches either a Subject Alternate Name or Common Name on the TLS certificate. 
+Clients MUST verify the entire chain of trust of the Authorisation Server TLS certificate, back to a trusted root certificate.
+This ensures that the authorisation server is trusted.
+Clients and Resource Servers MUST provide a mechanism for installing root CA certificates used for verifying the TLS certificate of Authorisation Servers. HTTPS MUST be used for all connections to the Authorisation Server. Clients and Resource Servers MUST NOT interact with Authorisation Servers if the TLS certificate of the Authorisation Server cannot be validated.
 
 #### DNS-SD TXT Records
 
@@ -137,7 +140,7 @@ All  public keys must be presented using the text representation used by The Sec
 
 Clients SHOULD seek to fetch public keys from the Authorisation Server at least once every hour. If a client is unable to contact the Authorisation Server, the client MUST implement an exponential back-of to avoid over-loading the Authorisation Server in the event of a system re-start. Also if a client is unable to contact an Authorisation Server, the client MAY assume currently held public keys remain valid until it is able to re-establish a connection to an Authorisation Server.
 
-Clients SHOULD attempt to verify tokens against every public key presented at its Authorisation Server's `certs` endpoint, until a client finds a public key that verifies the token, or until no keys are left. If a client fails to veryify all public keys available, the client MUST reject the token.
+Clients SHOULD attempt to verify tokens against every public key presented at its Authorisation Server's `certs` endpoint, until a client finds a public key that verifies the token, or until no keys are left. If a client fails to verify all public keys available, the client MUST reject the token.
 
 #### Changing Keys
 
@@ -446,9 +449,6 @@ TODO: Needs further discussion with IS-04 group
 
 [RFC-7591]: https://tools.ietf.org/html/rfc7591
 "OAuth 2.0 Dynamic Client Registration Protocol"
-
-[RFC-6750]: https://tools.ietf.org/html/rfc6750
-"The OAuth 2.0 Authorization Framework: Bearer Token Usage"
 
 [RFC-6455]: https://tools.ietf.org/html/rfc6455
 "The WebSocket Protocol"

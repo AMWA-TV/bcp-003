@@ -329,7 +329,9 @@ minimal claim is as follows:
 }
 ```
 In addition specifications MAY require a `version` field be included, to indicate which version of the API
-the token may be used with. This filed MUST contain a JSON array. Each element of the array MUST be the 
+the token may be used with. This is to allow the Authorisation Server to return an Authorisation Token compatible
+with the requirements for a particular version of the API.
+This filed MUST contain a JSON array. Each element of the array MUST be the 
 version number of API the token may be used with.
 
 ```json

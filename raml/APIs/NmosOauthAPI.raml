@@ -4,7 +4,7 @@
 # (c) AMWA 2019
 
 title: NMOS Oauth
-baseUri: http://example.api.com/x-nmos/oauth/{version}
+baseUri: http://api.example.com/x-nmos/oauth/{version}
 version: v1.0
 mediaType: application/json
 securitySchemes: !include SecuritySchemes.raml
@@ -15,40 +15,40 @@ documentation:
       The NMOS Oauth Security API is exposed by an NMOS Authorization Server as a standard interface for requesting, revoking, and managing tokens and client registration
   - title: Endpoint Discovery
     content: |
-      The NMOS OAuth Authorization Server URL is discoverable using unicast and/or multicast DNS using the '_nmos-security._tcp' service name
+      The NMOS OAuth Authorization Server URL is discoverable using unicast and/or multicast DNS using the '_nmos-oauth._tcp' service name
 
 traits:
   OAuthBasic:
     headers:
       Authorization:
-        displayName: OAuth Basic Authorization
-        description: Basic authentication (base-64 encoded string) of username (client ID) and Password (Client Secret)
+        displayName: OAuth 2.0 Basic Authorization
+        description: Basic authentication (base-64 encoded string) of Username (Client ID) and Password (Client Secret)
         type: string
         required: true
 
-  authorizeReq:
+  authorizationCodeRequest:
     queryParameters:
       response_type:
-        description: Type of OAuth response. MUST be set to "code"
+        description: Type of OAuth 2.0 response. MUST be set to "code"
         required: true
       client_id:
         description: The identifier of the client authenticating
         required: true
       redirect_uri:
-        description: URI to direct resource owners user-agent back to clients
+        description: URI to direct resource owner's user-agent back to clients
         required: false
       scope:
-        description: The scope of the access request_token
+        description: The scope of the access request
         required: false
       state:
         description: Value used by client to maintain state between request and callback
         required: false
 
 types:
-  tokenAuthorizeReq:
+  tokenAuthorizeRequest:
     properties:
       grant_type:
-        description: The OAuth grant type of the request
+        description: The OAuth 2.0 grant type of the request
         type: string
         required: true
       code:
@@ -56,16 +56,16 @@ types:
         type: string
         required: true
       redirect_uri:
-        description: The "redirect_uri" parameter that was included in the authorization request
+        description: Absolute URI used by the auth server to redirect the user-agent, previously established during client registration
         type: string
       client_id:
         description: The identifier of the client authenticating
         type: string
 
-  tokenPasswordReq:
+  tokenPasswordRequest:
     properties:
       grant_type:
-        description: The OAuth grant type of the request
+        description: The OAuth 2.0 grant type of the request
         type: string
         required: true
       username:
@@ -81,7 +81,7 @@ types:
         type: string
         required: true
 
-  tokenRefreshReq:
+  tokenRefreshRequest:
     properties:
         grant_type:
           description: MUST be set to "refresh_token"
@@ -93,7 +93,7 @@ types:
           description: The scope of the access request
           required: false
 
-  registerClientReq:
+  registerClientRequest:
     properties:
       client_name:
         description: Name of Client
@@ -102,14 +102,14 @@ types:
         description: URI of client
         type: string
       scope:
-        description: List of possible scopes, space-separated
+        description: List of possible scopes, *space-separated*
         type: string
       redirect_uri:
-        description: used by the authorization server to return responses containing authorization credentials to the client
+        description: Used by the authorization server to return responses containing authorization credentials to the client
         type: array
         required: true
       grant_types:
-        description: The type of permissable OAuth grants
+        description: The type of permissable OAuth 2.0 grants
         type: array
         items:
           enum: [ authorization_code, implicit, password, client_credentials, refresh_token, urn:ietf:params:oauth:grant-type:jwt-bearer ]
@@ -128,9 +128,10 @@ types:
 
 
 /:
-  displayName: Base
+  displayName: Home Page
+  securedBy: [ basic ]
   get:
-    description: The home page of the Authorization Server. This will likely be a login page in order to keep OAuth Client credentials confidential and limit tasks.
+    description: Auth Server login page / home page of the Authorization Server. This will likely detail registered-client-credentials and client info.
     responses:
       200:
         body:
@@ -141,48 +142,59 @@ types:
   displayName: Register Clients
   securedBy: [ basic ]
   get:
-    description: UI / Web Form for registering details of OAuth clients with the Auth Server
+    description: UI / Web Form for registering details of OAuth 2.0 clients with the Auth Server
     responses:
       200:
         body:
           text/html:
             type: file
   post:
-    description: Resource for registering clients with auth server
+    description: |
+      Resource for registering clients with auth server.
+
+      **Note** - Request examples may render as JSON objects, but should be passed in as "application/x-www-form-urlencoded"
+      data types, in accordance with [RFC6749](https://tools.ietf.org/html/rfc6749#section-3.1.2).
     body:
       application/x-www-form-urlencoded:
-        type: registerClientReq
+        type: registerClientRequest
         examples:
           RegisterClient:
-            client_name:	R&D+Web+Router
-            client_uri:	http://ipstudio-master.rd.bbc.co.uk/ips-web/#/web-router
-            scope: is04
-            redirect_uri:	[http://ipstudio-master.rd.bbc.co.uk/ips-web/#/web-router]
-            grant_types:	[password]
+            client_name:	Example App
+            client_uri:	http://client.example.com
+            scope: photos
+            redirect_uri:	[http://client.example.com/home]
+            grant_types:	[authorization_code, password]
             response_types: [code]
             token_endpoint_auth_method:	client_secret_basic
 
 /token:
-  displayName: Request Token Resource (Password)
+  displayName: Request Token Resource
   post:
-    description: Method for requesting OAuth Bearer Token
+    description: |
+      Method for requesting OAuth 2.0 Bearer Token (Authorization, Password and Refresh Grants.)
+
+      **Note** - The data flow is dependant on the chosen grant type (e.g. password, authorization_code, refresh grant, etc.)
+
+      **Note** - Request examples may render as JSON objects, but should be passed in as "application/x-www-form-urlencoded"
+      data types, in accordance with [RFC6749](https://tools.ietf.org/html/rfc6749#section-3.1.2).
+
     securedBy: [ basic ]
     is: ["OAuthBasic"]
     body:
       application/x-www-form-urlencoded:
-        type: tokenPasswordReq | tokenAuthorizeReq | tokenRefreshReq
+        type: tokenPasswordRequest | tokenAuthorizeRequest | tokenRefreshRequest
         examples:
           PasswordGrant:
             grant_type: password
             username: Joe Bloggs
-            password: Password
-            scope: is04
+            password: secret
+            scope: photos
           AuthCodeGrant:
             grant_type: code
-            code: SplxlOBeZQQYbYS6WxSbIA&state
+            code: SplxlOBeZQQYbYS6WxSbIA
             redirect_uri: http://client.example.com/
             client_id: ttwCD9hb4OckmcGDnmC3J3Jr
-          RefreshToken:
+          RefreshTokenGrant:
             grant_type: refresh_token
             refresh_token: tGzv3JOkF0XG5Qx2TlKWIA
 
@@ -209,7 +221,7 @@ types:
   displayName: Authorization Code Resource
   get:
     description: The confirmation page enabling the resource owner to approve the client
-    is: ["authorizeReq"]
+    is: ["authorizationCodeRequest"]
     responses:
       200:
         body:
@@ -219,7 +231,7 @@ types:
     description: Means of confirming Resource Owner approval
     queryParameters:
       confirm:
-        description: Boolean comfirmation of approval
+        description: Boolean comfirmation of Resource Owner authorization
         type: boolean
         required: true
     responses:

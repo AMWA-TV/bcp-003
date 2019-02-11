@@ -1,7 +1,0 @@
-client_name: R&D+Web+Router
-client_uri:	http://ipstudio-master.rd.bbc.co.uk/ips-web/#/web-router
-scope:	is04+is05
-redirect_uri: http://ipstudio-master.rd.bbc.co.uk/ips-web/#/web-router
-grant_type:	password
-response_type:password
-token_endpoint_auth_method:	client_secret_basic

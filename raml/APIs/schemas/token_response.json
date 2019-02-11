@@ -9,7 +9,7 @@
       "type": "string"
     },
     "expires_in": {
-      "description": "The UTC time in which the Bearer Token will expire",
+      "description": "The lifetime in seconds of the access token",
       "type": "integer"
     },
     "refresh_token": {
@@ -21,8 +21,11 @@
       "type": "string"
     },
     "token_type": {
-      "description": "The form of the Token",
-      "type": "string"
+      "description": "The type of the Token issued",
+      "type": "string",
+      "enum": [
+        "Bearer"
+      ]
     }
   },
   "required": ["access_token", "expires_in", "token_type"]

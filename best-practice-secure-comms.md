@@ -1,4 +1,4 @@
-# [Work In Progress] Securing communications in NMOS APIs (future BCP-003-01)
+# AMWA BCP-003-01: Securing communications in NMOS APIs
 
 [//]: # (ToC goes after this comment. Generate with gen-toc.sh <this-file> and paste in.)
 
@@ -175,8 +175,6 @@ TLS_AES_256_GCM_SHA384
 
 TLS_CHACHA20_POLY1305_SHA256
 
-_Note: the above needs discussion by the group._
-
 ### TLS 1.2 Cipher Suites
 
 This section applies to implementations using TLS 1.2.
@@ -305,8 +303,6 @@ Implementers SHOULD consider the impact of TLS Session Tickets (RFC 5077) on per
 Implementers SHOULD be aware of OWASP's recommendations on
 [Server Protocol and Cipher Configuration](OWASP-TRANSPORT).
 
-_What about Public Key Pinning (RFC 7469)? Is there consensus?_
-
 Servers SHOULD be as specific as possible in the use of CORS.
 
 - The examples in the IS-04 and IS-05 documentation are "very relaxed",
@@ -370,8 +366,7 @@ It SHOULD be possible for a user to perform these operations.
 
 - Having to return equipment to the manufacturer is not acceptable.
   Having to install firmware updates is undesirable.
-
-_What do we want to say on client certs?_
+_
 
 ### HTTP: Client
 

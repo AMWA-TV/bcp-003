@@ -8,5 +8,5 @@ A proposed approach is based on TLS 1.2, X.509 PKI, OAuth 2.0 and JSON Web Token
 
 ## Documentation
 
-- [Best Practice for Securing Communications (future BCP-003-01)](best-practice-secure-comms.md)
+- [AMWA BCP-003-01: Securing communications in NMOS APIs](best-practice-secure-comms.md)
 - [Initial Security Proposal (for info only)](security-proposal.md)

@@ -1,0 +1,90 @@
+#%RAML 1.0 Types
+TokenAuthorizeRequest:
+  properties:
+    grant_type:
+      description: The OAuth 2.0 grant type of the request
+      type: string
+      required: true
+    code:
+      description:  The authorization code received from the authorization server
+      type: string
+      required: true
+    redirect_uri:
+      description: Absolute URI used by the auth server to redirect the user-agent, previously established during client registration
+      type: string
+    client_id:
+      description: The identifier of the client authenticating
+      type: string
+
+TokenPasswordRequest:
+  properties:
+    grant_type:
+      description: The OAuth 2.0 grant type of the request
+      type: string
+      required: true
+    username:
+      description: Username for the Password Credentials Grant
+      type: string
+      required: true
+    password:
+      description: Password for the Password Credentials grant_type
+      type: string
+      required: true
+    scope:
+      description: The scope of the access request
+      type: string
+      required: true
+
+TokenRefreshRequest:
+  properties:
+      grant_type:
+        description: MUST be set to "refresh_token"
+        required: true
+      refresh_token:
+        description: The refresh token issued to the client inside the bearer token
+        required: true
+      scope:
+        description: The scope of the access request
+        required: false
+
+RegisterClientRequest:
+  properties:
+    client_name:
+      description: Name of Client
+      type: string
+    client_uri:
+      description: URI of client
+      type: string
+    scope:
+      description: List of possible scopes, *space-separated*
+      type: string
+    redirect_uri:
+      description: Used by the authorization server to return responses containing authorization credentials to the client
+      type: array
+      required: true
+    grant_types:
+      description: The type of permissable OAuth 2.0 grants
+      type: array
+      items:
+        enum: [ authorization_code, implicit, password, client_credentials, refresh_token, urn:ietf:params:oauth:grant-type:jwt-bearer ]
+      default: [ authorization_code ]
+    response_types:
+      description: Used to define the valid response types of the client
+      type: array
+      items:
+        enum: [ code, token ]
+      default: [ code ]
+    token_endpoint_auth_method:
+      description: Defines whether client credentials are passed via Basic Auth or via POST body
+      type: string
+      enum: [ client_secret_post, client_secret_basic, none ]
+
+RevokeRequest:
+  properties:
+    access_token:
+      description: The token (access / refresh) that the client wants to revoke
+      required: true
+    token_type_hint:
+      description: A hint about the type of the token submitted for revocation
+      required: true
+      enum: [ access_token, refresh_token ]

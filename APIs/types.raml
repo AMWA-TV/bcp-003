@@ -47,38 +47,6 @@ TokenRefreshRequest:
         description: The scope of the access request
         required: false
 
-RegisterClientRequest:
-  properties:
-    client_name:
-      description: Name of Client
-      type: string
-    client_uri:
-      description: URI of client
-      type: string
-    scope:
-      description: List of possible scopes, *space-separated*
-      type: string
-    redirect_uri:
-      description: Used by the authorization server to return responses containing authorization credentials to the client
-      type: array
-      required: true
-    grant_types:
-      description: The type of permissable OAuth 2.0 grants
-      type: array
-      items:
-        enum: [ authorization_code, implicit, password, client_credentials, refresh_token, urn:ietf:params:oauth:grant-type:jwt-bearer ]
-      default: [ authorization_code ]
-    response_types:
-      description: Used to define the valid response types of the client
-      type: array
-      items:
-        enum: [ code, token ]
-      default: [ code ]
-    token_endpoint_auth_method:
-      description: Defines whether client credentials are passed via Basic Auth or via POST body
-      type: string
-      enum: [ client_secret_post, client_secret_basic, none ]
-
 RevokeRequest:
   properties:
     access_token:

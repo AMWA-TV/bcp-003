@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "array",
+  "title": "Authorization API base resource",
+  "description": "Displays the Authorization API base resources",
+  "items": {
+    "type": "string",
+    "enum": [
+      "certs/",
+      "register_client/",
+      "token/",
+      "authorize/",
+      "revoke/"
+    ],
+    "minItems": 5,
+    "maxItems": 5,
+    "uniqueItems": true
+  }
+}

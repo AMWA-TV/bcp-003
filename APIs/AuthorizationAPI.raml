@@ -45,7 +45,6 @@ traits:
         description: Colon-seperated, base-64 encoded string, of Client ID and Client Secret
         type: string
         required: true
-
   AuthorizationCodeRequest:
     queryParameters:
       response_type:
@@ -85,7 +84,6 @@ types:
       client_id:
         description: The identifier of the client authenticating
         type: string
-
   TokenPasswordRequest:
     properties:
       grant_type:
@@ -104,7 +102,6 @@ types:
         description: The scope of the access request
         type: string
         required: true
-
   TokenRefreshRequest:
     properties:
         grant_type:
@@ -116,7 +113,6 @@ types:
         scope:
           description: The scope of the access request
           required: false
-
   RevokeRequest:
     properties:
       access_token:
@@ -126,7 +122,6 @@ types:
         description: A hint about the type of the token submitted for revocation
         required: true
         enum: [ access_token, refresh_token ]
-
 
 /:
   displayName: Base Resource

@@ -7,7 +7,12 @@ title: NMOS Authorization
 baseUri: http://api.example.com/x-nmos/auth/{version}
 version: v1.0
 mediaType: application/json
-securitySchemes: !include SecuritySchemes.raml
+securitySchemes:
+  basic:
+    type: Basic Authentication
+    displayName: Basic Authentication (client credentials)
+    description: |
+      This API supports Basic Authentication using client ID and client secret as username and password credentials.
 
 documentation:
   - title: Overview
@@ -30,9 +35,98 @@ documentation:
       sending requests to the authorization endpoint. The redirection endpoint SHOULD require the use of TLS
       when the requested response type is "code" or "token".
 
-traits: !include traits.raml
+traits:
+  OAuthBasic:
+    description: Basic authentication using Client ID and client Secret
+    usage: Applied in accordance with RFC 6749
+    headers:
+      Authorization:
+        displayName: OAuth 2.0 Basic Authorization
+        description: Colon-seperated, base-64 encoded string, of Client ID and Client Secret
+        type: string
+        required: true
 
-types: !include types.raml
+  AuthorizationCodeRequest:
+    queryParameters:
+      response_type:
+        description: Type of OAuth 2.0 response. MUST be set to "code"
+        required: true
+        example: response_type=code
+      client_id:
+        description: The identifier of the client authenticating
+        required: true
+        example: client_id=s6BhdRkqt3
+      redirect_uri:
+        description: URI to direct resource owner's user-agent back to clients
+        example: redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcb
+      scope:
+        description: The scope of the access request
+        required: false
+        example: scope=photos
+      state:
+        description: Value used by client to maintain state between request and callback
+        required: false
+        example: state=xyz
+
+types:
+  TokenAuthorizeRequest:
+    properties:
+      grant_type:
+        description: The OAuth 2.0 grant type of the request
+        type: string
+        required: true
+      code:
+        description:  The authorization code received from the authorization server
+        type: string
+        required: true
+      redirect_uri:
+        description: Absolute URI used by the auth server to redirect the user-agent, previously established during client registration
+        type: string
+      client_id:
+        description: The identifier of the client authenticating
+        type: string
+
+  TokenPasswordRequest:
+    properties:
+      grant_type:
+        description: The OAuth 2.0 grant type of the request
+        type: string
+        required: true
+      username:
+        description: Username for the Password Credentials Grant
+        type: string
+        required: true
+      password:
+        description: Password for the Password Credentials grant_type
+        type: string
+        required: true
+      scope:
+        description: The scope of the access request
+        type: string
+        required: true
+
+  TokenRefreshRequest:
+    properties:
+        grant_type:
+          description: MUST be set to "refresh_token"
+          required: true
+        refresh_token:
+          description: The refresh token issued to the client inside the bearer token
+          required: true
+        scope:
+          description: The scope of the access request
+          required: false
+
+  RevokeRequest:
+    properties:
+      access_token:
+        description: The token (access / refresh) that the client wants to revoke
+        required: true
+      token_type_hint:
+        description: A hint about the type of the token submitted for revocation
+        required: true
+        enum: [ access_token, refresh_token ]
+
 
 /:
   displayName: Base Resource
@@ -83,7 +177,22 @@ types: !include types.raml
     body:
       application/x-www-form-urlencoded:
         type: TokenPasswordRequest | TokenAuthorizeRequest | TokenRefreshRequest
-        examples: !include ../examples/token-requests.raml
+        examples:
+          PasswordGrant:
+            grant_type: password
+            username: Joe Bloggs
+            password: secret
+            scope: photos
+
+          AuthCodeGrant:
+            grant_type: code
+            code: SplxlOBeZQQYbYS6WxSbIA
+            redirect_uri: "http://client.example.com/"
+            client_id: ttwCD9hb4OckmcGDnmC3J3Jr
+
+          RefreshTokenGrant:
+            grant_type: refresh_token
+            refresh_token: tGzv3JOkF0XG5Qx2TlKWIA
     responses:
       200:
         description: Successful request to obtain a Bearer Token, consisting of the access token and optionally

@@ -1,0 +1,32 @@
+#%RAML 1.0 Traits
+OAuthBasic:
+  description: Basic authentication using Client ID and client Secret
+  usage: Applied in accordance with RFC 6749
+  headers:
+    Authorization:
+      displayName: OAuth 2.0 Basic Authorization
+      description: Colon-seperated, base-64 encoded string, of Client ID and Client Secret
+      type: string
+      required: true
+
+AuthorizationCodeRequest:
+  queryParameters:
+    response_type:
+      description: Type of OAuth 2.0 response. MUST be set to "code"
+      required: true
+      example: response_type=code
+    client_id:
+      description: The identifier of the client authenticating
+      required: true
+      example: client_id=s6BhdRkqt3
+    redirect_uri:
+      description: URI to direct resource owner's user-agent back to clients
+      example: redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcb
+    scope:
+      description: The scope of the access request
+      required: false
+      example: scope=photos
+    state:
+      description: Value used by client to maintain state between request and callback
+      required: false
+      example: state=xyz

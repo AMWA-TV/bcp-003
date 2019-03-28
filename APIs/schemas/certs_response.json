@@ -1,0 +1,10 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Certificate Response",
+  "description": "Array of certificates to validate Access Token",
+  "type": "array",
+  "minItems": 1,
+  "items": {
+      "type": "string"
+  }
+}

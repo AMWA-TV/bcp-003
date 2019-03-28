@@ -1,0 +1,165 @@
+#%RAML 1.0
+
+# AMWA NMOS BCP-003 Security: NMOS Authorization API with JSON Web Tokens (JWTs)
+# (c) AMWA 2019
+
+title: NMOS Authorization
+baseUri: http://api.example.com/x-nmos/auth/{version}
+version: v1.0
+mediaType: application/json
+securitySchemes: !include SecuritySchemes.raml
+
+documentation:
+  - title: Overview
+    content: |
+      The NMOS Authorization API is exposed by an Authorization Server as a standard interface for requesting, revoking,
+      and managing tokens and client registration.
+  - title: Endpoint Discovery
+    content: |
+      The Authorization Server URL is discoverable using unicast and/or multicast DNS using the '_nmos-auth._tcp' service name.
+  - title: Registering Clients
+    content: |
+      The `/register_client` endpoint should be protected by some appropriate authentication scheme
+      to limit the availability of client-registration to valid clients. This is implementation-specific.
+      This may be via the use of user credentials, public/private keys or an initial JWT token.
+      This equally may be administered by an enterprise system such as a Single-Sign-On system.
+      Please see [RFC7591](https://tools.ietf.org/html/rfc7591).
+  - title: Use of HTTPS/TLS
+    content: |
+      The authorization server MUST require the use of TLS when sending requests using password authentication or
+      sending requests to the authorization endpoint. The redirection endpoint SHOULD require the use of TLS
+      when the requested response type is "code" or "token".
+
+traits: !include traits.raml
+
+types: !include types.raml
+
+/:
+  displayName: Base Resource
+  get:
+    description: List of endpoints available from this API.
+    responses:
+      200:
+        body:
+          type: !include schemas/authorization-base.json
+          example: !include ../examples/base-get-200.json
+
+/register_client:
+  displayName: Register Clients Resource
+  get:
+    description: UI / Web Form for registering details of OAuth 2.0 clients with the Auth Server.
+    responses:
+      200:
+        body:
+          text/html:
+            type: file
+  post:
+    description: |
+      Resource for registering clients with auth server.
+
+      **Note** - Request examples may render as JSON objects, but should be passed in as "application/x-www-form-urlencoded"
+      data types, in accordance with [RFC6749](https://tools.ietf.org/html/rfc6749).
+    body:
+        type: !include schemas/register_client_request.json
+        example: !include ../examples/register-client-post-request.json
+    responses:
+      201:
+        body:
+          type: !include schemas/register_client_response.json
+          example: !include ../examples/register-client-post-201.json
+
+/token:
+  displayName: Request Token Resource
+  post:
+    description: |
+      Method for requesting OAuth 2.0 Bearer Token (Authorization, Password and Refresh Grants.)
+
+      **Note** - The data flow is dependant on the chosen grant type (e.g. password, authorization_code, refresh grant, etc.)
+
+      **Note** - Request examples may render as JSON objects, but should be passed in as the `application/x-www-form-urlencoded`
+      MIME type, in accordance with [RFC6749](https://tools.ietf.org/html/rfc6749).
+    securedBy: [ basic ]
+    is: ["OAuthBasic"]
+    body:
+      application/x-www-form-urlencoded:
+        type: TokenPasswordRequest | TokenAuthorizeRequest | TokenRefreshRequest
+        examples: !include ../examples/token-requests.raml
+    responses:
+      200:
+        description: Successful request to obtain a Bearer Token, consisting of the access token and optionally
+          a refresh token to be used to request further access tokens.
+        body:
+          type: !include schemas/token_response.json
+          example: !include ../examples/token-post-200.json
+      400:
+        description: Unsuccessful token requests
+        body:
+          type: !include schemas/token_error_response.json
+          example: !include ../examples/token-post-400.json
+
+/certs:
+  displayName: Certificates Resource
+  get:
+    description: |
+      Request the contents of the certs endpoints.
+
+      **Note** - The example array shows a multi-element array for readability purposes only.
+      Each element of the array should be a string containing a single, entire certificate.
+    responses:
+      200:
+        description: Successful request to obtain JSON dictionary of available public keys to validate token against.
+        body:
+          type: !include schemas/certs_response.json
+          example: !include ../examples/certs-get-200.json
+
+/authorize:
+  displayName: Authorization Code Resource
+  get:
+    description: The confirmation page enabling the resource owner to approve the client.
+    is: ["AuthorizationCodeRequest"]
+    responses:
+      200:
+        description: The client directs the resource owner to this URI using an
+                     HTTP redirection response.
+        body:
+          text/html:
+            type: file
+  post:
+    description: |
+      Means of confirming Resource Owner approval
+    is: ["AuthorizationCodeRequest"]
+    body:
+      properties:
+        confirm:
+          description: |
+            Boolean comfirmation of Resource Owner authorization.
+
+            **Note** This is merely an example of one mechanism for obtaining the
+            resource owner's approval. This is not covered in an RFC and is implementation-specific.
+          type: boolean
+          required: true
+          example: true
+    responses:
+      302:
+        description: Redirection of endpoint to client URI
+        headers:
+          Location:
+            description: The redirect URI with the Auth Code and State parameters added to the query component of the redirection URI.
+            type: string
+            required: true
+            example: |
+              HTTP/1.1 302 Found
+              Location: https://client.example.com/cb?code=SplxlOBeZQQYbYS6WxSbIA&state=xyz
+
+/revoke:
+  displayName: Token Revocation Resource
+  securedBy: basic
+  is: ["OAuthBasic"]
+  post:
+    description: Endpoint for revoking specific access/refresh tokens.
+    body:
+      application/x-www-form-urlencoded:
+        type: RevokeRequest
+    responses:
+      200:
+        description: the token has been revoked successfully or if the client submitted an invalid token.

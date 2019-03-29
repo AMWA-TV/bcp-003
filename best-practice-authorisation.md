@@ -432,35 +432,35 @@ TODO: Needs further discussion with IS-04 group
 
 [//]: ### (Normative)
 
-[RFC-6749]: https://tools.ietf.org/html/rfc6749
-"The OAuth 2.0 Authorization Framework"
-
-[RFC-6763]: https://tools.ietf.org/html/rfc6763
-"DNS-Based Service Discovery"
-
-[RFC-4716]: https://tools.ietf.org/html/rfc4716
-"The Secure Shell (SSH) Public Key File Format"
-
-[RFC-7519]: https://tools.ietf.org/html/rfc7519
-"JSON Web Token (JWT)"
-
-[RFC-6750]: https://tools.ietf.org/html/rfc6750
-"The OAuth 2.0 Authorization Framework: Bearer Token Usage"
-
-[RFC-7515]: https://tools.ietf.org/html/rfc7515
-"JSON Web Signature (JWS)"
-
 [RFC-2119]: https://tools.ietf.org/html/rfc2119
 "Key words for use in RFCs to Indicate Requirement Levels"
 
 [RFC-2617]: https://tools.ietf.org/html/rfc2617
 "HTTP Authentication: Basic and Digest Access Authentication"
 
+[RFC-2782]: https://www.ietf.org/rfc/rfc2782.txt
+"A DNS RR for specifying the location of services (DNS SRV)"
+
+[RFC-4716]: https://tools.ietf.org/html/rfc4716
+"The Secure Shell (SSH) Public Key File Format"
+
+[RFC-6749]: https://tools.ietf.org/html/rfc6749
+"The OAuth 2.0 Authorization Framework"
+
+[RFC-6750]: https://tools.ietf.org/html/rfc6750
+"The OAuth 2.0 Authorization Framework: Bearer Token Usage"
+
+[RFC-6763]: https://tools.ietf.org/html/rfc6763
+"DNS-Based Service Discovery"
+
+[RFC-7519]: https://tools.ietf.org/html/rfc7519
+"JSON Web Token (JWT)"
+
+[RFC-7515]: https://tools.ietf.org/html/rfc7515
+"JSON Web Signature (JWS)"
+
 [RFC-7591]: https://tools.ietf.org/html/rfc7591
 "OAuth 2.0 Dynamic Client Registration Protocol"
 
 [RFC-6455]: https://tools.ietf.org/html/rfc6455
 "The WebSocket Protocol"
-
-[RFC-2782]: https://www.ietf.org/rfc/rfc2782.txt
-"A DNS RR for specifying the location of services (DNS SRV)"

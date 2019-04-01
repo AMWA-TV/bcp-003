@@ -66,12 +66,11 @@ A short lived JSON Web Token that may be used by a client to access privileged r
 
 ### Bearer Token
 
-Bearer tokens are longer lived in access tokens. They are passed from the Authorization Server to the client after successful authentication of client credentials, and contain an access token. Bearer tokens can be used to retrieve further access tokens from the Authorization Server once the original access token expires.
+Bearer tokens are longer lived then access tokens. They are passed from the Authorization Server to the client after successful authentication of client credentials, and contain an access token. Bearer tokens can be used to retrieve further access tokens from the Authorization Server once the original access token expires.
 
 ## Introduction (informative)
 
-This document covers client authorization, the mechanism by which an AMWA NMOS API Resource Server may verify that a client accessing
-it has the privileges required to access or modify some or all of the content using the API.
+This document covers client authorization, the mechanism by which an AMWA NMOS API Resource Server may verify that a client accessing it has the privileges required to access or modify some or all of the content using the API.
 
 This document is not concerned with the security of the connection used to carry out authorization or subsequently authorised interactions, but for the authorization mechanisms described in this document to be effective the connection used must be secured, ideally using the recommendations covered in [BCP-003-01](best-practice-secure-comms.md).
 
@@ -249,7 +248,7 @@ The access token MUST be a JSON Web Signature (JWS) as defined by [RFC 7515](RFC
 JWAs MUST NOT be used.
 
 The JWS MUST be signed with `RSASSA-PKCS1-v1_5 using SHA-512`, meaning the value of the `alg` field in the
-token's JOSE header MUST be set to `RS512` as defined in [RFC 7518](RFC-7518). An example JOSE header would
+token's JOSE header MUST be set to `RS512` as defined in [RFC 7518](RFC-7518). An example JOSN header would
 be:
 
 ```json

@@ -246,11 +246,11 @@ Unsuccessful authorization responses should be handled as per Section 5.2 of [RF
 The access token type returned MUST be of the `Bearer_token` type specified in [RFC 6750](RFC-6750).
 
 The access token MUST be a JSON Web Signature (JWS) as defined by [RFC 7515](RFC-7515).
-JWAs MUST NOT be used.
+JSON Web Algorithms (JWA) MUST NOT be used.
 
 The JWS MUST be signed with `RSASSA-PKCS1-v1_5 using SHA-512`, meaning the value of the `alg` field in the
-token's JOSE header MUST be set to `RS512` as defined in [RFC 7518](RFC-7518). An example JOSE header would
-be:
+token's JOSE (JSON Object Signing and Encryption) header (see [RFC 7515](RFC-7515)) MUST be set to `RS512`
+as defined in [RFC 7518](RFC-7518). An example JOSE header would be:
 
 ```json
 {
@@ -453,11 +453,11 @@ TODO: Needs further discussion with IS-04 group
 [RFC-6763]: https://tools.ietf.org/html/rfc6763
 "DNS-Based Service Discovery"
 
-[RFC-7519]: https://tools.ietf.org/html/rfc7519
-"JSON Web Token (JWT)"
-
 [RFC-7515]: https://tools.ietf.org/html/rfc7515
 "JSON Web Signature (JWS)"
+
+[RFC-7519]: https://tools.ietf.org/html/rfc7519
+"JSON Web Token (JWT)"
 
 [RFC-7591]: https://tools.ietf.org/html/rfc7591
 "OAuth 2.0 Dynamic Client Registration Protocol"

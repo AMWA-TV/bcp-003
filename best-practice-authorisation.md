@@ -320,7 +320,7 @@ _Contains information particular to the NMOS API the token is intended for_
 The `x-nmos-api` claim MUST be included in the token. The value of the claim is a JSON object, the
 contents of which are defined by AMWA specifications.
 The only entry in this object required by this specification is the "name" field. This should be the
-identifier of the AMWA specification the token is to be used for in lower case. For example the IS­04
+identifier of the AMWA specification the token is to be used for in lower case. For example the IS-04
 minimal claim is as follows:
 
 ```json
@@ -342,8 +342,8 @@ version number of the API with which the token may be used.
 ```
 
 In addition individual AMWA specifications MAY also specify additional entries in the object.
-For example, IS­04 could define an entry "node­read", which may be either `true` or `false`.
-An example of the resulting `x­nmos­api` claim  is shown below.
+For example, IS-04 could define an entry "node-read", which may be either `true` or `false`.
+An example of the resulting `x-nmos-api` claim  is shown below.
 
 ```json
 "x-nmos-api": {

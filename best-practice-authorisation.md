@@ -320,7 +320,7 @@ _Contains information particular to the NMOS API the token is intended for_
 The `x-nmos-api` claim MUST be included in the token. The value of the claim is a JSON object, the
 contents of which are defined by AMWA specifications.
 The only entry in this object required by this specification is the "name" field. This should be the
-identifier of the AMWA specification the token is to be used for in lower case. For example the ISÂ­04
+identifier of the AMWA specification the token is to be used for in lower case. For example the IS­04
 minimal claim is as follows:
 
 ```json
@@ -342,8 +342,8 @@ version number of the API with which the token may be used.
 ```
 
 In addition individual AMWA specifications MAY also specify additional entries in the object.
-For example, ISÂ­04 could define an entry "nodeÂ­read", which may be either `true` or `false`.
-An example of the resulting `xÂ­nmosÂ­api` claim  is shown below.
+For example, IS­04 could define an entry "node­read", which may be either `true` or `false`.
+An example of the resulting `x­nmos­api` claim  is shown below.
 
 ```json
 "x-nmos-api": {
@@ -444,6 +444,9 @@ TODO: Needs further discussion with IS-04 group
 [RFC-4716]: https://tools.ietf.org/html/rfc4716
 "The Secure Shell (SSH) Public Key File Format"
 
+[RFC-6455]: https://tools.ietf.org/html/rfc6455
+"The WebSocket Protocol"
+
 [RFC-6749]: https://tools.ietf.org/html/rfc6749
 "The OAuth 2.0 Authorization Framework"
 
@@ -461,6 +464,3 @@ TODO: Needs further discussion with IS-04 group
 
 [RFC-7591]: https://tools.ietf.org/html/rfc7591
 "OAuth 2.0 Dynamic Client Registration Protocol"
-
-[RFC-6455]: https://tools.ietf.org/html/rfc6455
-"The WebSocket Protocol"

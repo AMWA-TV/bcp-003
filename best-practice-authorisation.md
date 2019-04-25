@@ -17,7 +17,7 @@ The mechanism used to authenticate users of a system implementing these recommen
 
 ## Use of Normative Language
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL, "NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC 2119](RFC-2119).
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL, "NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC 2119][RFC-2119].
 
 ## Normative References
 
@@ -75,7 +75,7 @@ it has the privileges required to access or modify some or all of the content us
 
 This document is not concerned with the security of the connection used to carry out authorization or subsequently authorised interactions, but for the authorization mechanisms described in this document to be effective the connection used must be secured, ideally using the recommendations covered in [BCP-003-01](best-practice-secure-comms.md).
 
-The client authentication mechanism described in this document is based on the OAuth 2.0 Authorization Framework [RFC 6749](RFC-6749). In particular JSON Web Tokens are used as the OAuth 2.0 Bearer Tokens and for client authorization as per [RFC 7523](RFC-7523).
+The client authentication mechanism described in this document is based on the OAuth 2.0 Authorization Framework [RFC 6749][RFC-6749]. In particular JSON Web Tokens are used as the OAuth 2.0 Bearer Tokens and for client authorization as per [RFC 7523][RFC-7523].
 
 ## Authorization Flow (informative)
 
@@ -99,11 +99,11 @@ The Authorization Server SHALL present an instance of the NMOS [Authorization AP
 
 The Authorization Server MAY present multiple versions of the API on the same port, but MUST name-space them accordingly as per the API specification.
 
-The Authorization Server must otherwise be implemented as per [RFC 6749](RFC-6749).
+The Authorization Server must otherwise be implemented as per [RFC 6749][RFC-6749].
 
 ### DNS-SD Advertisement
 
-The Authorization Server MUST support advertising itself using unicast DNS-SD as per [RFC 6763](RFC-6763).
+The Authorization Server MUST support advertising itself using unicast DNS-SD as per [RFC 6763][RFC-6763].
 The Authorization Server SHOULD NOT be advertised via mDNS-based DNS-SD.
 The Authorization Server MUST advertise itself with the following service type:
 
@@ -115,7 +115,7 @@ The hostname and port of the Authorization Server MUST be identified via the DNS
 
 Multiple DNS-SD advertisements for the same API are permitted where the API is exposed via multiple ports and/or protocols.
 
-Clients and Resource Servers MUST support discovering the Authorization Server through use of unicast DNS-SD service discovery, as described in [RFC 6763](RFC-6763).
+Clients and Resource Servers MUST support discovering the Authorization Server through use of unicast DNS-SD service discovery, as described in [RFC 6763][RFC-6763].
 
 Clients and Resource Servers MUST verify the TLS certificate of the Authorization Server. Clients MUST check that the address of the Authorization Server matches either a Subject Alternate Name or Common Name on the TLS certificate. 
 Clients MUST verify the entire chain of trust of the Authorization Server TLS certificate, back to a trusted root certificate.
@@ -130,13 +130,13 @@ The DNS-SD advertisement MUST be accompanied by a TXT record of name 'api_ver'. 
 
 ##### pri
 
-The DNS-SD advertisement MUST include a TXT record with key 'pri' and an integer value. Servers MAY additionally present a matching priority via the DNS-SD SRV record 'priority' and 'weight' as defined in (RFC 2782)[RFC-2782]. The TXT record should be used in favour of the SRV priority and weight where these values differ, in order to overcome issues in the Bonjour and Avahi implementations. Values 0 to 99 correspond to an active NMOS Authorization Server API (zero being the highest priority). Values 100+ are reserved for development work to avoid colliding with a live system.
+The DNS-SD advertisement MUST include a TXT record with key 'pri' and an integer value. Servers MAY additionally present a matching priority via the DNS-SD SRV record 'priority' and 'weight' as defined in [RFC 2782][RFC-2782]. The TXT record should be used in favour of the SRV priority and weight where these values differ, in order to overcome issues in the Bonjour and Avahi implementations. Values 0 to 99 correspond to an active NMOS Authorization Server API (zero being the highest priority). Values 100+ are reserved for development work to avoid colliding with a live system.
 
 ### Authorization Server Public Key
 
 The Authorization Server MUST provide all public keys used for signing tokens at the `certs` endpoint of the API. The Authorization Server MAY present more than one key on this endpoint, with each key being an entry in an array.
 
-All public keys must be presented using the text representation used by The Secure Shell (SSH) Public Key File Format in [RFC 4716](RFC-4716). Each public key presented will be one entry in the array provided by the `certs` endpoint.
+All public keys must be presented using the text representation used by The Secure Shell (SSH) Public Key File Format in [RFC 4716][RFC-4716]. Each public key presented will be one entry in the array provided by the `certs` endpoint.
 
 Resource Servers SHOULD seek to fetch public keys from the Authorization Server at least once every hour.
 Resource Servers MUST vary their retrieval interval at random by up to at least one minute to avoid overloading the Authorization Server due to Resource
@@ -155,7 +155,7 @@ Authorization Servers SHOULD provide new public keys on the `certs` endpoint for
 ## Client Registration
 
 Clients MUST be registered with the Authorization Server before initiating the OAuth 2.0 protocol as per
-Section 2 of [RFC 6749](RFC-6749).
+Section 2 of [RFC 6749][RFC-6749].
 The Authorization Server MUST NOT accept unregistered clients.
 
 Authorization Servers SHOULD support a manual mechanism for registering clients (e.g an HTML web form)
@@ -163,12 +163,12 @@ allowing the client type and redirect URIs to be provided. Clients SHOULD suppor
 the information required for OAuth 2.0 registration (e.g a web page containing the required details).
 
 Clients operating with a client password SHOULD support using HTTP Basic Authentication, as per Section 2
-of [RFC 2617](RFC-2617), to authenticate with the Authorization Server
-in the manner described in Section 2.3.1 of [RFC 6749](RFC-6749). Authorization Servers SHOULD provide
+of [RFC 2617][RFC-2617], to authenticate with the Authorization Server
+in the manner described in Section 2.3.1 of [RFC 6749][RFC-6749]. Authorization Servers SHOULD provide
 support for such registrations.
 
 Clients and Authorization Servers are RECOMMENDED to provide for the OAuth 2.0 Dynamic
-Client Registration Protocol [RFC 7591](RFC-7591).
+Client Registration Protocol [RFC 7591][RFC-7591].
 
 AMWA NMOS Specifications MAY specify additional registration parameters where they require them.
 Where clients and Authorization Servers that support OAuth 2.0 are used with these specifications
@@ -178,7 +178,7 @@ they SHALL use these parameters in all OAuth 2.0 registration mechanisms they su
 
 ### Client Types (Informative)
 
-[RFC 6749](RFC-6749) defines three different classes of OAuth client:
+[RFC 6749][RFC-6749] defines three different classes of OAuth client:
 - Web application - client credentials stored in a server.
 - User-agent-based application - client credentials stored in the user-agent (e.g browser).
 - Native application - client credentials stored in a native application (e.g broadcast control system).
@@ -191,14 +191,14 @@ Typically clients for NMOS APIs are Broadcast Control Systems, or the broadcast 
 
 Clearly a broadcast control system that is built as a native app is a "Native Application" type, and
 a control system implemented in a browser is a "User-agent-based application", and they should be treated
-accordingly when implementing OAuth. [RFC 6749](RFC-6749) defines both these client types to be
+accordingly when implementing OAuth. [RFC 6749][RFC-6749] defines both these client types to be
 _Public Clients_.
 
 Out of these three client types an NMOS Node most closely resembles a web application, because client
 credentials are not stored in the user-agent or a native application.
 Instead they are stored on a server away from the resource owner.
 The web application client type is the only OAuth 2.0 client type where this is
-permitted to be the case. [RFC 6749](RFC-6749) considers such clients to be _Confidential Clients_.
+permitted to be the case. [RFC 6749][RFC-6749] considers such clients to be _Confidential Clients_.
 
 ### Grant Types
 
@@ -236,21 +236,21 @@ Authorization Server SHOULD support all four grant flows.
 ### Authorization Server Response
 
 Successful authorization requests shall be serviced by the Authorization Server as defined in
-[RFC 6749](RFC-6749) Section 5.1.
+[RFC 6749][RFC-6749] Section 5.1.
 Additionally the `expires_in` and `refresh_token` fields MUST be included in the response.
 
-Unsuccessful authorization responses should be handled as per Section 5.2 of [RFC 6749](RFC-6749).
+Unsuccessful authorization responses should be handled as per Section 5.2 of [RFC 6749][RFC-6749].
 
 ### Access Tokens
 
-The access token type returned MUST be of the `Bearer_token` type specified in [RFC 6750](RFC-6750).
+The access token type returned MUST be of the `Bearer_token` type specified in [RFC 6750][RFC-6750].
 
-The access token MUST be a JSON Web Signature (JWS) as defined by [RFC 7515](RFC-7515).
+The access token MUST be a JSON Web Signature (JWS) as defined by [RFC 7515][RFC-7515].
 JSON Web Algorithms (JWA) MUST NOT be used.
 
 The JWS MUST be signed with `RSASSA-PKCS1-v1_5 using SHA-512`, meaning the value of the `alg` field in the
-token's JOSE (JSON Object Signing and Encryption) header (see [RFC 7515](RFC-7515)) MUST be set to `RS512`
-as defined in [RFC 7518](RFC-7518). An example JOSE header would be:
+token's JOSE (JSON Object Signing and Encryption) header (see [RFC 7515][RFC-7515]) MUST be set to `RS512`
+as defined in [RFC 7518][RFC-7518]. An example JOSE header would be:
 
 ```json
 {
@@ -261,7 +261,7 @@ as defined in [RFC 7518](RFC-7518). An example JOSE header would be:
 
 #### Registered Claims
 
-Registered claims are defined in the authorization JSON Web Token specification in [RFC 7519](RFC-7519), but their specific usage is left to the application. NMOS API Clients and Servers implementing this BCP MUST employ the restrictions on claims outlined below, in addition to implementing tokens as specified in [RFC 7519](RFC-7519).
+Registered claims are defined in the authorization JSON Web Token specification in [RFC 7519][RFC-7519], but their specific usage is left to the application. NMOS API Clients and Servers implementing this BCP MUST employ the restrictions on claims outlined below, in addition to implementing tokens as specified in [RFC 7519][RFC-7519].
 
 ##### iss
 _Identifies principal that issued the JWT_
@@ -294,7 +294,7 @@ server, the Resource Server MUST reject the token.
 ##### exp
 _Expiration time of the token_
 
-The `exp` (expiration) claim MUST be included in the token. This is defined in [RFC 7519](RFC-7519) as being a JSON
+The `exp` (expiration) claim MUST be included in the token. This is defined in [RFC 7519][RFC-7519] as being a JSON
 NumericDate field, which uses the UTC epoch. This is in contrast to the TAI epoch used elsewhere
 within the NMOS APIs, so implementers should take care to ensure they are using the correct
 epoch.
@@ -311,7 +311,7 @@ less than the UTC time at which the token is issued.
 
 #### Private Claims
 
-[RFC 7519](RFC-7519) allows for "private claims". The following claim is used to identify the API
+[RFC 7519][RFC-7519] allows for "private claims". The following claim is used to identify the API
 specification a given token is used for.
 
 ##### x-nmos-api
@@ -358,7 +358,7 @@ support certain versions of such APIs.
 
 #### Size Considerations
 
-While [RFC 7519](RFC-7519) does not prescribe a maximum size for an OAuth 2.0 JSON
+While [RFC 7519][RFC-7519] does not prescribe a maximum size for an OAuth 2.0 JSON
 Web Token, it should be noted that these tokens are typically used within an HTTP header.
 While HTTP does not define a header size limit, 8KByte is a common limitation in HTTP
 server implementations.
@@ -404,18 +404,18 @@ authentication flow. Refresh tokens MAY be valid indefinitely or MAY be time-lim
 
 When accessing protected resources clients MUST include the authorization token in the
 request using the Authorization Request Header Field method described in Section 2.1
-of [RFC 6750](RFC-6750). Clients MUST NOT use any of the other methods specified in Section 2.0
-of [RFC 6750](RFC-6750).
+of [RFC 6750][RFC-6750]. Clients MUST NOT use any of the other methods specified in Section 2.0
+of [RFC 6750][RFC-6750].
 
 When a protected resources receives a token it MUST validate the claims of the token.
 If a token is invalid the resource server MUST reject the request with the appropriate
-HTTP error code as defined by [RFC 6750](RFC-6750).
+HTTP error code as defined by [RFC 6750][RFC-6750].
 
 ### Operation with WebSockets
 
 Where OAuth 2.0 is to be used with WebSockets clients SHALL provide the access token
 in the HTTP GET request that initiates the Websocket handshake defined in
-[RFC 6455](RFC-6455) in the same manner as a normal HTTP request as described in
+[RFC 6455][RFC-6455] in the same manner as a normal HTTP request as described in
 [Accessing Protected Resources](#accessing-protected-resources).
 
 The Authorization SHALL validate such tokens in the same manner as it would for a normal
@@ -432,35 +432,26 @@ TODO: Needs further discussion with IS-04 group
 
 [//]: ### (Normative)
 
-[RFC-2119]: https://tools.ietf.org/html/rfc2119
-"Key words for use in RFCs to Indicate Requirement Levels"
+[RFC-2119]: https://tools.ietf.org/html/rfc2119 "Key words for use in RFCs to Indicate Requirement Levels"
 
-[RFC-2617]: https://tools.ietf.org/html/rfc2617
-"HTTP Authentication: Basic and Digest Access Authentication"
+[RFC-2617]: https://tools.ietf.org/html/rfc2617 "HTTP Authentication: Basic and Digest Access Authentication"
 
-[RFC-2782]: https://www.ietf.org/rfc/rfc2782.txt
-"A DNS RR for specifying the location of services (DNS SRV)"
+[RFC-2782]: https://www.ietf.org/rfc/rfc2782.txt "A DNS RR for specifying the location of services (DNS SRV)"
 
-[RFC-4716]: https://tools.ietf.org/html/rfc4716
-"The Secure Shell (SSH) Public Key File Format"
+[RFC-4716]: https://tools.ietf.org/html/rfc4716 "The Secure Shell (SSH) Public Key File Format"
 
-[RFC-6455]: https://tools.ietf.org/html/rfc6455
-"The WebSocket Protocol"
+[RFC-6455]: https://tools.ietf.org/html/rfc6455 "The WebSocket Protocol"
 
-[RFC-6749]: https://tools.ietf.org/html/rfc6749
-"The OAuth 2.0 Authorization Framework"
+[RFC-6749]: https://tools.ietf.org/html/rfc6749 "The OAuth 2.0 Authorization Framework"
 
-[RFC-6750]: https://tools.ietf.org/html/rfc6750
-"The OAuth 2.0 Authorization Framework: Bearer Token Usage"
+[RFC-6750]: https://tools.ietf.org/html/rfc6750 "The OAuth 2.0 Authorization Framework: Bearer Token Usage"
 
-[RFC-6763]: https://tools.ietf.org/html/rfc6763
-"DNS-Based Service Discovery"
+[RFC-6763]: https://tools.ietf.org/html/rfc6763 "DNS-Based Service Discovery"
 
-[RFC-7515]: https://tools.ietf.org/html/rfc7515
-"JSON Web Signature (JWS)"
+[RFC-7523]: https://tools.ietf.org/html/rfc7523 "JSON Web Token (JWT) Profile for OAuth 2.0 Client Authentication and Authorization Grants"
 
-[RFC-7519]: https://tools.ietf.org/html/rfc7519
-"JSON Web Token (JWT)"
+[RFC-7515]: https://tools.ietf.org/html/rfc7515 "JSON Web Signature (JWS)"
 
-[RFC-7591]: https://tools.ietf.org/html/rfc7591
-"OAuth 2.0 Dynamic Client Registration Protocol"
+[RFC-7519]: https://tools.ietf.org/html/rfc7519 "JSON Web Token (JWT)"
+
+[RFC-7591]: https://tools.ietf.org/html/rfc7591 "OAuth 2.0 Dynamic Client Registration Protocol"

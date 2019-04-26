@@ -237,8 +237,8 @@ and certificate revocation can be a significant overhead.
 
 Wildcard certificates SHOULD NOT be used.
 
-Certificates SHOULD contain the Subject Alternate Name extension. The Subject Alternate Name
-field SHOULD contain the Common Name, and any other names the server is known by,
+Certificates SHOULD contain the Subject Alternate Name (SAN) extension. The Subject Alternate Name
+field SHOULD contain the Common Name (CN), and any other names the server is known by,
 [to ensure client compatibility][Digicert].
 
 Certificates SHOULD NOT use IP addresses as the Common Name or as a Subject Alternate Name.
@@ -403,6 +403,10 @@ Clients SHOULD use unicast DNS-SD in preference to multicast DNS-SD to find API 
 
 - However, this does not make unicast DNS-SD a substitute for a secure API.
   For instance, if the Server fails to provide a valid Certificate, the Client must not use its endpoint.
+- Note that many DNS-SD client implementations return DNS names with the the trailing '.' that indicates an
+  FQDN (Fully Qualified Domain Name), such as "api.example.com.".
+  On the other hand, certificatess are normally issued with CN/SANs that are DNS Names without the dot,
+  like "api.example.com". During the handshake, name matching needs to take this into account.
 
 Clients SHOULD NOT rely on DNS-SD announcements of Node API endpoints for correct operation.
 

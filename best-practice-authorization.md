@@ -436,7 +436,7 @@ TODO: Needs further discussion with IS-04 group
 
 [RFC-2617]: https://tools.ietf.org/html/rfc2617 "HTTP Authentication: Basic and Digest Access Authentication"
 
-[RFC-2782]: https://www.ietf.org/rfc/rfc2782.txt "A DNS RR for specifying the location of services (DNS SRV)"
+[RFC-2782]: https://tools.ietf.org/html/rfc2782 "A DNS RR for specifying the location of services (DNS SRV)"
 
 [RFC-4716]: https://tools.ietf.org/html/rfc4716 "The Secure Shell (SSH) Public Key File Format"
 
@@ -448,10 +448,10 @@ TODO: Needs further discussion with IS-04 group
 
 [RFC-6763]: https://tools.ietf.org/html/rfc6763 "DNS-Based Service Discovery"
 
-[RFC-7523]: https://tools.ietf.org/html/rfc7523 "JSON Web Token (JWT) Profile for OAuth 2.0 Client Authentication and Authorization Grants"
-
 [RFC-7515]: https://tools.ietf.org/html/rfc7515 "JSON Web Signature (JWS)"
 
 [RFC-7519]: https://tools.ietf.org/html/rfc7519 "JSON Web Token (JWT)"
+
+[RFC-7523]: https://tools.ietf.org/html/rfc7523 "JSON Web Token (JWT) Profile for OAuth 2.0 Client Authentication and Authorization Grants"
 
 [RFC-7591]: https://tools.ietf.org/html/rfc7591 "OAuth 2.0 Dynamic Client Registration Protocol"

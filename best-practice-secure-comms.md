@@ -79,7 +79,7 @@ An HTTP / WebSocket API as defined in an AMWA NMOS Specification (IS-04, IS-05, 
 The entity that is providing the API, for example:
 
 - a registry implementing IS-04 Registration and Query APIs
-- a Node implementing IS-04 Node API and IS-05 Connection API.
+- a Node implementing IS-04 Node API and IS-05 Connection API
 
 ### Client
 
@@ -121,15 +121,15 @@ This document identifies best practice for providing these communications with:
 
 - **Authentication**:
     The Client can check if Messages actually came from the Server it is
-    interacting with, and vice versa
+    interacting with, and vice versa.
 
 This is achieved as follows:
 
 - HTTP and WebSocket communications are tunneled over TLS (i.e. they use HTTPS and WSS).
 - The Server or Client sending each Message includes in it a signed hash to authenticate that it is the originator.
 - The other party checks the hash to check that the Message has not been altered.
-- The Server (and optionally Client) presents X.509 certificates, preferably signed by a Certificate Authority
-  - This provides a point of mutual trust to identify the parties
+- The Server (and optionally Client) presents X.509 certificates, preferably signed by a Certificate Authority.
+  - This provides a point of mutual trust to identify the parties.
 
 A later document will cover **authorisation**,
 i.e. how the Server can determine whether the Client should be allowed to carry out the requested operation.
@@ -148,7 +148,7 @@ and information about test software and other resources.
 Implementations SHOULD support TLS 1.3 and SHALL support TLS 1.2.
 
 Note: TLS 1.3 has only recently been finalised, so is not yet mandatory here.
-However, implementors should be ready to upgrade, as 1.3 may be mandatory in a future revision.
+However, implementers should be ready to upgrade, as 1.3 may be mandatory in a future revision.
 
 Implementations SHALL NOT use TLS 1.0 or 1.1. These are deprecated.
 
@@ -253,7 +253,7 @@ and OCSP stapling (see so that Clients can check whether certificates are compro
 ### Certificate Management: Server
 
 Servers SHALL provide a means of installing X.509 certificates.
-These SHOULD be signed by the CA, unless "self-signed" certificates are being used
+These SHOULD be signed by the CA, unless "self-signed" certificates are being used.
 
 - See comments above.
 
@@ -273,9 +273,9 @@ _Note: as discussed in the [scope](#scope) this applies to API requests.
 Secure presentation of web pages to users is not in scope._
 
 Servers SHALL accept and respond to HTTPS requests,
-using a TLS version and cipher suite allowed by [TLS](#tls)
+using a TLS version and cipher suite allowed by [TLS](#tls).
 
-Servers SHALL NOT accept or respond to plain HTTP requests
+Servers SHALL NOT accept or respond to plain HTTP requests.
 
 Servers SHOULD use the Strict-Transport-Security header as per [RFC 6797]
 to declare that they only will communicate with secure connections.
@@ -283,14 +283,14 @@ to declare that they only will communicate with secure connections.
 Servers SHALL reject all requests not explicitly allowed by the API
 with HTTP response code 405 Method not allowed.
 
-- NMOS Specifications typically define the allowed requests using RAML
+- NMOS Specifications typically define the allowed requests using RAML.
 
 Servers SHALL validate all request payloads and reject those that are invalid
 with an appropriate 4xx Client Error code.
 
 - NMOS Specifications typically define the allowed payloads using JSON Schema
-  - This includes, for example, checking string inputs with regexps.
-- Servers SHOULD check requests are not too large (HTTP response 413)
+  - This includes, for example, checking string inputs with regular expressions.
+- Servers SHOULD check requests are not too large (HTTP response 413).
 - See OWAST's [REST Security][OWASP-REST] page for advice on appropriate codes.
 
 Servers SHOULD log invalid requests, to help check for broken/malicious clients.
@@ -316,7 +316,7 @@ for example for subscription to an AMWA IS-04 Query API.
   for example AMWA IS-07 events.
 
 Servers SHALL provide an encrypted WebSocket connection (wss: URL scheme),
-using a TLS version and cipher suite allowed by [TLS](#tls)
+using a TLS version and cipher suite allowed by [TLS](#tls).
 
 Note: this is default for IS-04 WebSocket subscriptions when using HTTPS for the Query API.
 
@@ -358,19 +358,18 @@ Clients SHALL provide a way of removing root certificates.
 
 Client SHOULD use OCSP Stapling to identify revoked certificates.
 
-- For TLS 1.2 this is defined in [RFC 6961][RFC-6961]
-- For TLS 1.3 it is included in the main spec [RFC 8446][RFC-8446]
+- For TLS 1.2, this is defined in [RFC 6961][RFC-6961].
+- For TLS 1.3, it is included in the main spec [RFC 8446][RFC-8446].
 
 It SHOULD be possible for a user to perform these operations.
 
 - Having to return equipment to the manufacturer is not acceptable.
   Having to install firmware updates is undesirable.
-_
 
 ### HTTP: Client
 
 Clients SHALL make API requests using HTTPS,
-using a TLS version and cipher suite allowed by [TLS](#tls)
+using a TLS version and cipher suite allowed by [TLS](#tls).
 
 Clients SHALL NOT make API requests using plain HTTP.
 
@@ -396,7 +395,7 @@ Clients SHALL NOT use unencrypted WebSocket connections (ws:).
 
 Other protocols used for Messages SHOULD be secured using TLS, where this is supported.
 
-- For example MQTT (see comments re: Server).
+- For example, MQTT (see comments re: Server).
 
 ### DNS-SD: Client
 
@@ -404,7 +403,7 @@ Clients SHOULD use unicast DNS-SD in preference to multicast DNS-SD to find API 
 
 - However, this does not make unicast DNS-SD a substitute for a secure API.
   For instance, if the Server fails to provide a valid Certificate, the Client must not use its endpoint.
-  
+
 Clients SHOULD NOT rely on DNS-SD announcements of Node API endpoints for correct operation.
 
 - These may be deprecated and removed from later versions of the spec.
@@ -423,7 +422,7 @@ In most cases DNS will be available on the network. However in many cases
 it should be considered insecure, and should not be considered as means of providing security
 without the other provisions of this document.
 
-- See also comments about DNS-SD [above](#dns-sd-client)
+- See also comments about DNS-SD [above](#dns-sd-client).
 
 Secure deployment of DNS is currently outside the scope of this document.
 

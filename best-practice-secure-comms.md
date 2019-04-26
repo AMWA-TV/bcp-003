@@ -145,7 +145,7 @@ and information about test software and other resources.
 
 ### TLS Versions
 
-Implementations SHOULD support TLS 1.3 and SHALL support TLS 1.2.
+Implementations SHOULD support TLS 1.3 ([RFC 8446][RFC-8446]) and SHALL support TLS 1.2 ([RFC 5246][RFC-5246]).
 
 Note: TLS 1.3 has only recently been finalised, so is not yet mandatory here.
 However, implementors should be ready to upgrade, as 1.3 may be mandatory in a future revision.
@@ -166,13 +166,13 @@ This section applies to implementations using TLS 1.3. It is consistent with [RF
 
 All Servers and Clients SHALL support this cipher suite:
 
-TLS_AES_128_GCM_SHA256
+TLS\_AES\_128\_GCM\_SHA256
 
 All Servers SHOULD support the following cipher suites:
 
-TLS_AES_256_GCM_SHA384
+TLS\_AES\_256\_GCM\_SHA384
 
-TLS_CHACHA20_POLY1305_SHA256
+TLS\_CHACHA20\_POLY1305\_SHA256
 
 ### TLS 1.2 Cipher Suites
 
@@ -181,6 +181,10 @@ This section applies to implementations using TLS 1.2.
 All Servers and Clients SHALL support this cipher suite:
 
 TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CCM\_8
+
+This supersedes the recommendation in [RFC 5246 Section 9. Mandatory Cipher Suites](https://tools.ietf.org/html/rfc5246#section-9).
+
+- More information on the rationale for requiring ECDHE is found in BBC R&D White Paper [337][BBC-WHP337].
 
 All Servers SHOULD support the following cipher suites,
 unless hardware limitations make this impractical.
@@ -458,21 +462,24 @@ test tools. [337][BBC-WHP337] also discusses IPv6.
 
 [//]: ### (Normative)
 
-[RFC-5280]: https://datatracker.ietf.org/doc/rfc5280/
+[RFC-5246]: https://tools.ietf.org/html/rfc5246/
+"The Transport Layer Security (TLS) Protocol Version 1.2"
+
+[RFC-5280]: https://tools.ietf.org/html/rfc5280/
 "Internet X.509 Public Key Infrastructure Certificate and
 Certificate Revocation List (CRL) Profile"
 
-[RFC-6797]: https://datatracker.ietf.org/doc/rfc6797/
+[RFC-6797]: https://tools.ietf.org/html/rfc6797/
 "HTTP Strict Transport Security (HSTS)"
 
-[RFC-6960]: https://datatracker.ietf.org/doc/rfc6960/
+[RFC-6960]: https://tools.ietf.org/html/rfc6960/
 "X.509 Internet Public Key Infrastructure Online Certificate Status Protocol - OCSP"
 
-[RFC-6961]: https://datatracker.ietf.org/doc/rfc6961/
+[RFC-6961]: https://tools.ietf.org/html/rfc6961/
 "The Transport Layer Security (TLS) Multiple Certificate Status Request Extension"
 
-[RFC-8446]: https://datatracker.ietf.org/doc/rfc8446/
-"Transport Layer Security 1.3"
+[RFC-8446]: https://tools.ietf.org/html/rfc8446/
+"The Transport Layer Security (TLS) Protocol Version 1.3"
 
 [//]: ### (Informative)
 

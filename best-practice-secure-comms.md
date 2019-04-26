@@ -295,7 +295,7 @@ with an appropriate 4xx Client Error code.
 - NMOS Specifications typically define the allowed payloads using JSON Schema
   - This includes, for example, checking string inputs with regexps.
 - Servers SHOULD check requests are not too large (HTTP response 413)
-- See OWAST's [REST Security][OWASP-REST] page for advice on appropriate codes.
+- See OWASP's [REST Security][OWASP-REST] page for advice on appropriate codes.
 
 Servers SHOULD log invalid requests, to help check for broken/malicious clients.
 

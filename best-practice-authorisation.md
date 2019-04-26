@@ -331,13 +331,13 @@ minimal claim is as follows:
 In addition, specifications MAY require a `version` field be included, to indicate which version of the API
 the token may be used with. This is to allow the Authorization Server to return an Authorization Token compatible
 with the requirements for a particular version of the API.
-This field MUST contain a JSON array. Each element of the array MUST be a
-version number of the API with which the token may be used.
+This field MUST contain a JSON array. Each element of the array MUST be a version number of the API
+(as a string formatted as v<#MAJOR>.<#MINOR>) with which the token may be used.
 
 ```json
 "x-nmos-api": {
   "name": "is-04",
-  "version": ["1.0","1.1","1.2"]
+  "version": ["v1.0","v1.1","v1.2"]
 }
 ```
 
@@ -348,7 +348,7 @@ An example of the resulting `x-nmos-api` claim  is shown below.
 ```json
 "x-nmos-api": {
   "name": "is-04",
-  "version": ["1.0","1.1","1.2"],
+  "version": ["v1.0","v1.1","v1.2"],
   "node-read": true
 }
 ```

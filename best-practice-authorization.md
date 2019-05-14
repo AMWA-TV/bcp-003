@@ -17,7 +17,7 @@ The mechanism used to authenticate users of a system implementing these recommen
 
 ## Use of Normative Language
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL, "NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC 2119][RFC-2119].
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC 2119][RFC-2119].
 
 ## Normative References
 

@@ -59,7 +59,7 @@ this is outside the scope of this document, which is concerned only with APIs.
 
 ## Use of Normative Language
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL, "NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC 2119][RFC-2119].
 
 ## Normative References
 
@@ -461,20 +461,23 @@ test tools. [337][BBC-WHP337] also discusses IPv6.
 
 [//]: ### (Normative)
 
-[RFC-5280]: https://datatracker.ietf.org/doc/rfc5280/
+[RFC-2119]: https://tools.ietf.org/html/rfc2119
+"Key words for use in RFCs to Indicate Requirement Levels"
+
+[RFC-5280]: https://tools.ietf.org/html/rfc5280
 "Internet X.509 Public Key Infrastructure Certificate and
 Certificate Revocation List (CRL) Profile"
 
-[RFC-6797]: https://datatracker.ietf.org/doc/rfc6797/
+[RFC-6797]: https://tools.ietf.org/html/rfc6797
 "HTTP Strict Transport Security (HSTS)"
 
-[RFC-6960]: https://datatracker.ietf.org/doc/rfc6960/
+[RFC-6960]: https://tools.ietf.org/html/rfc6960
 "X.509 Internet Public Key Infrastructure Online Certificate Status Protocol - OCSP"
 
-[RFC-6961]: https://datatracker.ietf.org/doc/rfc6961/
+[RFC-6961]: https://tools.ietf.org/html/rfc6961
 "The Transport Layer Security (TLS) Multiple Certificate Status Request Extension"
 
-[RFC-8446]: https://datatracker.ietf.org/doc/rfc8446/
+[RFC-8446]: https://tools.ietf.org/html/rfc8446
 "Transport Layer Security 1.3"
 
 [//]: ### (Informative)

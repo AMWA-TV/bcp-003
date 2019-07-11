@@ -208,7 +208,7 @@ TLS\_DHE\_RSA\_WITH\_AES\_128\_CBC\_SHA256
 
 TLS\_DHE\_RSA\_WITH\_AES\_256\_CBC\_SHA256
 
-From the above cipher suites, all Servers and Clients SHALL support the following cipher suite. Where resources are extremely limited, this mandatory suite above ensures interoperability.
+From the above cipher suites, all Servers and Clients SHALL support the following cipher suite. Where resources are extremely limited, this mandatory suite ensures interoperability.
 
 TLS\_ECDHE\_RSA\_WITH\_AES\_128\_GCM\_SHA256
 

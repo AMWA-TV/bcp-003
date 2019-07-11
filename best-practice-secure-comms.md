@@ -298,7 +298,7 @@ Servers SHOULD log invalid requests, to help check for broken/malicious clients.
 
 Servers SHOULD NOT use SSL compression, as this has a known vulnerability.
 
-Implementers SHOULD consider the impact of TLS Session Tickets (RFC 5077) on performance.
+Implementers SHOULD consider the impact of TLS Session Tickets ([RFC 5077][RFC-5077]) on performance.
 
 Implementers SHOULD be aware of OWASP's recommendations on
 [Server Protocol and Cipher Configuration](OWASP-TRANSPORT).
@@ -464,6 +464,10 @@ test tools. [337][BBC-WHP337] also discusses IPv6.
 
 [RFC-2119]: https://tools.ietf.org/html/rfc2119
 "Key words for use in RFCs to Indicate Requirement Levels"
+
+[RFC-5077]: https://tools.ietf.org/html/rfc5077
+"Transport Layer Security (TLS) Session Resumption without
+Server-Side State"
 
 [RFC-5246]: https://tools.ietf.org/html/rfc5246
 "The Transport Layer Security (TLS) Protocol Version 1.2"

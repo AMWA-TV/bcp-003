@@ -164,32 +164,23 @@ which needs to be sufficiently secure.
 
 This section applies to implementations using TLS 1.3. It is consistent with [RFC 8446][RFC-8446].
 
-All Servers and Clients SHALL support this cipher suite:
+All Servers SHOULD support the following cipher suites. Servers SHOULD be configured to use the priority order listed:
 
 TLS\_AES\_128\_GCM\_SHA256
-
-All Servers SHOULD support the following cipher suites:
 
 TLS\_AES\_256\_GCM\_SHA384
 
 TLS\_CHACHA20\_POLY1305\_SHA256
 
+From the above cipher suites, all Servers and Clients SHALL support the following cipher suite:
+
+TLS\_AES\_128\_GCM\_SHA256
+
 ### TLS 1.2 Cipher Suites
 
 This section applies to implementations using TLS 1.2.
 
-All Servers and Clients SHALL support this cipher suite:
-
-TLS\_ECDHE\_RSA\_WITH\_AES\_128\_GCM\_SHA256
-
-This supersedes the recommendation in [RFC 5246 Section 9. Mandatory Cipher Suites](https://tools.ietf.org/html/rfc5246#section-9).
-
-- More information on the rationale for requiring ECDHE is found in BBC R&D White Paper [337][BBC-WHP337].
-
-All Servers SHOULD support the following cipher suites,
-unless hardware limitations make this impractical.
-
-- Where resources are extremely limited, the mandatory suite above ensures interoperability.
+All Servers SHOULD support the following cipher suites, unless hardware limitations make this impractical.
 
 Servers SHOULD be configured to use the priority order listed:
 
@@ -200,6 +191,8 @@ TLS\_ECDHE\_ECDSA\_WITH\_AES\_256\_GCM\_SHA384
 TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CBC\_SHA256
 
 TLS\_ECDHE\_ECDSA\_WITH\_AES\_256\_CBC\_SHA384
+
+TLS\_ECDHE\_RSA\_WITH\_AES\_128\_GCM\_SHA256
 
 TLS\_ECDHE\_RSA\_WITH\_AES\_256\_GCM\_SHA384
 
@@ -214,6 +207,14 @@ TLS\_ECDHE\_RSA\_WITH\_AES\_256\_CBC\_SHA384
 TLS\_DHE\_RSA\_WITH\_AES\_128\_CBC\_SHA256
 
 TLS\_DHE\_RSA\_WITH\_AES\_256\_CBC\_SHA256
+
+From the above cipher suites, all Servers and Clients SHALL support the following cipher suite. Where resources are extremely limited, this mandatory suite above ensures interoperability.
+
+TLS\_ECDHE\_RSA\_WITH\_AES\_128\_GCM\_SHA256
+
+This supersedes the recommendation in [RFC 5246 Section 9. Mandatory Cipher Suites](https://tools.ietf.org/html/rfc5246#section-9).
+
+- More information on the rationale for requiring ECDHE is found in BBC R&D White Paper [337][BBC-WHP337].
 
 ### X.509 Certificates and Certificate Authority
 

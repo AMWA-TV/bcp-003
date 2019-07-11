@@ -19,13 +19,13 @@
 - [Server Behaviour](#server-behaviour)
   - [Certificate Management: Server](#certificate-management-server)
   - [HTTP: Server](#http-server)
-  - [WebSockets: Server](#websockets-server)
+  - [WebSocket: Server](#websocket-server)
   - [Other Protocols: Server](#other-protocols-server)
   - [DNS\-SD: Server](#dns-sd-server)
 - [Client Behaviour](#client-behaviour)
   - [Certificate Management: Client](#certificate-management-client)
   - [HTTP: Client](#http-client)
-  - [WebSockets: Client](#websockets-client)
+  - [WebSocket: Client](#websocket-client)
   - [Other Protocols: Client](#other-protocols-client)
   - [DNS\-SD: Client](#dns-sd-client)
 - [Other Considerations](#other-considerations)
@@ -46,7 +46,7 @@ The recommendations are also suitable for other APIs beyond NMOS.
 
 Use of insecure communication (plain HTTP etc.) is forbidden within the scope of this document.
 
-Fine-grained Client authorisation --
+Fine-grained Client authorization --
 providing a mechanism to determine what actions a Client may take against an API --
 is not in scope, but may be part of a future revision.
 
@@ -99,13 +99,13 @@ Information sent according to an NMOS API, e.g.:
 
 A Message can also carry payload data related to an NMOS API.
 
-- For example the draft IS-07 specification uses WebSocket and MQTT transport to carry event data.
+- For example the IS-07 specification uses WebSocket and MQTT transport to carry event data.
   These can be considered as Messages for the purposes of this document.
   - Although ST 2110 payload information is not considered a Message here.
 
 ## Introduction (informative)
 
-The AMWA NMOS Interface Specfications use HTTP and WebSockets for API communications between Nodes,
+The AMWA NMOS Interface Specfications use HTTP and WebSocket for API communications between Nodes,
 network services and control applications.
 
 This document identifies best practice for providing these communications with:
@@ -131,10 +131,10 @@ This is achieved as follows:
 - The Server (and optionally Client) presents X.509 certificates, preferably signed by a Certificate Authority.
   - This provides a point of mutual trust to identify the parties.
 
-A later document will cover **authorisation**,
+A later document will cover **authorization**,
 i.e. how the Server can determine whether the Client should be allowed to carry out the requested operation.
 
-When used correctly HTTPS provides an excellent level of security.
+When used correctly, HTTPS provides an excellent level of security.
 However it is important it is implemented well, with up-to-date versions,
 and in a way that will ensure cross vendor inter-operability.
 These recommendations only provide an overview of this rapidly-changing field,
@@ -145,7 +145,7 @@ and information about test software and other resources.
 
 ### TLS Versions
 
-Implementations SHOULD support TLS 1.3 and SHALL support TLS 1.2.
+Implementations SHOULD support TLS 1.3 ([RFC 8446][RFC-8446]) and SHALL support TLS 1.2 ([RFC 5246][RFC-5246]).
 
 Note: TLS 1.3 has only recently been finalised, so is not yet mandatory here.
 However, implementers should be ready to upgrade, as 1.3 may be mandatory in a future revision.
@@ -181,6 +181,10 @@ This section applies to implementations using TLS 1.2.
 All Servers and Clients SHALL support this cipher suite:
 
 TLS\_ECDHE\_RSA\_WITH\_AES\_128\_GCM\_SHA256
+
+This supersedes the recommendation in [RFC 5246 Section 9. Mandatory Cipher Suites](https://tools.ietf.org/html/rfc5246#section-9).
+
+- More information on the rationale for requiring ECDHE is found in BBC R&D White Paper [337][BBC-WHP337].
 
 All Servers SHOULD support the following cipher suites,
 unless hardware limitations make this impractical.
@@ -273,7 +277,7 @@ using a TLS version and cipher suite allowed by [TLS](#tls).
 
 Servers SHALL NOT accept or respond to plain HTTP requests.
 
-Servers SHOULD use the Strict-Transport-Security header as per [RFC 6797]
+Servers SHOULD use the Strict-Transport-Security header as per [RFC 6797][RFC-6797]
 to declare that they only will communicate with secure connections.
 
 Servers SHALL reject all requests not explicitly allowed by the API
@@ -287,7 +291,7 @@ with an appropriate 4xx Client Error code.
 - NMOS Specifications typically define the allowed payloads using JSON Schema
   - This includes, for example, checking string inputs with regular expressions.
 - Servers SHOULD check requests are not too large (HTTP response 413).
-- See OWAST's [REST Security][OWASP-REST] page for advice on appropriate codes.
+- See OWASP's [REST Security][OWASP-REST] page for advice on appropriate codes.
 
 Servers SHOULD log invalid requests, to help check for broken/malicious clients.
 
@@ -303,7 +307,7 @@ Servers SHOULD be as specific as possible in the use of CORS.
 - The examples in the IS-04 and IS-05 documentation are "very relaxed",
   and SHOULD NOT be used without considering whether they are appropriate.
 
-### WebSockets: Server
+### WebSocket: Server
 
 This section applies to Servers providing Messages through a WebSocket connection,
 for example for subscription to an AMWA IS-04 Query API.
@@ -376,7 +380,7 @@ except with the express permission of the user.
   If the user wishes to continue it is at his/her own risk.
   Clients SHOULD allow a system administrator the option to disable such exceptions.
 
-### WebSockets: Client
+### WebSocket: Client
 
 This section applies to Clients requesting WebSocket connections as part of an API,
 for example for subscription to an AMWA IS-04 Query API,
@@ -459,6 +463,9 @@ test tools. [337][BBC-WHP337] also discusses IPv6.
 
 [RFC-2119]: https://tools.ietf.org/html/rfc2119
 "Key words for use in RFCs to Indicate Requirement Levels"
+
+[RFC-5246]: https://tools.ietf.org/html/rfc5246
+"The Transport Layer Security (TLS) Protocol Version 1.2"
 
 [RFC-5280]: https://tools.ietf.org/html/rfc5280
 "Internet X.509 Public Key Infrastructure Certificate and

@@ -166,13 +166,13 @@ This section applies to implementations using TLS 1.3. It is consistent with [RF
 
 All Servers and Clients SHALL support this cipher suite:
 
-TLS_AES_128_GCM_SHA256
+TLS\_AES\_128\_GCM\_SHA256
 
 All Servers SHOULD support the following cipher suites:
 
-TLS_AES_256_GCM_SHA384
+TLS\_AES\_256\_GCM\_SHA384
 
-TLS_CHACHA20_POLY1305_SHA256
+TLS\_CHACHA20\_POLY1305\_SHA256
 
 ### TLS 1.2 Cipher Suites
 
@@ -180,12 +180,10 @@ This section applies to implementations using TLS 1.2.
 
 All Servers and Clients SHALL support this cipher suite:
 
-TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CCM\_8
+TLS\_ECDHE\_RSA\_WITH\_AES\_128\_GCM\_SHA256
 
 All Servers SHOULD support the following cipher suites,
 unless hardware limitations make this impractical.
-In such a case Servers SHOULD support the first four listed suites,
-which are used with ECDSA certificates.
 
 - Where resources are extremely limited, the mandatory suite above ensures interoperability.
 
@@ -198,8 +196,6 @@ TLS\_ECDHE\_ECDSA\_WITH\_AES\_256\_GCM\_SHA384
 TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CBC\_SHA256
 
 TLS\_ECDHE\_ECDSA\_WITH\_AES\_256\_CBC\_SHA384
-
-TLS\_ECDHE\_RSA\_WITH\_AES\_128\_GCM\_SHA256
 
 TLS\_ECDHE\_RSA\_WITH\_AES\_256\_GCM\_SHA384
 
@@ -257,10 +253,10 @@ These SHOULD be signed by the CA, unless "self-signed" certificates are being us
 
 - See comments above.
 
-Servers SHALL support installation of multiple certificates,
-and SHALL support both RSA and ECDSA certificates.
+Servers SHOULD support installation of multiple certificates,
+and SHOULD support both RSA and ECDSA certificates.
 
-- ECDSA certificates are suited to the hardware-limited cases discussed above.
+- ECDSA certificates are more suited to hardware-limited cases.
 
 Servers SHALL provide a secure mechanism to install and store the private key(s)
 and key chain for their certificates.

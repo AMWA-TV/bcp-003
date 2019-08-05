@@ -117,7 +117,7 @@ Multiple DNS-SD advertisements for the same API are permitted where the API is e
 
 Clients and Resource Servers MUST support discovering the Authorization Server through use of unicast DNS-SD service discovery, as described in [RFC 6763][RFC-6763].
 
-Clients and Resource Servers MUST verify the TLS certificate of the Authorization Server. Clients MUST check that the address of the Authorization Server matches either a Subject Alternate Name or Common Name on the TLS certificate. 
+Clients and Resource Servers MUST verify the TLS certificate of the Authorization Server. Clients MUST check that the address of the Authorization Server matches either a Subject Alternate Name or Common Name on the TLS certificate.
 Clients MUST verify the entire chain of trust of the Authorization Server TLS certificate, back to a trusted root certificate.
 This ensures that the authorization server is trusted.
 Clients and Resource Servers MUST provide a mechanism for installing root CA certificates used for verifying the TLS certificate of Authorization Servers. HTTPS MUST be used for all connections to the Authorization Server. Clients and Resource Servers MUST NOT interact with Authorization Servers if the TLS certificate of the Authorization Server cannot be validated.
@@ -220,8 +220,8 @@ relationship with the client - this is typically reserved for clients like opera
 privileged software. This may be the case for native application broadcast control systems, but not those
 implemented in the user-agent (e.g browser). This grant is not suitable for NMOS Node type clients.
 
-The client authentication grant is suitable for confidential clients, but requires the resource owner 
-arrange for the Authorization Server to allow access to protected resources out of band rather than as part 
+The client authentication grant is suitable for confidential clients, but requires the resource owner
+arrange for the Authorization Server to allow access to protected resources out of band rather than as part
 of the grant process.
 This may be suitable for use with NMOS, especially where the Authorization Server forms part of a
 larger broadcast control system.
@@ -384,7 +384,7 @@ available in the header for both the token and all other HTTP headers.
 ### Token Lifetime and Refresh
 
 A given token for an NMOS API may be used on more than one Node or Registry instance.
-If one of these Nodes or Registries is compromised, it is possible for that entity to "capture" that token, 
+If one of these Nodes or Registries is compromised, it is possible for that entity to "capture" that token,
 and use it itself maliciously.
 While the precise duration of token validity should be left to implementers and administrators based on the
 risk profile, these tokens SHOULD ideally be set to be valid for no more than one hour.
@@ -418,8 +418,18 @@ in the HTTP GET request that initiates the Websocket handshake defined in
 [RFC 6455][RFC-6455] in the same manner as a normal HTTP request as described in
 [Accessing Protected Resources](#accessing-protected-resources).
 
-The Authorization SHALL validate such tokens in the same manner as it would for a normal
-protected HTTP resources. The Authorization server SHALL NOT upgrade the connection to a
+The Resource Server SHALL validate such tokens in the same manner as it would for a normal
+protected HTTP resources using the HTTP Authorization Request Header.
+
+Further to this, due to limitations
+in the native Javascript Websocket API, clients MAY pass the OAuth2 access token in the query parameters
+of the request URL during the handshake, using the `access_token` key, as described in [RFC 6750](https://tools.ietf.org/html/rfc6750#section-2.3). This is only for situations in which it is not feasible to pass the token in the HTTP Authorization Header.
+
+```
+https://www.example.com/ws?access_token=mF_9.B5f-4.1JqM
+```
+
+The Authorization server SHALL NOT upgrade the connection to a
 WebSocket if the token is deemed invalid.
 
 ## Interaction With Other AMWA Specifications

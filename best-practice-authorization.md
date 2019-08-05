@@ -421,15 +421,17 @@ in the HTTP GET request that initiates the Websocket handshake defined in
 The Resource Server SHALL validate such tokens in the same manner as it would for a normal
 protected HTTP resources using the HTTP Authorization Request Header.
 
-Further to this, due to limitations
-in the native Javascript Websocket API, clients MAY pass the OAuth2 access token in the query parameters
-of the request URL during the handshake, using the `access_token` key, as described in [RFC 6750](https://tools.ietf.org/html/rfc6750#section-2.3). This is only for situations in which it is not feasible to pass the token in the HTTP Authorization Header.
+Further to this, due to limitations in the native JavaScript Websocket API, clients MAY
+pass the OAuth2 access token in the query parameters of the request URL during the handshake,
+using the `access_token` key, as described in [RFC 6750](https://tools.ietf.org/html/rfc6750#section-2.3).
+This is only for situations in which it is not feasible to pass the token in the HTTP Authorization Header.
 
 ```
 https://www.example.com/ws?access_token=mF_9.B5f-4.1JqM
 ```
 
-The Authorization server SHALL NOT upgrade the connection to a
+The Resource Server MUST support the parsing of access tokens in both the Authorization
+HTTP Header and the query parameter. The Authorization server SHALL NOT upgrade the connection to a
 WebSocket if the token is deemed invalid.
 
 ## Interaction With Other AMWA Specifications

@@ -422,7 +422,7 @@ The Resource Server SHALL validate such tokens in the same manner as it would fo
 protected HTTP resources using the HTTP Authorization Request Header.
 
 Further to this, due to limitations in the native JavaScript WebSocket API, clients MAY
-pass the OAuth2 access token in the query parameters of the request URL during the handshake,
+pass the OAuth 2.0 access token in the query parameters of the request URL during the handshake,
 using the `access_token` key, as described in [RFC 6750](https://tools.ietf.org/html/rfc6750#section-2.3).
 This is only for situations in which it is not feasible to pass the token in the HTTP Authorization Header.
 

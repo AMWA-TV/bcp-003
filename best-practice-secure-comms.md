@@ -301,7 +301,7 @@ Servers SHOULD NOT use SSL compression, as this has a known vulnerability.
 Implementers SHOULD consider the impact of TLS Session Tickets ([RFC 5077][RFC-5077]) on performance.
 
 Implementers SHOULD be aware of OWASP's recommendations on
-[Server Protocol and Cipher Configuration](OWASP-TRANSPORT).
+[Server Protocol and Cipher Configuration][OWASP-TRANSPORT].
 
 Servers SHOULD be as specific as possible in the use of CORS.
 
@@ -494,10 +494,10 @@ Certificate Revocation List (CRL) Profile"
 
 [BBC-WHP338]: https://www.bbc.co.uk/rd/publications/whitepaper338 "Public Key Infrastructure for IP Production for Broadcast"
 
-[OWASP-REST]: https://www.owasp.org/index.php/REST_Security_Cheat_Sheet
+[OWASP-REST]: https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html
 "OWASP REST Security Cheat Sheet"
 
-[OWASP-TRANSPORT]: https://www.owasp.org/index.php/Transport_Layer_Protection_Cheat_Sheet
+[OWASP-TRANSPORT]: https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html
 "OWASP Transport Layer Protection Cheat Sheet"
 
 [Digicert]: https://www.digicert.com/subject-alternative-name-compatibility.htm

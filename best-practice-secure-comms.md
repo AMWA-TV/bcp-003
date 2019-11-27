@@ -494,7 +494,7 @@ Certificate Revocation List (CRL) Profile"
 
 [BBC-WHP338]: https://www.bbc.co.uk/rd/publications/whitepaper338 "Public Key Infrastructure for IP Production for Broadcast"
 
-[OWASP-REST]: https://www.owasp.org/index.php/REST_Security_Cheat_Sheet
+[OWASP-REST]: https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html
 "OWASP REST Security Cheat Sheet"
 
 [OWASP-TRANSPORT]: https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html

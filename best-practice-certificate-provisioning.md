@@ -19,8 +19,7 @@ Use of insecure communication (plain HTTP etc.) is forbidden within the scope of
 
 Implementation of [BCP-003-01](best-practice-secure-comms.md) is a recommended prerequisite to implementing this document.
 
-Although security of web pages presented to users is also important,
-this is outside the scope of this document, which is concerned only with APIs.
+Although security of web pages presented to users is also important, this is outside the scope of this document, which is concerned only with APIs.
 
 ## Use of Normative Language
 
@@ -39,7 +38,20 @@ _See also the [NMOS Glossary](https://github.com/AMWA-TV/nmos/wiki/Glossary), an
 
 An HTTP / WebSocket API as defined in an AMWA NMOS Specification (IS-04, IS-05, IS-06, etc.)
 
+### CSR (Certificate Signing Request)
+
+The syntax used to request a TLS Certificate from a Certificate Authority, it contains the public key and identification information require by the Certificate Authority in the PKCS Format [RFC-2986][RFC-2986]
+
 ### EST Server
+
+The entity that is providing the EST API in accordance with [RFC 7030][RFC-7030]
+
+### EST Client
+
+The entity that is using the EST API, for example:
+
+- a Node requesting a TLS Server Certificate
+- a Node requesting the latest Root CA of the domain
 
 ### NMOS Server
 
@@ -48,15 +60,35 @@ The entity that is providing an NMOS API, for example:
 - a registry implementing IS-04 Registration and Query APIs
 - a Node implementing IS-04 Node API and IS-05 Connection API
 
-### EST Client
+### NMOS Client
 
-The entity that is using the EST API, for example:
+The entity that is using the NMOS API, for example:
 
-- a Node requesting a TLS Server Certificate
-
-### CSR (Certificate Signing Request)
+- a Node using the IS-04 Registration API
+- a monitoring application using the IS-04 Query API
+- a connection control application using the IS-05 Connection API
 
 ## Introduction (informative)
+
+This document covers the automated provisioning of TLS Server Certificates to NMOS Servers, which are then used to secure communications between NMOS Servers and NMOS Clients.
+
+This document is not concerned with the security of the connection used to carry out provisioning of the TLS Server Certificate, but for the mechanism described in this document to be effective the connection must be secured, ideally using the recommendation covered in [BCP-003-01](best-practice-secure-comms.md).
+
+
+
+## Automated Certificate Provisioning Flow (informative)
+
+1. Before the NMOS Node(EST Client) is shipped from the factory it is provision with a unique TLS Client Certificate, signed by the manufacturer Certificate Authority
+2. When the EST Client is connected to the target environments network, it will first dicover the location of the EST Server using Unicast DNS-SD.
+    * The EST Client SHOULD assume the EST server found using DNS-SD is trusted
+3. The EST Client should then request the Root CA for the target network from the EST Server.
+    * Using the Root CA returned to secure further communications with the EST Server
+4. Generate a Certificate Signing Request(CSR) for all supported TLS Key profiles
+5. Send the CSR to the EST Server which will return a signed TLS Server Certificate for the requested EST Client
+6. The EST Client SHOULD provide the TLS Server Certificate and the corresponding chain of trust for all future HTTPS request to its NMOS APIs
+
+On subsequent network connections or reboots the EST Client should query the EST server for the latest Root CA, if the domain differs from the existing certificate, and new TLS Server certificate should be provisioned
+
 
 ## Automated Certificate Provisioning Specification
 
@@ -71,7 +103,6 @@ This MUST include the following API endpoints:
 | Distribution of CA Certificates | /cacerts        |
 | Enrollment of Clients           | /simpleenroll   |
 | Re-enrollment of Clients        | /simplereenroll |
-
 
 
 ### DNS-SD Advertisement
@@ -99,6 +130,13 @@ The DNS-SD advertisement MUST be accompanied by a TXT record of name 'api_ver'. 
 ##### pri
 
 The DNS-SD advertisement MUST include a TXT record with key 'pri' and an integer value. Servers MAY additionally present a matching priority via the DNS-SD SRV record 'priority' and 'weight' as defined in [RFC 2782][RFC-2782]. The TXT record should be used in favour of the SRV priority and weight where these values differ, in order to overcome issues in the Bonjour and Avahi implementations. Values 0 to 99 correspond to an active EST Server API (zero being the highest priority). Values 100+ are reserved for development work to avoid colliding with a live system.
+
+## Initial Certificate Provisioning
+
+## Certificate Renewal
+
+## Expired TLS Server Certificate
+
 
 
 

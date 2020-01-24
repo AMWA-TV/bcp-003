@@ -105,7 +105,7 @@ A Message can also carry payload data related to an NMOS API.
 
 ## Introduction (informative)
 
-The AMWA NMOS Interface Specfications use HTTP and WebSocket for API communications between Nodes,
+The AMWA NMOS Interface Specifications use HTTP and WebSocket for API communications between Nodes,
 network services and control applications.
 
 This document identifies best practice for providing these communications with:
@@ -233,7 +233,7 @@ If a CA cannot be provided, then "self-signed" certificates MAY be exchanged
 directly between Clients and Servers. However such an approach does not scale at
 all well beyond the simple case with a single Client and Server (e.g. a camera and
 and control unit), as it requires each Client and Server to be provisioned with the
-certifcate of each and every other party with which it communicates,
+certificate of each and every other party with which it communicates,
 and certificate revocation can be a significant overhead.
 
 Wildcard certificates SHOULD NOT be used.
@@ -335,7 +335,7 @@ Security of ST 2110 streams is outside the scope of this document.
 
 ### DNS-SD: Server
 
-Servers SHALL support unicast DNS-SD to advertise their API endpoints.  
+Servers SHALL support unicast DNS-SD to advertise their API endpoints.
 
 Servers SHOULD NOT advertise multicast DNS-SD, except where a DNS server is not available.
 
@@ -406,7 +406,7 @@ Clients SHOULD use unicast DNS-SD in preference to multicast DNS-SD to find API 
   For instance, if the Server fails to provide a valid Certificate, the Client must not use its endpoint.
 - Note that many DNS-SD client implementations return DNS names with the the trailing '.' that indicates an
   FQDN (Fully Qualified Domain Name), such as "api.example.com.".
-  On the other hand, certificatess are normally issued with CN/SANs that are DNS Names without the dot,
+  On the other hand, certificates are normally issued with CN/SANs that are DNS Names without the dot,
   like "api.example.com". During the handshake, name matching needs to take this into account.
 
 Clients SHOULD NOT rely on DNS-SD announcements of Node API endpoints for correct operation.
@@ -433,10 +433,10 @@ Secure deployment of DNS is currently outside the scope of this document.
 
 ## Recommendations for Future Interface Specifications
 
-Creators of new AMWA Interface Specifcations SHOULD ensure that the recommendations
+Creators of new AMWA Interface Specifications SHOULD ensure that the recommendations
 of this document are followed in the Specification itself.
 
-Organisers of interoperabily testing of new Specifications SHOULD include tests of
+Organisers of interoperability testing of new Specifications SHOULD include tests of
 whether implementations meet the recommendations of this document.
 
 All those involved in creating and testing new Specifications SHOULD be aware of the

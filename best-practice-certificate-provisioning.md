@@ -76,6 +76,8 @@ This document is not concerned with the security of the connection used to carry
 
 ## Automated Certificate Provisioning Flow (informative)
 
+To enable zero-configuration TLS Certificate provisioning, Manufacturers must include a unique TLS Client Certificate on all their devices and the provide the corresponding Root Certificate Authority to customers. If the Client Certificate or the chain of trust is compromised the manufacturer must revoke the comprised certificates.
+
 1. Before the NMOS Node(EST Client) is shipped from the factory it must be provisioned with a unique TLS Client Certificate, signed by the Manufacturers Certificate Authority
 2. When the EST Client is connected to the target environments network, it will first discover the location of the EST Server using Unicast DNS-SD.
     * The EST Client should assume the EST server found using DNS-SD is trusted
@@ -141,7 +143,7 @@ The EST Server MUST present a valid TLS Server Certificate signed by the CA for 
 
 The EST Server MUST authenticate the EST Client that is requesting a TLS Certificate manually or automatically using a TLS Client Certificate.
 
-The EST Server MUST support using a TLS Client Certificate, presented during the TLS handshake by the EST Client to authenticate if the Client is trusted. The TLS Client Certificate can either be signed my the current CA or a trusted Root CA of the device manufacturer. The EST Server MUST provide a method to load multiple trusted Root CA's, that are used to verify TLS Client Certificate.
+The EST Server MUST support using a TLS Client Certificate, presented during the TLS handshake by the EST Client to authenticate if the Client is trusted. The TLS Client Certificate can either be signed my the current CA or a trusted Root CA of the device manufacturer. The EST Server MUST check the validity of the EST CLients TLS Certificate before responding to its request. The EST Server MUST provide a method to load multiple trusted Root CA's, that are used to verify TLS Client Certificate.
 
 The EST Server MAY also support manually authentication of the EST Client if no TLS Client Certificate is presented during the TLS handshake, the TLS Client Certificate is not trusted or as an extra authentication step. The exact process for manual authentication will be implementation specific, but the EST Server MUST provide enough information to the user so they can authenticate the EST Client. During the manual authentication the EST Server MUST respond with either HTTP 202 or HTTP 503, the response must include a `Retry-After` header.
 
@@ -179,7 +181,7 @@ The EST Client SHOULD create a CSR for each Cipher Suite it supports with an app
 
 **Certificate Request**
 
-For each generated CSR the EST CLient SHOULD make a HTTPS request should be made to the `/simpleenroll` endpoint of the EST Server. The EST Client SHOULD include the manufacturer installed TLS Client Certificate if present and valid during the TLS handshake with the EST Server.
+For each generated CSR the EST CLient SHOULD make a HTTPS request containing the CSR to the `/simpleenroll` endpoint of the EST Server. The EST Client SHOULD include the manufacturer installed TLS Client Certificate if present and valid during the TLS handshake with the EST Server.
 
 If the EST Server returns a HTTP 200 response the certificate request was successful and the EST Client should use the returned TLS Certificate and its chain of trust for all further requests to its NMOS APIs.
 
@@ -189,17 +191,27 @@ If the EST Server returns any other the HTTP response, the request has been unsu
 
 ### Certificate Renewal
 
-At an appropriate point before the EST Clients TLS Certificate expires the EST Client SHOULD renew its TLS Certificate.
+At an appropriate point before the EST Clients TLS Certificate expires the EST Client SHOULD renew the TLS Certificate. If the EST Clients TLS Certificate is no longer valid then [Initial Certificate Provisioning](#initial-certificate-provisioning) workflow should be followed.
 
-### Expired TLS Server Certificate
+The EST Client SHOULD generate a new CSR matching the TLS certificate it is being used to replace. The EST Client SHOULD make a HTTP request containing the CSR to the `/simplereenroll` endpoint of the EST Server. The EST Client MUST include the TLS Certificate being renewed during the TLS handshake with the EST Server.
+
+If the EST Server returns a HTTP 200 response the certificate request was successful and the EST Client should use the returned TLS Certificate and its chain of trust for all further requests to its NMOS APIs. The EST Client MUST remove any previously issued TLS Certificates and key pairs.
+
+### Expired Manufacturer Issued TLS Client Certificate
+
+If the Manufacturer issued TLS Client Certificate has expired or has been revoked, it MUST NOT be used by the EST Client for authentication. An EST Client MAY attempt to request a TLS Certificate following [Initial Certificate Provisioning](#initial-certificate-provisioning), without providing a TLS Client Certificate during the TLS handshake. If the EST Server supports manual authentication the request maybe processed.
+
+If the EST Server fails to process the request the following actions MAY be taken:
+1. The EST Client MAY have a TLS Certificate for the target network manually installed on the device. This certificate MUST then be used for future [Certicate Renewals](#certificate-renewal)
+2. The Manufacturer issued TLS Client Certificate MAY be renewed by a software/firmware update, but this update MUST contain a unique TLS certificate per device. The valid TLS Client Certificate MAY then be used during [Initial Certificate Provisioning](#initial-certificate-provisioning)
 
 ### Connection to new network
 
 ## TODO:
-* Specification of returned TLS certificate format (eg, .p7, .pem)
-* Specification of supported Cipher Suites and minimum key lengths
-* Generate a new Key Pair for each TLS Certificate renewal
-* Specification of Root CA rollover period and procedure
+* Specification of returned TLS certificate format (eg, .p7, .pem)?
+* Specification of supported Cipher Suites and minimum key lengths?
+* Generate a new Key Pair for each TLS Certificate renewal?
+* Specification of Root CA rollover period and procedure?
 
 ## Further Reading
 
@@ -226,6 +238,9 @@ The IETF RFCs referenced here provide much more information.
 
 [RFC-5785]: https://tools.ietf.org/html/rfc5785
 "Defining Well-Known Uniform Resource Identifiers (URIs)"
+
+[RFC-8615]: https://tools.ietf.org/html/rfc8615
+"Well-Known Uniform Resource Identifiers (URIs)"
 
 [RFC-6763]: https://tools.ietf.org/html/rfc6763
 "DNS-Based Service Discovery"

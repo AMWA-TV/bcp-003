@@ -206,7 +206,7 @@ The EST Client SHOULD make a HTTPS request to the `/cacerts` endpoint of the EST
 
 **Generate Certificate Signing(CSR) Request**
 
-The EST Client SHOULD create a CSR for each Cipher Suite it supports with an appropriate Key Length. The CSR MUST contain a Common Name that is resolvable via DNS on the current domain and appropriate values for the other CSR fields. The manufacturer MAY allow the optional CSR fields to be configured by the operator.
+The EST Client SHOULD create a CSR for each digital signature algorithm it supports with an appropriate Key Length. The CSR MUST contain a Common Name that is resolvable via DNS on the current domain and appropriate values for the other CSR fields. The manufacturer MAY allow the optional CSR fields to be configured by the operator.
 
 **Certificate Request**
 

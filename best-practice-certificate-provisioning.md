@@ -202,10 +202,14 @@ If the EST Server returns a HTTP 200 response the certificate request was succes
 If the Manufacturer issued TLS Client Certificate has expired or has been revoked, it MUST NOT be used by the EST Client for authentication. An EST Client MAY attempt to request a TLS Certificate following [Initial Certificate Provisioning](#initial-certificate-provisioning), without providing a TLS Client Certificate during the TLS handshake. If the EST Server supports manual authentication the request maybe processed.
 
 If the EST Server fails to process the request the following actions MAY be taken:
-1. The EST Client MAY have a TLS Certificate for the target network manually installed on the device. This certificate MUST then be used for future [Certicate Renewals](#certificate-renewal)
+1. The EST Client MAY have a TLS Certificate for the target network manually installed on the device. This certificate MUST then be used for future [Certificate Renewals](#certificate-renewal)
 2. The Manufacturer issued TLS Client Certificate MAY be renewed by a software/firmware update, but this update MUST contain a unique TLS certificate per device. The valid TLS Client Certificate MAY then be used during [Initial Certificate Provisioning](#initial-certificate-provisioning)
 
 ### Connection to new network
+
+It MAY be desirable that when a EST Client is connected to a different network that it automatically requests a TLS Certificate for the new network. It MUST be possible to disable this functionality on the EST Client and provide a manual method ofr an authorised operator to initiate the registration.
+
+On start up or on change of network state the EST Client MUST attempt to discover the EST Server using [DNS-SD](#dns-sd-advertisement). The EST Client SHOULD make a request to the `/cacerts` endpoint, if the request is successful the EST Client should compare the returned Certificate to the currently install Root CA, if the Certificate is for a different Domain the EST Client MUST follow [Initial Certificate Provisioning](#initial-certificate-provisioning).
 
 ## TODO:
 * Specification of returned TLS certificate format (eg, .p7, .pem)?

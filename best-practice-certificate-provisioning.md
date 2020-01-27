@@ -19,7 +19,7 @@
     - [DNS-SD Advertisement](#dns-sd-advertisement)
         - [DNS-SD TXT Records](#dns-sd-txt-records)
             - [pri](#pri)
-            - [namespace](#namespace)
+            - [api_label](#api_label)
     - [EST Server Behaviour](#est-server-behaviour)
         - [EST Server API](#est-server-api)
         - [EST Server Authentication](#est-server-authentication)
@@ -143,9 +143,9 @@ EST Clients MUST support discovering the EST Server through use of unicast DNS-S
 
 The DNS-SD advertisement MUST include a TXT record with key 'pri' and an integer value. Servers MAY additionally present a matching priority via the DNS-SD SRV record 'priority' and 'weight' as defined in [RFC 2782][RFC-2782]. The TXT record should be used in favour of the SRV priority and weight where these values differ, in order to overcome issues in the Bonjour and Avahi implementations. Values 0 to 99 correspond to an active EST Server API (zero being the highest priority). Values 100+ are reserved for development work to avoid colliding with a live system.
 
-#### namespace
+#### api_label
 
-The DNS-SD advertisement MAY include a TXT record with key 'namespace' and a string. The 'namespace' key defines an arbitrary label that if present MUST be appended to the well-know EST path, for example `https://www.example.com/.well-known/est/<arbitrary label>/`. The arbitrary label allows multiple EST Server instance on a single host to be used.
+The DNS-SD advertisement MAY include a TXT record with key 'api_label' and a string. The 'api_label' key defines an arbitrary label that if present MUST be appended to the well-know EST path, for example `https://www.example.com/.well-known/est/<arbitrary label>/`. The arbitrary label allows multiple EST Server instance on a single host to be used.
 
 ## EST Server Behaviour
 

@@ -120,6 +120,8 @@ To enable zero-configuration TLS Certificate provisioning, manufacturers must in
 
 The workflow if no valid Manufacturer TLS Client Certificate is present or if EST Client is moved to a new network are covered in detail in the following [sections](#est-client).
 
+![NMOS EST WorkFlow](images/nmos_est_workflow.png)
+
 ## DNS-SD Advertisement
 
 The EST Server MUST be advertised using unicast DNS-SD as per [RFC 6763][RFC-6763].

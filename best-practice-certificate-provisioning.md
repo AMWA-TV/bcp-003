@@ -107,7 +107,7 @@ To enable zero-configuration TLS Certificate provisioning, manufacturers must in
 
 1. Before the NMOS Node(EST Client) is shipped from the factory it must be provisioned with a unique TLS Client Certificate, signed by the Manufacturers Certificate Authority
 2. When the EST Client is connected to the target environments network, it will first discover the location of the EST Server using Unicast DNS-SD.
-    * The EST Client should assume the EST server found using DNS-SD is trusted
+    * The EST Client should assume the EST server found using DNS-SD is trusted and need not perform certificate verification for this initial transaction.
 3. The EST Client should then request the Root CA for the target network, from the EST Server
     * Using the Root CA returned to secure further communications with the EST Server and NMOS Servers
 4. The EST Client must generate a Certificate Signing Request(CSR) for all supported TLS Cipher Suites with appropriate key lengths

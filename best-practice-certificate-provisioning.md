@@ -133,7 +133,7 @@ The EST Server MUST be advertised with the following service type:
 _nmos-certs._tcp
 ```
 
-The hostname and port of the EST Server MUST be identified via the DNS-SD advertisement, with the full HTTPS path then being resolved via the use of the path-prefix of `/.well-known/` as defined in [RFC5785][RFC-5785] and the registered name of `est`. Thus, a valid EST server URI path begins with `https://www.example.com/.well-known/est/`. A DNS A record MUST be provided to allow the hostname to be resolved.
+The hostname and port of the EST Server MUST be identified via the DNS-SD advertisement, with the full HTTPS path then being resolved via the use of the path-prefix of `/.well-known/` as defined in [RFC5785][RFC-5785] and the registered name of `est`. Thus, a valid example EST server URI path begins with `https://www.example.com/.well-known/est/`. A DNS A record MUST be provided to allow the hostname to be resolved.
 
 Multiple DNS-SD advertisements for the same API are permitted where the API is exposed via multiple ports and/or protocols.
 

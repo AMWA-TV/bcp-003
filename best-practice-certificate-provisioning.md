@@ -258,7 +258,7 @@ On start up or on change of network state the EST Client MUST attempt to discove
 
 ### Certificate Revocation
 
-The EST Client SHOULD periodically check the revocation status of both the Root CA and their TLS Certificates using [OCSP](RFC-6960) and [CRL](RFC-5280). If a TLS Certificate is revoked, the EST Client MUST stop using the revoked certificate immediately and follow [Initial Certificate Provisioning](#initial-certificate-provisioning) workflow to replace the certificate.
+The EST Client SHOULD periodically check the revocation status of both the Root CA and their TLS Certificates using [OCSP][RFC-6960] and [CRL][RFC-5280]. If a TLS Certificate is revoked, the EST Client MUST stop using the revoked certificate immediately and follow [Initial Certificate Provisioning](#initial-certificate-provisioning) workflow to replace the certificate.
 
 ## TODO:
 * Specification of returned TLS certificate format (eg, .p7, .pem)?
@@ -272,25 +272,25 @@ The EST Client SHOULD periodically check the revocation status of both the Root 
 
 The IETF RFCs referenced here provide much more information.
 
-[RFC  2119](RFC-2119) - Key words for use in RFCs to Indicate Requirement Levels
+[RFC 2119][RFC-2119] - Key words for use in RFCs to Indicate Requirement Levels
 
-[RFC 2617](RFC-26170) - HTTP Authentication: Basic and Digest Access Authentication
+[RFC 2617][RFC-2617] - HTTP Authentication: Basic and Digest Access Authentication
 
-[RFC 2782](RFC-2782) - A DNS RR for specifying the location of services (DNS SRV)
+[RFC 2782][RFC-2782] - A DNS RR for specifying the location of services (DNS SRV)
 
-[RFC 2986](RFC-2986) - PKCS #10: Certification Request Syntax Specification
+[RFC 2986][RFC-2986] - PKCS #10: Certification Request Syntax Specification
 
-[RFC 5280](RFC-5280) - Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile
+[RFC 5280][RFC-5280] - Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile
 
-[RFC 5785](RFC-5785) - Defining Well-Known Uniform Resource Identifiers (URIs)
+[RFC 5785][RFC-5785] - Defining Well-Known Uniform Resource Identifiers (URIs)
 
-[RFC 8615](RFC-8615) - Well-Known Uniform Resource Identifiers (URIs)
+[RFC 8615][RFC-8615] - Well-Known Uniform Resource Identifiers (URIs)
 
-[RFC 6763](RFC-6763) - DNS-Based Service Discovery
+[RFC 6763][RFC-6763] - DNS-Based Service Discovery
 
-[RFC 6960](RFC-6960) - X.509 Internet Public Key Infrastructure Online Certificate Status Protocol - OCSP
+[RFC 6960][RFC-6960] - X.509 Internet Public Key Infrastructure Online Certificate Status Protocol - OCSP
 
-[RFC 7030](RFC-7030) - Enrollment over Secure Transport
+[RFC 7030][RFC-7030] - Enrollment over Secure Transport
 
 [RFC-2119]: https://tools.ietf.org/html/rfc2119
 

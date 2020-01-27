@@ -224,6 +224,8 @@ The EST Client SHOULD generate a new CSR matching the TLS certificate it is bein
 
 If the EST Server returns a HTTP 200 response the certificate request was successful and the EST Client should use the returned TLS Certificate and its chain of trust for all further requests to its NMOS APIs. The EST Client MUST remove any previously issued TLS Certificates and key pairs.
 
+If the EST Server returns any other HTTP response, the request has been unsuccessful. The EST Client SHOULD re-submit the request to an alternative EST Server if present. Otherwise the EST Client SHOULD carry on using the existing TLS Certificate if still valid and re-attempt renewal at an appropriate point.
+
 ### Expired Manufacturer Issued TLS Client Certificate
 
 If the Manufacturer issued TLS Client Certificate has expired or has been revoked, it MUST NOT be used by the EST Client for authentication. An EST Client MAY attempt to request a TLS Certificate following [Initial Certificate Provisioning](#initial-certificate-provisioning), without providing a TLS Client Certificate during the TLS handshake. If the EST Server supports manual authentication the request will be processed.

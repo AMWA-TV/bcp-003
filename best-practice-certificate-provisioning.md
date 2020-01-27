@@ -180,7 +180,7 @@ The EST Server MAY also support manually authentication of the EST Client if; no
 
 The EST Server MUST be capable of issuing TLS Certificates signed with both RSA and ECDSA keys.
 
-The EST Server MUST return a TLS Certificate with the Extended Key Usage set for both TLS Server Authentication and TLS Client AUthentication as per [RFC 5280][RFC-5280]. This is to allow the TLS Certificate to be used to authenticated the NMOS APIs to NMOS Clients and for authentication of the EST Client during certificate renewal.
+The EST Server MUST return a TLS Certificate with the Extended Key Usage set for both TLS Server Authentication and TLS Client AUthentication as per [RFC 5280][RFC-5280]. This is to allow the TLS Certificate to be used both as a server certificate to authenticate NMOS APIs to NMOS Clients and for authentication of the EST Client to the EST Server during certificate renewal.
 
 ## EST Client
 

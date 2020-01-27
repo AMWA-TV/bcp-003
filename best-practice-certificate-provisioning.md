@@ -26,9 +26,15 @@
         - [EST Server - Client Authentication](#est-server---client-authentication)
     - [EST Client](#est-client-1)
         - [Initial Certificate Provisioning](#initial-certificate-provisioning)
+            - [EST Server Discovery](#est-server-discovery)
+            - [Get Root CA](#get-root-ca)
+            - [Generate Certificate Signing(CSR) Request](#generate-certificate-signingcsr-request)
+            - [Certificate Request](#certificate-request)
         - [Certificate Renewal](#certificate-renewal)
+        - [Root CA Renewal](#root-ca-renewal)
         - [Expired Manufacturer Issued TLS Client Certificate](#expired-manufacturer-issued-tls-client-certificate)
         - [Connection to new network](#connection-to-new-network)
+        - [Certificate Revocation](#certificate-revocation)
     - [TODO:](#todo)
     - [Further Reading](#further-reading)
 
@@ -63,7 +69,7 @@ An HTTP / WebSocket API as defined in an AMWA NMOS Specification (IS-04, IS-05, 
 
 ### CSR (Certificate Signing Request)
 
-The syntax used to request a TLS Certificate from a Certificate Authority, it contains the public key and identification information required by the Certificate Authority in the PKCS Format, [RFC-2986][RFC-2986]
+The syntax used to request a TLS Certificate from a Certificate Authority, it contains the public key and identification information required by the Certificate Authority in the PKCS Format, [RFC 2986][RFC-2986]
 
 ### EST (Enrollment over Secure Transport)
 
@@ -133,7 +139,7 @@ The EST Server MUST be advertised with the following service type:
 _nmos-certs._tcp
 ```
 
-The hostname and port of the EST Server MUST be identified via the DNS-SD advertisement, with the full HTTPS path then being resolved via the use of the path-prefix of `/.well-known/` as defined in [RFC5785][RFC-5785] and the registered name of `est`. Thus, a valid example EST server URI path begins with `https://www.example.com/.well-known/est/`. A DNS A record MUST be provided to allow the hostname to be resolved.
+The hostname and port of the EST Server MUST be identified via the DNS-SD advertisement, with the full HTTPS path then being resolved via the use of the path-prefix of `/.well-known/` as defined in [RFC 5785][RFC-5785] and the registered name of `est`. Thus, a valid example EST server URI path begins with `https://www.example.com/.well-known/est/`. A DNS A record MUST be provided to allow the hostname to be resolved.
 
 Multiple DNS-SD advertisements for the same API are permitted where the API is exposed via multiple ports and/or protocols.
 
@@ -147,7 +153,7 @@ The DNS-SD advertisement MUST include a TXT record with key 'pri' and an integer
 
 #### api_label
 
-The DNS-SD advertisement MAY include a TXT record with key 'api_label' and a string. The 'api_label' key defines an arbitrary label that if present MUST be appended to the well-know EST path, for example `https://www.example.com/.well-known/est/<arbitrary label>/`. The arbitrary label allows multiple EST Server instance on a single host to be used.
+The DNS-SD advertisement MAY include a TXT record with key 'api_label' and a string. The 'api_label' key defines an arbitrary label that if present MUST be appended to the well-know EST path, for example `https://www.example.com/.well-known/est/<arbitrary label>/`. The arbitrary label is specified in the EST [RFC 7030][RFC-7030] and allows multiple EST Server instance on a single host to be used.
 
 ## EST Server Behaviour
 
@@ -184,11 +190,15 @@ The EST Server MUST return a TLS Certificate with the Extended Key Usage set for
 
 ## EST Client
 
+The EST Client manufacturer SHOULD issue a unique TLS Client Certificate for every device, this certificate should be valid for a maximum of 10 year and the Root CA used to sign it be valid for a maximum of 20 years.
+
 An EST Client SHOULD allow EST to be disabled, preventing the EST Client from being automatically provisioned with a TLS Certificate if required by the networks security policy.
 
 An EST Client SHOULD allow manual configuration of the EST Servers Hostname and Port, to prevent the EST Client from requesting a TLS Certificate from a rogue server.
 
 An EST Client MUST provide a method to manually install both the Root CA and TLS Server certificate for the target environment, for the case when an EST Server is not present or the TLS Client Certificate is no longer valid.
+
+An EST Client MUST provide a method to replace the Manufacturer Issued TLS Certificate, for the case when the TLS Certificate has been revoked or expired.
 
 If the EST Server returns a HTTP re-direct, the the EST Client SHOULD follow the re-direct URL.
 
@@ -196,37 +206,41 @@ If the EST Server returns an HTTP 4xx, HTTP 5xx or Connection Timeout, the EST C
 
 ### Initial Certificate Provisioning
 
-**EST Server Discovery**
+#### EST Server Discovery
 
 On connection to the target environments network the EST Client SHOULD attempt to discover the location of the EST Server using [DNS-SD](#dns-sd-advertisement), if EST has not been disabled or the location of the EST configured manually.
 
-**Get Root CA**
+#### Get Root CA
 
 The EST Client SHOULD make a HTTPS request to the `/cacerts` endpoint of the EST Server for the latest Root CA of the current network. The EST Client SHOULD explicitly trust the EST Server manually configured or discovered using Unicast DNS and not perform authentication of the EST Servers TLS Certificate during the initial request to EST Server. If EST Server returns a HTTP 200 response, the EST Client should use the returned Root CA to authenticate all further communication with the EST Server and NMOS APIs.
 
-**Generate Certificate Signing(CSR) Request**
+#### Generate Certificate Signing(CSR) Request
 
 The EST Client SHOULD create a CSR for each digital signature algorithm it supports with an appropriate Key Length. The CSR MUST contain a Common Name that is resolvable via DNS on the current domain and appropriate values for the other CSR fields. The manufacturer MAY allow the optional CSR fields to be configured by the operator.
 
-**Certificate Request**
+#### Certificate Request
 
 For each generated CSR the EST CLient SHOULD make a HTTPS request containing the CSR to the `/simpleenroll` endpoint of the EST Server. The EST Client SHOULD include the manufacturer installed TLS Client Certificate if present and valid during the TLS handshake with the EST Server. If the TLS certificate is no longer valid, the [Expired Manufacturer Issued TLS Client Certificate](#Expired-Manufacturer-Issued-TLS-Client-Certificate) workflow should be followed.
 
 If the EST Server returns a HTTP 200 response the certificate request was successful and the EST Client should use the returned TLS Certificate and its chain of trust for all further requests to its NMOS APIs.
 
-If the EST Server returns a HTTP 202 or HTTP 503 response, the request was successful, but the certificate has not been processed yet. The response SHOULD include a `Retry-After` header and the EST Client MUST not attempt re-sending the request before the defined time has expired. The EST Client SHOULD attempt resending the request 5 times before aborting the certificate request and attempting with an a alternative EST Server.
+If the EST Server returns a HTTP 202 or HTTP 503 response, the request was successful, but the certificate has not been processed yet. The response SHOULD include a `Retry-After` header and the EST Client MUST not attempt re-sending the request before the defined time has expired. The EST Client SHOULD attempt resending the request 5 times before aborting the certificate request and attempting with an a alternative EST Server. [RFC 7030 Section 4.2.3](https://tools.ietf.org/html/rfc7030#section-4.2.3)
 
-If the EST Server returns any other HTTP response, the request has been unsuccessful, this could be caused by a malformed request, server side error or the EST Client not being authorised. The EST Client SHOULD restart the EST workflow with an alternative EST Server if present, else the EST Client SHOULD wait an appropriate exponential backoff period before retrying.
+If the EST Server returns any other HTTP response, the request has been unsuccessful, this could be caused by a malformed request, server side error or the EST Client not being authorised. The EST Client SHOULD restart the EST workflow with an alternative EST Server if present, else the EST Client SHOULD wait a backoff period 2 seconds plus jitter before retrying.
 
 ### Certificate Renewal
 
-At an appropriate point before the EST Clients TLS Certificate expires the EST Client SHOULD renew the TLS Certificate. If the EST Clients TLS Certificate is no longer valid then [Initial Certificate Provisioning](#initial-certificate-provisioning) workflow should be followed.
+Renewal of the TLS Certificate SHOULD be attempted no sooner than 50% of the certificates expiry time or before the 'Not Before' date on the certificate. It is RECOMMENDED that certificate renewal is performed after 80% of the expiry time. If the EST Clients TLS Certificate is no longer valid then [Initial Certificate Provisioning](#initial-certificate-provisioning) workflow should be followed.
 
 The EST Client SHOULD generate a new CSR matching the TLS certificate it is being used to replace. The EST Client SHOULD make a HTTPS request containing the CSR to the `/simplereenroll` endpoint of the EST Server. The EST Client MUST include the TLS Certificate being renewed during the TLS handshake with the EST Server.
 
 If the EST Server returns a HTTP 200 response the certificate request was successful and the EST Client should use the returned TLS Certificate and its chain of trust for all further requests to its NMOS APIs. The EST Client MUST remove any previously issued TLS Certificates and key pairs.
 
 If the EST Server returns any other HTTP response, the request has been unsuccessful. The EST Client SHOULD re-submit the request to an alternative EST Server if present. Otherwise the EST Client SHOULD carry on using the existing TLS Certificate if still valid and re-attempt renewal at an appropriate point.
+
+### Root CA Renewal
+
+Renewal of the Root CA SHOULD be attempted no sooner than 50% of the certificates expiry time or before the 'Not Before' date on the certificate. It is RECOMMENDED that certificate renewal is performed after 80% of the expiry time. To renew the Root CA and the EST Clients TLS Certificate follow the [Initial Certificate Provisioning](#initial-certificate-provisioning) workflow, using the existing TLS Certificate for authentication if still valid.
 
 ### Expired Manufacturer Issued TLS Client Certificate
 
@@ -242,46 +256,58 @@ It MAY be desirable that when a EST Client is connected to a different network t
 
 On start up or on change of network state the EST Client MUST attempt to discover the EST Server using [DNS-SD](#dns-sd-advertisement). The EST Client SHOULD make a request to the `/cacerts` endpoint, if the request is successful the EST Client should compare the returned Certificate to the currently install Root CA, if the Certificate is for a different Domain the EST Client MUST follow [Initial Certificate Provisioning](#initial-certificate-provisioning) workflow.
 
+### Certificate Revocation
+
+The EST Client SHOULD periodically check the revocation status of both the Root CA and their TLS Certificates using [OCSP](RFC-6960) and [CRL](RFC-5280). If a TLS Certificate is revoked, the EST Client MUST stop using the revoked certificate immediately and follow [Initial Certificate Provisioning](#initial-certificate-provisioning) workflow to replace the certificate.
+
 ## TODO:
 * Specification of returned TLS certificate format (eg, .p7, .pem)?
 * Specification of supported Cipher Suites and minimum key lengths?
 * Generate a new Key Pair for each TLS Certificate renewal?
 * Specification of Root CA rollover period and procedure?
 * Support for server side generation of keys?
+* Consider using using TLS Client Certificates when using NMOS API, for use with BCP-003-02 OAuth
 
 ## Further Reading
 
 The IETF RFCs referenced here provide much more information.
 
-[//]: ## (References)
+[RFC  2119](RFC-2119) - Key words for use in RFCs to Indicate Requirement Levels
 
-[//]: ### (Normative)
+[RFC 2617](RFC-26170) - HTTP Authentication: Basic and Digest Access Authentication
+
+[RFC 2782](RFC-2782) - A DNS RR for specifying the location of services (DNS SRV)
+
+[RFC 2986](RFC-2986) - PKCS #10: Certification Request Syntax Specification
+
+[RFC 5280](RFC-5280) - Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile
+
+[RFC 5785](RFC-5785) - Defining Well-Known Uniform Resource Identifiers (URIs)
+
+[RFC 8615](RFC-8615) - Well-Known Uniform Resource Identifiers (URIs)
+
+[RFC 6763](RFC-6763) - DNS-Based Service Discovery
+
+[RFC 6960](RFC-6960) - X.509 Internet Public Key Infrastructure Online Certificate Status Protocol - OCSP
+
+[RFC 7030](RFC-7030) - Enrollment over Secure Transport
 
 [RFC-2119]: https://tools.ietf.org/html/rfc2119
-"Key words for use in RFCs to Indicate Requirement Levels"
 
 [RFC-2617]: https://tools.ietf.org/html/rfc2617
-"HTTP Authentication: Basic and Digest Access Authentication"
 
 [RFC-2782]: https://tools.ietf.org/html/rfc2782
-"A DNS RR for specifying the location of services (DNS SRV)"
 
 [RFC-2986]: https://tools.ietf.org/html/rfc2986
-"PKCS #10: Certification Request Syntax Specification"
 
 [RFC-5280]: https://tools.ietf.org/html/rfc5280
-"Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile"
 
 [RFC-5785]: https://tools.ietf.org/html/rfc5785
-"Defining Well-Known Uniform Resource Identifiers (URIs)"
 
 [RFC-8615]: https://tools.ietf.org/html/rfc8615
-"Well-Known Uniform Resource Identifiers (URIs)"
 
 [RFC-6763]: https://tools.ietf.org/html/rfc6763
-"DNS-Based Service Discovery"
+
+[RFC-6960]: https://tools.ietf.org/html/rfc6960
 
 [RFC-7030]: https://tools.ietf.org/html/rfc7030
-"Enrollment over Secure Transport"
-
-[//]: ### (Informative)

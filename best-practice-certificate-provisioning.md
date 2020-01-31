@@ -174,7 +174,7 @@ This MUST include the following API endpoints:
 
 ### EST Server Authentication
 
-The EST Server MUST present a valid TLS Server Certificate signed by the CA for realm from which it is issuing certificates.
+The EST Server MUST present a valid TLS Server Certificate signed by the CA for the realm to which it is issuing certificates.
 
 ### EST Server - Client Authentication
 

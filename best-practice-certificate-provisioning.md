@@ -121,7 +121,7 @@ To enable zero-configuration TLS Certificate provisioning, manufacturers must in
     * Appropriate values for the remaining CSR fields should be used
 5. The EST Client should send each CSR to the EST Server
     * The EST Client must provide the Manufacturer issued certificate during the TLS handshake, if valid
-    * The EST Server will use the TLS Client Certificate to validate whether the EST Client is authorized to be issued with a TLS Server Certificate. If the EST CLient is validated the EST Server will return a signed TLS Certificate
+    * The EST Server will use the TLS Client Certificate to validate whether the EST Client is authorized to be issued with a TLS Server Certificate. If the EST Client is validated the EST Server will return a signed TLS Certificate
 6. The EST Client should provide the returned TLS Certificate and the corresponding chain of trust for all future request to its NMOS APIs
 
 The workflow if no valid Manufacturer TLS Client Certificate is present or if EST Client is moved to a new network are covered in detail in the following [sections](#est-client).

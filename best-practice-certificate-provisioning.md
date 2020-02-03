@@ -19,7 +19,7 @@
     - [DNS-SD Advertisement](#dns-sd-advertisement)
         - [DNS-SD TXT Records](#dns-sd-txt-records)
             - [pri](#pri)
-            - [api_label](#api_label)
+            - [api_selector](#api_selector)
     - [EST Server Behaviour](#est-server-behaviour)
         - [EST Server API](#est-server-api)
         - [EST Server Authentication](#est-server-authentication)
@@ -31,7 +31,7 @@
             - [Generate Certificate Signing(CSR) Request](#generate-certificate-signingcsr-request)
             - [Certificate Request](#certificate-request)
         - [Certificate Renewal](#certificate-renewal)
-        - [Root CA Renewal](#root-ca-renewal)
+        - [Root Certificate Authority Renewal](#root-certificate-authority-renewal)
         - [Expired Manufacturer Issued TLS Client Certificate](#expired-manufacturer-issued-tls-client-certificate)
         - [Connection to new network](#connection-to-new-network)
         - [Certificate Revocation](#certificate-revocation)
@@ -48,7 +48,7 @@ This is based on best practice used for RESTful APIs, and is intended to promote
 
 Use of insecure communication (plain HTTP etc.) is forbidden within the scope of this document.
 
-Implementation of [BCP-003-01](best-practice-secure-comms.md) is a recommended prerequisite to implementing this document.
+Implementation of [BCP-003-01](best-practice-secure-comms.md) is a recommended alongside implementing this document.
 
 ## Use of Normative Language
 
@@ -109,7 +109,7 @@ This document is not concerned with the security of the connection used to carry
 
 ## Automated Certificate Provisioning Flow (informative)
 
-To enable zero-configuration TLS Certificate provisioning, manufacturers must include a unique TLS Client Certificate on all their devices and provide the corresponding Root Certificate Authority public key to customers. If the TLS Client Certificate or the chain of trust is compromised the manufacturer must revoke the comprised certificates.
+To enable zero-configuration TLS Certificate provisioning, NMOS implementations must include a unique TLS Client Certificate, signed by the manufacturers Certificate Authority. Manufacturers must provide the corresponding Root Certificate Authority public key to customers. If the TLS Client Certificate or the chain of trust is compromised, the manufacturer must revoke the comprised certificates.
 
 1. Before the NMOS Node(EST Client) is shipped from the factory it must be provisioned with a unique TLS Client Certificate, signed by the Manufacturers Certificate Authority
 2. When the EST Client is connected to the target environments network, it will first discover the location of the EST Server using Unicast DNS-SD.
@@ -151,9 +151,9 @@ EST Clients MUST support discovering the EST Server through use of unicast DNS-S
 
 The DNS-SD advertisement MUST include a TXT record with key 'pri' and an integer value. Servers MAY additionally present a matching priority via the DNS-SD SRV record 'priority' and 'weight' as defined in [RFC 2782][RFC-2782]. The TXT record should be used in favour of the SRV priority and weight where these values differ, in order to overcome issues in the Bonjour and Avahi implementations. Values 0 to 99 correspond to an active EST Server API (zero being the highest priority). Values 100+ are reserved for development work to avoid colliding with a live system.
 
-#### api_label
+#### api_selector
 
-The DNS-SD advertisement MAY include a TXT record with key 'api_label' and a string. The 'api_label' key defines an arbitrary label that if present MUST be appended to the well-know EST path, for example `https://www.example.com/.well-known/est/<arbitrary label>/`. The arbitrary label is specified in the EST [RFC 7030][RFC-7030] and allows multiple EST Server instance on a single host to be used.
+The DNS-SD advertisement MAY include a TXT record with key 'api_selector' and a string. The 'api_selector' key defines an arbitrary label that if present MUST be appended to the well-know EST path, for example `https://www.example.com/.well-known/est/<arbitrary label>/`. The arbitrary label is specified in the EST [RFC 7030][RFC-7030] and allows multiple EST Server instances on a single host to be used. If the 'api_selector' key is not present in the TXT record, the EST Client must not append anything to the well-know EST path.
 
 ## EST Server Behaviour
 
@@ -180,7 +180,7 @@ The EST Server MUST present a valid TLS Server Certificate signed by the CA for 
 
 The EST Server MUST authenticate the EST Client that is requesting a TLS Certificate manually or automatically using a TLS Client Certificate.
 
-The EST Server MUST support using a TLS Client Certificate, presented during the TLS handshake by the EST Client to authenticate if the Client is trusted. The TLS Client Certificate can either be signed by the current CA or an externally trusted Root CA. The EST Server MUST check the validity of the EST CLients TLS Certificate before responding to its request. The EST Server MUST provide a method to load multiple trusted Root CA's, that are used to verify TLS Client Certificate.
+The EST Server MUST support using a TLS Client Certificate, presented during the TLS handshake by the EST Client to authenticate if the EST Client is trusted. The TLS Client Certificate can either be signed by the current CA or an externally trusted Root CA. The EST Server MUST check the validity of the EST CLients TLS Certificate before responding to its request. The EST Server MUST provide a method to load multiple trusted Root CA's, that are used to verify TLS Client Certificate.
 
 The EST Server MAY also support manual authentication of the EST Client if:
 - No TLS Client Certificate is presented during the TLS handshake
@@ -240,35 +240,35 @@ The EST Client SHOULD generate a new CSR matching the TLS certificate it is bein
 
 If the EST Server returns a HTTP 200 response the certificate request was successful and the EST Client should use the returned TLS Certificate and its chain of trust for all further requests to its NMOS APIs. The EST Client MUST remove any previously issued TLS Certificates and key pairs.
 
-If the EST Server returns any other HTTP response, the request has been unsuccessful. The EST Client SHOULD re-submit the request to an alternative EST Server if present. Otherwise the EST Client SHOULD carry on using the existing TLS Certificate if still valid and re-attempt renewal at an appropriate point.
+If the EST Server returns any other HTTP response, the request has been unsuccessful. The EST Client SHOULD re-submit the request to an alternative EST Server if present. Otherwise the EST Client SHOULD carry on using the existing TLS Certificate if still valid and re-attempt renewal after half of the remaining period of validity has elapsed.
 
-### Root CA Renewal
+### Root Certificate Authority Renewal
 
 Renewal of the Root CA SHOULD be attempted no sooner than 50% of the certificates expiry time or before the 'Not Before' date on the certificate. It is RECOMMENDED that certificate renewal is performed after 80% of the expiry time. To renew the Root CA and the EST Clients TLS Certificate follow the [Initial Certificate Provisioning](#initial-certificate-provisioning) workflow, using the existing TLS Certificate for authentication if still valid.
+If the returned Root Certificate Authority by the EST Server is the same as the existing Root Certificate Authority, the EST Client should attempt renewal of the Root Certificate Authority after half of the remaining period of validity has elapsed.
 
 ### Expired Manufacturer Issued TLS Client Certificate
 
 If the Manufacturer issued TLS Client Certificate has expired or has been revoked, it MUST NOT be used by the EST Client for authentication. An EST Client MAY attempt to request a TLS Certificate following [Initial Certificate Provisioning](#initial-certificate-provisioning), without providing a TLS Client Certificate during the TLS handshake. If the EST Server supports manual authentication the request will be processed.
 
 If the EST Server fails to process the request the following actions MAY be taken:
-1. The EST Client MAY have a TLS Certificate for the target network manually installed on the device. This certificate MUST then be used for future [Certificate Renewals](#certificate-renewal)
+1. The EST Client MAY have a TLS Certificate for the target network manually installed on the device. The manually installed TLS certificate MUST then be used to secure its NMOS APIs until the TLS Certificate is due for renewal. The manually installed TLS Certificate MUST be presented used during the TLS Handshake for [Certificate Renewals](#certificate-renewal). If the certificate renewal is successful, the manually installed TLS Certificate and private key MUST be removed.
 2. The Manufacturer issued TLS Client Certificate MAY be renewed by a software/firmware update, this update MUST contain a unique TLS certificate per device. The valid TLS Client Certificate MAY then be used during [Initial Certificate Provisioning](#initial-certificate-provisioning)
 
 ### Connection to new network
 
-It MAY be desirable that when a EST Client is connected to a different network that it automatically requests a TLS Certificate for the new network. It MUST be possible to disable this functionality on the EST Client and provide a manual method for an authorised operator to initiate the [Initial Certificate Provisioning](#initial-certificate-provisioning) workflow.
+It MAY be desirable that when a EST Client is connected to a different network that it automatically requests a TLS Certificate for the new network.
 
-On start up or on change of network state the EST Client MUST attempt to discover the EST Server using [DNS-SD](#dns-sd-advertisement). The EST Client SHOULD make a request to the `/cacerts` endpoint, if the request is successful the EST Client should compare the returned Certificate to the currently install Root CA, if the Certificate is for a different Domain the EST Client MUST follow [Initial Certificate Provisioning](#initial-certificate-provisioning) workflow.
+On start up or on change of network state the EST Client MUST attempt to discover the EST Server using [DNS-SD](#dns-sd-advertisement), unless manually configured. The EST Client SHOULD make a request to the `/cacerts` endpoint, if the request is successful the EST Client should compare the returned Certificate to the currently install Root CA, if the Certificate is for a different Domain the EST Client MUST follow [Initial Certificate Provisioning](#initial-certificate-provisioning) workflow.
 
 ### Certificate Revocation
 
 The EST Client SHOULD periodically check the revocation status of both the Root CA and their TLS Certificates using [OCSP][RFC-6960] and [CRL][RFC-5280]. If a TLS Certificate is revoked, the EST Client MUST stop using the revoked certificate immediately and follow [Initial Certificate Provisioning](#initial-certificate-provisioning) workflow to replace the certificate.
 
 ## TODO:
+* Consider alternative authentication methods of trusted EST Clients
 * Specification of returned TLS certificate format (eg, .p7, .pem)?
-* Specification of supported Cipher Suites and minimum key lengths?
 * Generate a new Key Pair for each TLS Certificate renewal?
-* Specification of Root CA rollover period and procedure?
 * Support for server side generation of keys?
 * Consider using using TLS Client Certificates when using NMOS API, for use with BCP-003-02 OAuth
 

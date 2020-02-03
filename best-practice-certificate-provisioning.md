@@ -194,7 +194,7 @@ The EST Server MUST return a TLS Certificate with the Extended Key Usage set for
 
 ## EST Client
 
-The EST Client manufacturer SHOULD issue a unique TLS Client Certificate for every device, this certificate should be valid for a maximum of 10 year and the Root CA used to sign it be valid for a maximum of 20 years.
+The EST Client manufacturer SHOULD issue a unique TLS Client Certificate for every device. It is RECOMMENDED that this certificate be valid for a maximum of 10 years. The Root CA used to sign it is RECOMMENDED to be valid for a maximum of 20 years.
 
 An EST Client SHOULD allow EST to be disabled, preventing the EST Client from being automatically provisioned with a TLS Certificate if required by the networks security policy.
 

@@ -182,7 +182,11 @@ The EST Server MUST authenticate the EST Client that is requesting a TLS Certifi
 
 The EST Server MUST support using a TLS Client Certificate, presented during the TLS handshake by the EST Client to authenticate if the Client is trusted. The TLS Client Certificate can either be signed by the current CA or an externally trusted Root CA. The EST Server MUST check the validity of the EST CLients TLS Certificate before responding to its request. The EST Server MUST provide a method to load multiple trusted Root CA's, that are used to verify TLS Client Certificate.
 
-The EST Server MAY also support manually authentication of the EST Client if; no TLS Client Certificate is presented during the TLS handshake, the TLS Client Certificate is not trusted or as an extra authentication step. The exact process for manual authentication will be implementation specific, but the EST Server MUST provide enough information to the operator so they can authenticate the EST Client. During the manual authentication the EST Server MUST respond with either HTTP 202 or HTTP 503 and the response must include a `Retry-After` header.
+The EST Server MAY also support manual authentication of the EST Client if:
+- No TLS Client Certificate is presented during the TLS handshake
+- The TLS Client Certificate is not trusted
+- As an extra authentication step.
+The exact process for manual authentication will be implementation specific, but the EST Server MUST provide enough information to the operator so they can authenticate the EST Client. During the manual authentication the EST Server MUST respond with either HTTP 202 or HTTP 503 and the response must include a `Retry-After` header.
 
 The EST Server MUST be capable of issuing TLS Certificates signed with both RSA and ECDSA keys.
 

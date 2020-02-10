@@ -245,7 +245,7 @@ If the EST Server returns any other HTTP response, the request has been unsucces
 ### Root Certificate Authority Renewal
 
 Renewal of the Root CA SHOULD be attempted no sooner than 50% of the certificates expiry time or before the 'Not Before' date on the certificate. It is RECOMMENDED that certificate renewal is performed after 80% of the expiry time. To renew the Root CA and the EST Clients TLS Certificate follow the [Initial Certificate Provisioning](#initial-certificate-provisioning) workflow, using the existing TLS Certificate for authentication if still valid.
-If the returned Root Certificate Authority by the EST Server is the same as the existing Root Certificate Authority, the EST Client should attempt renewal of the Root Certificate Authority after half of the remaining period of validity has elapsed.
+If the returned Root Certificate Authority by the EST Server is the same as the existing Root Certificate Authority, the EST Client SHOULD re-attempt renewal of the Root Certificate Authority after half of the remaining period of validity has elapsed.
 
 ### Expired Manufacturer Issued TLS Client Certificate
 

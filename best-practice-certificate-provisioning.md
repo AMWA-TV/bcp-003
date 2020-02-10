@@ -48,7 +48,7 @@ This is based on best practice used for RESTful APIs, and is intended to promote
 
 Use of insecure communication (plain HTTP etc.) is forbidden within the scope of this document.
 
-Implementation of [BCP-003-01](best-practice-secure-comms.md) is a recommended alongside implementing this document.
+Implementation of [BCP-003-01](best-practice-secure-comms.md) is recommended alongside implementing this document.
 
 ## Use of Normative Language
 

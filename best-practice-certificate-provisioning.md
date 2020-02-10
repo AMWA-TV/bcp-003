@@ -109,7 +109,7 @@ This document is not concerned with the security of the connection used to carry
 
 ## Automated Certificate Provisioning Flow (informative)
 
-To enable zero-configuration TLS Certificate provisioning, NMOS implementations must include a unique TLS Client Certificate, signed by the manufacturers Certificate Authority. Manufacturers must provide the corresponding Root Certificate Authority public key to customers. If the TLS Client Certificate or the chain of trust is compromised, the manufacturer must revoke the comprised certificates.
+To enable zero-configuration TLS Certificate provisioning, NMOS implementations must include a unique TLS Client Certificate, signed by the manufacturer's Certificate Authority. Manufacturers must provide the corresponding Root Certificate Authority public key to customers. If the TLS Client Certificate or the chain of trust is compromised, the manufacturer must revoke the comprised certificates.
 
 1. Before the NMOS Node(EST Client) is shipped from the factory it must be provisioned with a unique TLS Client Certificate, signed by the Manufacturers Certificate Authority
 2. When the EST Client is connected to the target environments network, it will first discover the location of the EST Server using Unicast DNS-SD.

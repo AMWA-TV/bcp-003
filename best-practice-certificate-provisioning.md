@@ -91,7 +91,7 @@ The entity that is using the EST API, for example:
 The entity that is providing an NMOS API, for example:
 
 - a registry implementing IS-04 Registration and Query APIs
-- a Node implementing IS-04 Node API and IS-05 Connection API
+- a Node implementing the IS-04 Node API and IS-05 Connection API
 
 ### NMOS Client
 

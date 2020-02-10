@@ -174,7 +174,7 @@ This MUST include the following API endpoints:
 
 ### EST Server Authentication
 
-The EST Server MUST present a valid TLS Server Certificate signed by the CA for the realm to which it is issuing certificates.
+The EST Server MUST present a valid TLS Server Certificate, this Certificate MUST either be signed by the CA for the realm to which it is issuing certificates or by a publicly trusted CA.
 
 ### EST Server - Client Authentication
 
@@ -196,11 +196,15 @@ The EST Server MUST return a TLS Certificate with the Extended Key Usage set for
 
 The EST Client manufacturer SHOULD issue a unique TLS Client Certificate for every device. It is RECOMMENDED that this certificate be valid for a maximum of 10 years. The Root CA used to sign it is RECOMMENDED to be valid for a maximum of 20 years.
 
-An EST Client SHOULD allow EST to be disabled, preventing the EST Client from being automatically provisioned with a TLS Certificate if required by the networks security policy.
+An EST Client SHOULD allow EST to be disabled, preventing the EST Client from being automatically provisioned with a TLS Certificate if required by the networks security policy. The default value SHOULD be EST **Enabled**.
 
-An EST Client SHOULD allow manual configuration of the EST Servers Hostname and Port, to prevent the EST Client from requesting a TLS Certificate from a rogue server.
+An EST Client SHOULD allow manual configuration of the EST Servers Hostname and Port, to prevent the EST Client from requesting a TLS Certificate from a rogue server. The default value SHOULD be **Not Set**, enabling DNS-SD discovery.
 
-An EST Client MUST provide a method to manually install both the Root CA and TLS Server certificate for the target environment, for the case when an EST Server is not present or the TLS Client Certificate is no longer valid.
+An EST Client SHOULD allow explicit trust of EST server to be disable, to prevent the EST Client from requesting a TLS Certificate from a rogue server. The default value SHOULD be explicit trust of EST Server **Enabled**.
+
+An EST Client MUST maintain a list of publicly trusted Certificate Authorities, used to verity identity of the EST Server. It MUST be possible to update this list of publicly trusted Certificate Authorities.
+
+An EST Client MUST provide a method to manually install both the Root Certificate Authorities and TLS Server certificate for the target environment, for the case when an EST Server is not present or the TLS Client Certificate is no longer valid.
 
 An EST Client MUST provide a method to replace the Manufacturer Issued TLS Certificate, for the case when the TLS Certificate has been revoked or expired.
 
@@ -216,7 +220,11 @@ On connection to the target environments network the EST Client SHOULD attempt t
 
 #### Get Root CA
 
-The EST Client SHOULD make a HTTPS request to the `/cacerts` endpoint of the EST Server for the latest Root CA of the current network. The EST Client SHOULD explicitly trust the EST Server manually configured or discovered using Unicast DNS and not perform authentication of the EST Servers TLS Certificate during the initial request to EST Server. If EST Server returns a HTTP 200 response, the EST Client should use the returned Root CA to authenticate all further communication with the EST Server and NMOS APIs.
+There are two possible workflows to getting the Root CA depending on if explicit trust of EST server is enabled or disabled.
+
+If explicit trust of the EST Server is **Enabled**, the EST Client SHOULD make a HTTPS request to the `/cacerts` endpoint of the EST Server for the latest Root CA of the current network. The EST Client SHOULD explicitly trust the EST Server manually configured or discovered using Unicast DNS and not perform authentication of the EST Servers TLS Certificate during the initial request to EST Server. If EST Server returns a HTTP 200 response, the EST Client SHOULD add the returned Root CA to the list of trusted Certificate authorities, replacing any previous installed Root CAs using EST.
+
+If explicit trust of the EST Server is **Disbaled**, the EST Client SHOULD make a HTTPS request to the `/cacerts` endpoint of the EST Server for the latest Root CA of the current network. The EST Client MUST perform authentication of the EST Servers TLS Certificate, using the list of publicly trusted Certificate Authorities. If EST Server returns a HTTP 200 response, the EST Client SHOULD add the returned Root CA to the list of trusted Certificate authorities, replacing any previous installed Root CAs using EST.
 
 #### Generate Certificate Signing(CSR) Request
 
@@ -259,7 +267,7 @@ If the EST Server fails to process the request the following actions MAY be take
 
 It MAY be desirable that when a EST Client is connected to a different network that it automatically requests a TLS Certificate for the new network.
 
-On start up or on change of network state the EST Client MUST attempt to discover the EST Server using [DNS-SD](#dns-sd-advertisement), unless manually configured. The EST Client SHOULD make a request to the `/cacerts` endpoint, if the request is successful the EST Client should compare the returned Certificate to the currently install Root CA, if the Certificate is for a different Domain the EST Client MUST follow [Initial Certificate Provisioning](#initial-certificate-provisioning) workflow.
+On start up or on change of network state the EST Client MUST attempt to discover the EST Server using [DNS-SD](#dns-sd-advertisement), unless the location fo the EST Server is manually configured. The EST Client SHOULD make a request to the `/cacerts` endpoint, if the request is successful the EST Client SHOULD compare the returned Certificate to the currently install Root CA, if the Certificate is for a different Domain the EST Client MUST follow [Initial Certificate Provisioning](#initial-certificate-provisioning) workflow.
 
 ### Certificate Revocation
 
@@ -270,7 +278,9 @@ The EST Client SHOULD periodically check the revocation status of both the Root 
 * Specification of returned TLS certificate format (eg, .p7, .pem)?
 * Generate a new Key Pair for each TLS Certificate renewal?
 * Support for server side generation of keys?
-* Consider whether the TLS Client Certificates issued by EST could be of use alongside BCP-003-02 OAuth in order to obtain tokens. Are there additional risks here?
+* Consider using using TLS Client Certificates when using NMOS API, for use with BCP-003-02 OAuth
+* Does this model extend, when broadcast facilities are connected across WANs or the internet
+* Discuss the use of using a publicly trusted CA to sign the EST servers certificate, this means devices must keep a list of trusted CAs and have a method to update these
 
 ## Further Reading
 

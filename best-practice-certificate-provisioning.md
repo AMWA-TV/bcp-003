@@ -270,7 +270,7 @@ The EST Client SHOULD periodically check the revocation status of both the Root 
 * Specification of returned TLS certificate format (eg, .p7, .pem)?
 * Generate a new Key Pair for each TLS Certificate renewal?
 * Support for server side generation of keys?
-* Consider using using TLS Client Certificates when using NMOS API, for use with BCP-003-02 OAuth
+* Consider whether the TLS Client Certificates issued by EST could be of use alongside BCP-003-02 OAuth in order to obtain tokens. Are there additional risks here?
 
 ## Further Reading
 

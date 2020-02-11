@@ -1,7 +1,0 @@
-[
-  "certs/",
-  "register_client/",
-  "token/",
-  "authorize/",
-  "revoke/"
-]

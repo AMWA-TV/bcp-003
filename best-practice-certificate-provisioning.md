@@ -202,7 +202,7 @@ An EST Client SHOULD allow manual configuration of the EST Servers Hostname and 
 
 An EST Client SHOULD allow explicit trust of EST server to be disabled, to prevent the EST Client from requesting a TLS Certificate from a rogue server. The default value SHOULD be explicit trust of EST Server **Enabled**.
 
-An EST Client MUST maintain a list of publicly trusted Certificate Authorities, used to verity identity of the EST Server. It MUST be possible to update this list of publicly trusted Certificate Authorities.
+An EST Client MUST maintain a list of publicly trusted Certificate Authorities, used to verify the identity of the EST Server. It MUST be possible to update this list of publicly trusted Certificate Authorities.
 
 An EST Client MUST provide a method to manually install both the Root Certificate Authorities and TLS Server certificate for the target environment, for the case when an EST Server is not present or the TLS Client Certificate is no longer valid.
 

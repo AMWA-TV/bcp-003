@@ -200,7 +200,7 @@ An EST Client SHOULD allow EST to be disabled, preventing the EST Client from be
 
 An EST Client SHOULD allow manual configuration of the EST Servers Hostname and Port, to prevent the EST Client from requesting a TLS Certificate from a rogue server. The default value SHOULD be **Not Set**, enabling DNS-SD discovery.
 
-An EST Client SHOULD allow explicit trust of EST server to be disable, to prevent the EST Client from requesting a TLS Certificate from a rogue server. The default value SHOULD be explicit trust of EST Server **Enabled**.
+An EST Client SHOULD allow explicit trust of EST server to be disabled, to prevent the EST Client from requesting a TLS Certificate from a rogue server. The default value SHOULD be explicit trust of EST Server **Enabled**.
 
 An EST Client MUST maintain a list of publicly trusted Certificate Authorities, used to verity identity of the EST Server. It MUST be possible to update this list of publicly trusted Certificate Authorities.
 

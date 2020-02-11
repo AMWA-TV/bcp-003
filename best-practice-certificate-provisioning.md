@@ -267,7 +267,7 @@ If the EST Server fails to process the request the following actions MAY be take
 
 It MAY be desirable that when a EST Client is connected to a different network that it automatically requests a TLS Certificate for the new network.
 
-On start up or on change of network state the EST Client MUST attempt to discover the EST Server using [DNS-SD](#dns-sd-advertisement), unless the location fo the EST Server is manually configured. The EST Client SHOULD make a request to the `/cacerts` endpoint, if the request is successful the EST Client SHOULD compare the returned Certificate to the currently install Root CA, if the Certificate is for a different Domain the EST Client MUST follow [Initial Certificate Provisioning](#initial-certificate-provisioning) workflow.
+On start up or on change of network state the EST Client MUST attempt to discover the EST Server using [DNS-SD](#dns-sd-advertisement), unless the location of the EST Server is manually configured. The EST Client SHOULD make a request to the `/cacerts` endpoint, if the request is successful the EST Client SHOULD compare the returned Certificate to the currently install Root CA. If the Certificate is for a different Domain the EST Client MUST follow the [Initial Certificate Provisioning](#initial-certificate-provisioning) workflow.
 
 ### Certificate Revocation
 

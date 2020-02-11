@@ -200,7 +200,7 @@ An EST Client SHOULD allow EST to be disabled, preventing the EST Client from be
 
 An EST Client SHOULD allow manual configuration of the EST Server's Hostname and Port, to prevent the EST Client from requesting a TLS Certificate from a rogue server. The default value SHOULD be **Not Set**, enabling DNS-SD discovery.
 
-An EST Client SHOULD allow explicit trust of EST server to be disabled, to prevent the EST Client from requesting a TLS Certificate from a rogue server. The default value SHOULD be explicit trust of EST Server **Enabled**.
+An EST Client SHOULD allow explicit trust of EST server to be disable, to prevent the EST Client from requesting a TLS Certificate from a rogue server. The default value SHOULD be explicit trust of EST Server **Enabled**. More information about explicit trust of an EST Server can be found in the [Get Root CA](#get-root-ca) section.
 
 An EST Client MUST maintain a list of publicly trusted Certificate Authorities, used to verify the identity of the EST Server. It MUST be possible to update this list of publicly trusted Certificate Authorities.
 
@@ -275,7 +275,6 @@ The EST Client SHOULD periodically check the revocation status of both the Root 
 
 ## TODO:
 * Consider alternative authentication methods of trusted EST Clients
-* Specification of returned TLS certificate format (eg, .p7, .pem)?
 * Generate a new Key Pair for each TLS Certificate renewal?
 * Support for server side generation of keys?
 * Consider using using TLS Client Certificates when using NMOS API, for use with BCP-003-02 OAuth

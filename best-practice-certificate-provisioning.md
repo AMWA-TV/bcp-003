@@ -196,9 +196,9 @@ The EST Server MUST return a TLS Certificate with the Extended Key Usage set for
 
 The EST Client manufacturer SHOULD issue a unique TLS Client Certificate for every device. It is RECOMMENDED that this certificate be valid for a maximum of 10 years. The Root CA used to sign it is RECOMMENDED to be valid for a maximum of 20 years.
 
-An EST Client SHOULD allow EST to be disabled, preventing the EST Client from being automatically provisioned with a TLS Certificate if required by the networks security policy. The default value SHOULD be EST **Enabled**.
+An EST Client SHOULD allow EST to be disabled, preventing the EST Client from being automatically provisioned with a TLS Certificate if required by the network's security policy. The default value SHOULD be EST **Enabled**.
 
-An EST Client SHOULD allow manual configuration of the EST Server's Hostname and Port, to prevent the EST Client from requesting a TLS Certificate from a rogue server. The default value SHOULD be **Not Set**, enabling DNS-SD discovery.
+An EST Client SHOULD allow manual configuration of the EST Server's Hostname, Port and Arbitrary Label, to prevent the EST Client from requesting a TLS Certificate from a rogue server. The default value SHOULD be **Not Set**, enabling DNS-SD discovery.
 
 An EST Client SHOULD allow explicit trust of EST server to be disable, to prevent the EST Client from requesting a TLS Certificate from a rogue server. The default value SHOULD be explicit trust of EST Server **Enabled**. More information about explicit trust of an EST Server can be found in the [Get Root CA](#get-root-ca) section.
 
@@ -209,6 +209,8 @@ An EST Client MUST provide a method to manually install both the Root Certificat
 An EST Client MUST provide a method to replace the manufacturer-issued TLS Client Certificate, for the case when the TLS Certificate has been revoked or expired.
 
 If the EST Server returns a HTTP re-direct, the the EST Client SHOULD follow the re-direct URL.
+
+If the EST Server returns a HTTP 202 with a Retry-After header, the EST Client SHOULD attempt the HTTP request again after the period defined in the header.
 
 If the EST Server returns an HTTP 4xx, HTTP 5xx or Connection Timeout, the EST Client SHOULD attempt the request again using an alternative EST Server if present, else the EST Client SHOULD wait an appropriate exponential backoff period before retrying.
 
@@ -236,7 +238,7 @@ For each generated CSR the EST Client SHOULD make a HTTPS request containing the
 
 If the EST Server returns a HTTP 200 response the certificate request was successful and the EST Client should use the returned TLS Certificate and its chain of trust for all further requests to NMOS APIs.
 
-If the EST Server returns a HTTP 202 or HTTP 503 response, the request was successful, but the certificate has not been processed yet. The response SHOULD include a `Retry-After` header and the EST Client MUST not attempt re-sending the request before the defined time has expired. The EST Client SHOULD attempt resending the request 5 times before aborting the certificate request and attempting with an a alternative EST Server. [RFC 7030 Section 4.2.3](https://tools.ietf.org/html/rfc7030#section-4.2.3)
+If the EST Server returns a HTTP 202, the request was accepted, but the certificate has not been processed yet. The response SHOULD include a `Retry-After` header and the EST Client MUST not attempt re-sending the request before the defined time has expired. The EST Client SHOULD attempt resending the request an appropriate number times before aborting the certificate request and attempting with an a alternative EST Server. [RFC 7030 Section 4.2.3](https://tools.ietf.org/html/rfc7030#section-4.2.3)
 
 If the EST Server returns any other HTTP response, the request has been unsuccessful, this could be caused by a malformed request, server side error or the EST Client not being authorised. The EST Client SHOULD restart the EST workflow with an alternative EST Server if present, else the EST Client SHOULD implement an exponential backoff algorithm, with a staring period of 1 second before retrying.
 
@@ -247,6 +249,8 @@ Renewal of the TLS Certificate SHOULD be attempted no sooner than 50% of the cer
 The EST Client SHOULD generate a new CSR matching the TLS certificate it is being used to replace. The EST Client SHOULD make a HTTPS request containing the CSR to the `/simplereenroll` endpoint of the EST Server. The EST Client MUST include the TLS Certificate being renewed during the TLS handshake with the EST Server.
 
 If the EST Server returns a HTTP 200 response the certificate request was successful and the EST Client SHOULD use the returned TLS Certificate and its chain of trust for all further requests to its NMOS APIs. The EST Client MUST remove any previously issued TLS Certificates and key pairs.
+
+If the EST Server returns a HTTP 202, the request was accepted, but the certificate has not been processed yet. The response SHOULD include a `Retry-After` header and the EST Client MUST not attempt re-sending the request before the defined time has expired. The EST Client SHOULD attempt resending the request an appropriate number times before aborting the certificate request and attempting with an a alternative EST Server. [RFC 7030 Section 4.2.3](https://tools.ietf.org/html/rfc7030#section-4.2.3)
 
 If the EST Server returns any other HTTP response, the request has been unsuccessful. The EST Client SHOULD re-submit the request to an alternative EST Server if present. Otherwise the EST Client SHOULD carry on using the existing TLS Certificate if still valid and re-attempt renewal after half of the remaining period of validity has elapsed.
 

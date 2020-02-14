@@ -230,7 +230,7 @@ If explicit trust of the EST Server is **Disabled**, the EST Client SHOULD make 
 
 #### Generate Certificate Signing(CSR) Request
 
-The EST Client SHOULD create a CSR for each digital signature algorithm it supports, with an appropriate Key Length. The CSR MUST contain a Common Name that is resolvable via DNS on the current domain and appropriate values for the other CSR fields. The manufacturer MAY allow the optional CSR fields to be configured by the operator. The EST Client MAY use an existing private key to sign the CSR, if the private key has been compromised the EST Client MUST generate a new pair to sign the SCR.
+The EST Client SHOULD create a CSR for each digital signature algorithm it supports, with an appropriate Key Length. The CSR MUST contain a Common Name that is resolvable via DNS on the current domain and appropriate values for the other CSR fields. The manufacturer MAY allow the optional CSR fields to be configured by the operator. The EST Client MAY use an existing private key to sign the CSR, if the private key has been compromised the EST Client MUST generate a new pair to sign the CSR.
 
 #### Certificate Request
 
@@ -246,7 +246,7 @@ If the EST Server returns any other HTTP response, the request has been unsucces
 
 Renewal of the TLS Certificate SHOULD be attempted no sooner than 50% of the certificate's expiry time or before the 'Not Before' date on the certificate. It is RECOMMENDED that certificate renewal is performed after 80% of the expiry time. If the EST Client's TLS Certificate is no longer valid then the [Initial Certificate Provisioning](#initial-certificate-provisioning) workflow should be followed.
 
-The EST Client SHOULD generate a new CSR matching the TLS certificate it is being used to replace. The EST Client MAY use the existing private key to sign the CSR, if the private key has been compromised the EST Client MUST generate a new pair to sign the SCR. The EST Client SHOULD make a HTTPS request containing the CSR to the `/simplereenroll` endpoint of the EST Server. The EST Client MUST include the TLS Certificate being renewed during the TLS handshake with the EST Server.
+The EST Client SHOULD generate a new CSR matching the TLS certificate it is being used to replace. The EST Client MAY use the existing private key to sign the CSR, if the private key has been compromised the EST Client MUST generate a new pair to sign the CSR. The EST Client SHOULD make a HTTPS request containing the CSR to the `/simplereenroll` endpoint of the EST Server. The EST Client MUST include the TLS Certificate being renewed during the TLS handshake with the EST Server.
 
 If the EST Server returns a HTTP 200 response the certificate request was successful and the EST Client SHOULD use the returned TLS Certificate and its chain of trust for all further requests to its NMOS APIs. The EST Client MUST remove any previously issued TLS Certificates and key pairs.
 

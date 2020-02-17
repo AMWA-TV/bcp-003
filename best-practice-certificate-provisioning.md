@@ -24,6 +24,7 @@
         - [EST Server API](#est-server-api)
         - [EST Server Authentication](#est-server-authentication)
         - [EST Server - Client Authentication](#est-server---client-authentication)
+        - [EST Server Side Key Generation](#est-server-side-key-generation)
     - [EST Client](#est-client-1)
         - [Initial Certificate Provisioning](#initial-certificate-provisioning)
             - [EST Server Discovery](#est-server-discovery)
@@ -171,6 +172,11 @@ This MUST include the following API endpoints:
 | Enrollment of Clients           | /simpleenroll   |
 | Re-enrollment of Clients        | /simplereenroll |
 
+This MAY include the following API endpoints:
+
+| Operation                       | Operation path  |
+| ------------------------------- | --------------- |
+| Server-Side Key Generation      | /serverkeygen   |
 
 ### EST Server Authentication
 
@@ -191,6 +197,18 @@ The exact process for manual authentication will be implementation specific, but
 The EST Server MUST be capable of issuing TLS Certificates signed for all Digital Signature algorithms.
 
 The EST Server MUST return a TLS Certificate with the Extended Key Usage set for both TLS Server Authentication and TLS Client Authentication as per [RFC 5280][RFC-5280]. This is to allow the TLS Certificate to be used both as a server certificate to authenticate NMOS APIs to NMOS Clients and for authentication of the EST Client to the EST Server during certificate renewal.
+
+### EST Server Side Key Generation
+
+The EST Server MAY support the server side generated key endpoint `/serverkeygen`, which should be implemented in accordance with [RFC 7030](https://tools.ietf.org/html/rfc7030#section-4.4).
+
+If server side generated key endpoint is supported the EST Server MUST perform client authentication as per [EST Server - Client Authentication](#est-server---client-authentication).
+
+If the EST Client is authenticated, the EST Server MUST return the TLS Certificate and private key used to sign the certificate.
+
+If requested by the EST Client, the EST Server's MUST encrypt the returned private key.
+
+The EST Server SHOULD generate a key of appropriate length and digital signature algorithm.
 
 ## EST Client
 

@@ -33,6 +33,7 @@
             - [Certificate Request](#certificate-request)
         - [Certificate Renewal](#certificate-renewal)
         - [Root Certificate Authority Renewal](#root-certificate-authority-renewal)
+        - [EST Server Side Key Generation](#est-server-side-key-generation-1)
         - [Expired Manufacturer Issued TLS Client Certificate](#expired-manufacturer-issued-tls-client-certificate)
         - [Connection to new network](#connection-to-new-network)
         - [Certificate Revocation](#certificate-revocation)
@@ -200,7 +201,7 @@ The EST Server MUST return a TLS Certificate with the Extended Key Usage set for
 
 ### EST Server Side Key Generation
 
-The EST Server MAY support the server side generated key endpoint `/serverkeygen`, which should be implemented in accordance with [RFC 7030](https://tools.ietf.org/html/rfc7030#section-4.4).
+The EST Server MAY support the server side generated key endpoint `/serverkeygen`, which should be implemented in accordance with [RFC 7030](https://tools.ietf.org/html/rfc7030#section-4.4). This endpoint allows low power devices unable to generate their own key, to request a TLS certificate.
 
 If server side generated key endpoint is supported the EST Server MUST perform client authentication as per [EST Server - Client Authentication](#est-server---client-authentication).
 
@@ -219,6 +220,8 @@ An EST Client SHOULD allow EST to be disabled, preventing the EST Client from be
 An EST Client SHOULD allow manual configuration of the EST Server's Hostname, Port and Arbitrary Label, to prevent the EST Client from requesting a TLS Certificate from a rogue server. The default value SHOULD be **Not Set**, enabling DNS-SD discovery.
 
 An EST Client SHOULD allow explicit trust of EST server to be disable, to prevent the EST Client from requesting a TLS Certificate from a rogue server. The default value SHOULD be explicit trust of EST Server **Enabled**. More information about explicit trust of an EST Server can be found in the [Get Root CA](#get-root-ca) section.
+
+An EST Client MAY allow an externally generate private keys to be loaded and used to sign CSR's, this is support support low power devices that are unable to generate their own private key. Care SHOULD be taken to maintain the confidentiality of the private keys externally generated and loaded on the device.
 
 An EST Client MUST maintain a list of publicly trusted Certificate Authorities, used to verify the identity of the EST Server. It MUST be possible to update this list of publicly trusted Certificate Authorities.
 
@@ -266,7 +269,7 @@ Renewal of the TLS Certificate SHOULD be attempted no sooner than 50% of the cer
 
 The EST Client SHOULD generate a new CSR matching the TLS certificate it is being used to replace. The EST Client MAY use the existing private key to sign the CSR, if the private key has been compromised the EST Client MUST generate a new pair to sign the CSR. The EST Client SHOULD make a HTTPS request containing the CSR to the `/simplereenroll` endpoint of the EST Server. The EST Client MUST include the TLS Certificate being renewed during the TLS handshake with the EST Server.
 
-If the EST Server returns a HTTP 200 response the certificate request was successful and the EST Client SHOULD use the returned TLS Certificate and its chain of trust for all further requests to its NMOS APIs. The EST Client MUST remove any previously issued TLS Certificates and key pairs.
+If the EST Server returns a HTTP 200 response the certificate request was successful and the EST Client SHOULD use the returned TLS Certificate and its chain of trust for all further requests to its NMOS APIs. The EST Client MUST remove any previously issued TLS Certificates and key.
 
 If the EST Server returns a HTTP 202, the request was accepted, but the certificate has not been processed yet. The response SHOULD include a `Retry-After` header and the EST Client MUST not attempt re-sending the request before the defined time has expired. The EST Client SHOULD attempt resending the request an appropriate number times before aborting the certificate request and attempting with an a alternative EST Server. [RFC 7030 Section 4.2.3](https://tools.ietf.org/html/rfc7030#section-4.2.3)
 
@@ -276,6 +279,18 @@ If the EST Server returns any other HTTP response, the request has been unsucces
 
 Renewal of the Root CA SHOULD be attempted no sooner than 50% of the certificate's expiry time or before the 'Not Before' date on the certificate. It is RECOMMENDED that certificate renewal is performed after 80% of the expiry time. To renew the Root CA and the EST Client's TLS Certificate follow the [Initial Certificate Provisioning](#initial-certificate-provisioning) workflow, using the existing TLS Certificate for authentication if still valid.
 If the returned Root Certificate Authority by the EST Server is the same as the existing Root Certificate Authority, the EST Client SHOULD re-attempt renewal of the Root Certificate Authority after half of the remaining period of validity has elapsed.
+
+### EST Server Side Key Generation
+
+An EST Server MAY support server side key generation, allowing low power devices to request a TLS Certificate without having to perform the computationally expensive process of generating a private key.
+
+If the EST Server supports server side key generation, the EST Client SHOULD make a request to the EST Server endpoint `/serverkeygen` in accordance with [RFC 7030](https://tools.ietf.org/html/rfc7030#section-4.4).
+
+The EST Client SHOULD request that the returned private key is encrypted using either symmetric or asymmetric encryption, by including the appropriate information in the CSR.
+
+The EST Client SHOULD include the manufacturer installed TLS Client Certificate if present and valid during the TLS handshake with the EST Server. If the TLS certificate is no longer valid, the [Expired Manufacturer Issued TLS Client Certificate](#Expired-Manufacturer-Issued-TLS-Client-Certificate) workflow should be followed.
+
+Renewal of the TLS Certificate can either be performed using the existing private key following the [Certificate Renewal](#certificate-renewal) workflow, if the key has not been compromised or re-running the [EST Server Side Key Generation](#est-server-side-key-generation) workflow, using the previously issued TLS Certificate for authentication.
 
 ### Expired Manufacturer Issued TLS Client Certificate
 

@@ -188,7 +188,7 @@ The EST Server MAY also support manual authentication of the EST Client if:
 - The deployment chooses to enforce an extra authentication step.
 The exact process for manual authentication will be implementation specific, but the EST Server MUST provide enough information to the operator so they can authenticate the EST Client. During the manual authentication the EST Server MUST respond with either HTTP 202 or HTTP 503 and the response MUST include a `Retry-After` header.
 
-The EST Server MUST be capable of issuing TLS Certificates signed with both RSA and ECDSA keys.
+The EST Server MUST be capable of issuing TLS Certificates signed for all Digital Signature algorithms.
 
 The EST Server MUST return a TLS Certificate with the Extended Key Usage set for both TLS Server Authentication and TLS Client Authentication as per [RFC 5280][RFC-5280]. This is to allow the TLS Certificate to be used both as a server certificate to authenticate NMOS APIs to NMOS Clients and for authentication of the EST Client to the EST Server during certificate renewal.
 

@@ -251,4 +251,4 @@ In order for this to be implemented the following work is required:
     advertise the authentication server.
 
 > TODO: Is this future work to be performed in a later phase, or is this future work
-that needs to be complete prior to publication of this document?
+> that needs to be complete prior to publication of this document?

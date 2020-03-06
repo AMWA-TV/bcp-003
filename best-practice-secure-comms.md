@@ -1,40 +1,8 @@
 # AMWA BCP-003-01: Securing communications in NMOS APIs
+{:.no_toc}
 
-[//]: # (ToC goes after this comment. Generate with gen-toc.sh <this-file> and paste in.)
-
-- [Scope](#scope)
-- [Use of Normative Language](#use-of-normative-language)
-- [Normative References](#normative-references)
-- [Definitions](#definitions)
-  - [API](#api)
-  - [Server](#server)
-  - [Client](#client)
-  - [Message](#message)
-- [Introduction (informative)](#introduction-informative)
-- [TLS](#tls)
-  - [TLS Versions](#tls-versions)
-  - [TLS 1\.3 Cipher Suites](#tls-13-cipher-suites)
-  - [TLS 1\.2 Cipher Suites](#tls-12-cipher-suites)
-  - [X\.509 Certificates and Certificate Authority](#x509-certificates-and-certificate-authority)
-- [Server Behaviour](#server-behaviour)
-  - [Certificate Management: Server](#certificate-management-server)
-  - [HTTP: Server](#http-server)
-  - [WebSocket: Server](#websocket-server)
-  - [Other Protocols: Server](#other-protocols-server)
-  - [DNS\-SD: Server](#dns-sd-server)
-- [Client Behaviour](#client-behaviour)
-  - [Certificate Management: Client](#certificate-management-client)
-  - [HTTP: Client](#http-client)
-  - [WebSocket: Client](#websocket-client)
-  - [Other Protocols: Client](#other-protocols-client)
-  - [DNS\-SD: Client](#dns-sd-client)
-- [Other Considerations](#other-considerations)
-  - [DHCP](#dhcp)
-  - [DNS](#dns)
-- [Recommendations for Future Interface Specifications](#recommendations-for-future-interface-specifications)
-- [Further Reading](#further-reading)
-
-[//]: # (ToC goes before this comment)
+* A markdown unordered list which will be replaced with the ToC, excluding the "Contents header" from above
+{:toc}
 
 ## Scope
 
@@ -458,10 +426,6 @@ BBC R&D White Papers [337][BBC-WHP337] and [338][BBC-WHP338] provide more inform
 securing NMOS APIs with TLS and PKI, and many references to online resources and
 test tools. [337][BBC-WHP337] also discusses IPv6.
 
-[//]: ## (References)
-
-[//]: ### (Normative)
-
 [RFC-2119]: https://tools.ietf.org/html/rfc2119
 "Key words for use in RFCs to Indicate Requirement Levels"
 
@@ -487,8 +451,6 @@ Certificate Revocation List (CRL) Profile"
 
 [RFC-8446]: https://tools.ietf.org/html/rfc8446
 "Transport Layer Security 1.3"
-
-[//]: ### (Informative)
 
 [BBC-WHP337]: https://www.bbc.co.uk/rd/publications/whitepaper337 "HTTPS Configuration for the AMWA NMOS APIs"
 

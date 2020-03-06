@@ -279,19 +279,11 @@ On start up or on change of network state the EST Client MUST attempt to discove
 The EST Client SHOULD periodically check the revocation status of both the Root CA and their TLS Certificates using [OCSP][RFC-6960] and [CRL][RFC-5280]. If a TLS Certificate is revoked, the EST Client MUST stop using the revoked certificate immediately and follow [Initial Certificate Provisioning](#initial-certificate-provisioning) workflow to replace the certificate.
 
 ## TODO:
-<<<<<<< HEAD
-* Support for EST Server side generation of keys?
-    * EST can optionally support EST Server side generation of keys
-    * For low power devices, this could be useful, but should only be added if really necessary as not supported by many EST Servers
-* Consider using using TLS Client Certificates when using NMOS API, for use with BCP-003-02 OAuth
-* Consider including unique information in the manufacturer client certificate, such as MAC address, so the EST Server can validate that the client certificate presented was for the device in question (eg. the firmware has not been loaded onto a fake device)
-=======
-
 - Support for EST Server side generation of keys?
   - EST can optionally support EST Server side generation of keys
   - For low power devices, this could be useful, but should only be added if really necessary as not supported by many EST Servers
 - Consider using using TLS Client Certificates when using NMOS API, for use with BCP-003-02 OAuth
->>>>>>> e7912585038f9bf4c4813d3224549c58d6ed4eb2
+- Consider including unique information in the manufacturer client certificate, such as MAC address, so the EST Server can validate that the client certificate presented was for the device in question (eg. the firmware has not been loaded onto a fake device)
 
 ## Further Reading
 

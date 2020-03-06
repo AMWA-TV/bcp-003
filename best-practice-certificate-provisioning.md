@@ -1,44 +1,8 @@
-# [Work In Progress] Best Practice Certificate Provisioning
+# \[Work In Progress\] Best Practice Certificate Provisioning
+{:.no_toc}
 
-<!-- TOC -->
-
-- [[Work In Progress] Best Practice Certificate Provisioning](#work-in-progress-best-practice-certificate-provisioning)
-    - [Scope](#scope)
-    - [Use of Normative Language](#use-of-normative-language)
-    - [Normative References](#normative-references)
-    - [Definitions](#definitions)
-        - [API](#api)
-        - [CSR (Certificate Signing Request)](#csr-certificate-signing-request)
-        - [EST (Enrollment over Secure Transport)](#est-enrollment-over-secure-transport)
-        - [EST Server](#est-server)
-        - [EST Client](#est-client)
-        - [NMOS Server](#nmos-server)
-        - [NMOS Client](#nmos-client)
-    - [Introduction (informative)](#introduction-informative)
-    - [Automated Certificate Provisioning Flow (informative)](#automated-certificate-provisioning-flow-informative)
-    - [DNS-SD Advertisement](#dns-sd-advertisement)
-        - [DNS-SD TXT Records](#dns-sd-txt-records)
-            - [pri](#pri)
-            - [api_selector](#api_selector)
-    - [EST Server Behaviour](#est-server-behaviour)
-        - [EST Server API](#est-server-api)
-        - [EST Server Authentication](#est-server-authentication)
-        - [EST Server - Client Authentication](#est-server---client-authentication)
-    - [EST Client](#est-client-1)
-        - [Initial Certificate Provisioning](#initial-certificate-provisioning)
-            - [EST Server Discovery](#est-server-discovery)
-            - [Get Root CA](#get-root-ca)
-            - [Generate Certificate Signing(CSR) Request](#generate-certificate-signingcsr-request)
-            - [Certificate Request](#certificate-request)
-        - [Certificate Renewal](#certificate-renewal)
-        - [Root Certificate Authority Renewal](#root-certificate-authority-renewal)
-        - [Expired Manufacturer Issued TLS Client Certificate](#expired-manufacturer-issued-tls-client-certificate)
-        - [Connection to new network](#connection-to-new-network)
-        - [Certificate Revocation](#certificate-revocation)
-    - [TODO:](#todo)
-    - [Further Reading](#further-reading)
-
-<!-- /TOC -->
+* A markdown unordered list which will be replaced with the ToC, excluding the "Contents header" from above
+{:toc}
 
 ## Scope
 
@@ -278,10 +242,11 @@ On start up or on change of network state the EST Client MUST attempt to discove
 The EST Client SHOULD periodically check the revocation status of both the Root CA and their TLS Certificates using [OCSP][RFC-6960] and [CRL][RFC-5280]. If a TLS Certificate is revoked, the EST Client MUST stop using the revoked certificate immediately and follow [Initial Certificate Provisioning](#initial-certificate-provisioning) workflow to replace the certificate.
 
 ## TODO:
-* Support for EST Server side generation of keys?
-    * EST can optionally support EST Server side generation of keys
-    * For low power devices, this could be useful, but should only be added if really necessary as not supported by many EST Servers
-* Consider using using TLS Client Certificates when using NMOS API, for use with BCP-003-02 OAuth
+
+- Support for EST Server side generation of keys?
+  - EST can optionally support EST Server side generation of keys
+  - For low power devices, this could be useful, but should only be added if really necessary as not supported by many EST Servers
+- Consider using using TLS Client Certificates when using NMOS API, for use with BCP-003-02 OAuth
 
 ## Further Reading
 

@@ -1,4 +1,4 @@
-# [Work In Progress] Best Practice Authorization
+# \[Work In Progress\] Best Practice Authorization
 
 Please see the IS-10 Specification at [NMOS Authorization][IS-10] for further details regarding implementing
 authorization with the NMOS suite of APIs.
@@ -18,7 +18,7 @@ implement specific NMOS Interface Specifications.
 
 ### IS-04 - Discovery and Registration
 
-When registering resources with an instance of an [IS-04 Registry], the Registry MUST register the Client ID
+When registering resources with an instance of an [IS-04 Registry][], the Registry MUST register the Client ID
 of the client performing the registration. The Client ID can be found within the `client_id` claim of the
 valid JWT access token used in the HTTP request.
 

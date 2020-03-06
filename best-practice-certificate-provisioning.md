@@ -287,26 +287,25 @@ On start up or on change of network state the EST Client MUST attempt to discove
 An EST Client SHOULD periodically check the revocation status of both the Root CA and their TLS Certificates using [OCSP][RFC-6960] and [CRL][RFC-5280]. If a TLS Certificate is revoked, the EST Client MUST stop using the revoked certificate immediately and follow [Initial Certificate Provisioning](#initial-certificate-provisioning) workflow to replace the certificate.
 
 ## TODO:
-- Support for EST Server side generation of keys?
-  - EST can optionally support EST Server side generation of keys
-  - For low power devices, this could be useful, but should only be added if really necessary as not supported by many EST Servers
 - Consider using using TLS Client Certificates when using NMOS API, for use with BCP-003-02 OAuth
 - Consider including unique information in the manufacturer client certificate, such as MAC address, so the EST Server can validate that the client certificate presented was for the device in question (eg. the firmware has not been loaded onto a fake device)
 - Use of 802.1AR - secure device identity for a distinct PKI for client Auth
-- Define EST Client support for the CSR endpoint
+- Define EST Client support for the CSR endpoint on the EST Server
 - Define the use of Root CA Key Update, for Root CA rollover/renewal
-
+- Possible extensions to EST RFC
+  - Add method to signal certificate profile, eg. TLS Client Auth or TLS Server Auth
+  - Add method to signal profile for server side key generation, digital signature algorithm
+  - discover of EST API
 
 ## Security Considerations
 
 Boostrap Distribution of CA Certificate
 - It has been decided that EST Clients will implicitly trust EST Server's found using DNS-SD, no authentication of its TLS Certificate automatic or manual, needs to be performed.
-- However EST Clients MUST use the CA returned by the EST Server endpoint `/cacerts` to establish an Explict Trust Anchor database used to for subsequent TLS authentication of the EST Server.
+- However EST Clients MUST use the CA returned by the EST Server endpoint `/cacerts` to establish an Explicit Trust Anchor database used to for subsequent TLS authentication of the EST Server.
 - This deviation from the EST specification has been allowed due to the minimal risk around trusting a rogue EST Server
   - If an EST Client is provisioned an incorrect CA Certificate by the rogue EST Server the EST Client would trust NMOS Node or NMOS registries. It would not divulge sensitive information, but quite clearly not work.
   - If an EST CLient is provisioned with a TLS Certificate by the rogue EST Server, the EST Client would not be trusted by other NMOS Nodes and Controller on the network, and therefore not work correctly.
   - This dispensation should not be applied to NMOS Controllers, as if they have the incorrect CA installed they would trust rogue devices.
-
 
 ## Further Reading
 

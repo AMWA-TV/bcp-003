@@ -1,47 +1,8 @@
-# [Work In Progress] Best Practice Certificate Provisioning
+# \[Work In Progress\] Best Practice Certificate Provisioning
+{:.no_toc}
 
-<!-- TOC -->
-
-- [[Work In Progress] Best Practice Certificate Provisioning](#work-in-progress-best-practice-certificate-provisioning)
-    - [Scope](#scope)
-    - [Use of Normative Language](#use-of-normative-language)
-    - [Normative References](#normative-references)
-    - [Definitions](#definitions)
-        - [API](#api)
-        - [CSR (Certificate Signing Request)](#csr-certificate-signing-request)
-        - [EST (Enrollment over Secure Transport)](#est-enrollment-over-secure-transport)
-        - [EST Server](#est-server)
-        - [EST Client](#est-client)
-        - [NMOS Server](#nmos-server)
-        - [NMOS Client](#nmos-client)
-    - [Introduction (informative)](#introduction-informative)
-    - [Automated Certificate Provisioning Flow (informative)](#automated-certificate-provisioning-flow-informative)
-    - [DNS-SD Advertisement](#dns-sd-advertisement)
-        - [DNS-SD TXT Records](#dns-sd-txt-records)
-            - [pri](#pri)
-            - [api_selector](#api_selector)
-    - [EST Server Behaviour](#est-server-behaviour)
-        - [EST Server API](#est-server-api)
-        - [EST Server Authentication](#est-server-authentication)
-        - [EST Server - Client Authentication](#est-server---client-authentication)
-        - [EST Server Side Key Generation](#est-server-side-key-generation)
-    - [EST Client](#est-client-1)
-        - [Initial Certificate Provisioning](#initial-certificate-provisioning)
-            - [EST Server Discovery](#est-server-discovery)
-            - [Get Root CA](#get-root-ca)
-            - [Generate Certificate Signing(CSR) Request](#generate-certificate-signingcsr-request)
-            - [Certificate Request](#certificate-request)
-        - [Certificate Renewal](#certificate-renewal)
-        - [Root Certificate Authority Renewal](#root-certificate-authority-renewal)
-        - [EST Server Side Key Generation](#est-server-side-key-generation-1)
-        - [Expired Manufacturer Issued TLS Client Certificate](#expired-manufacturer-issued-tls-client-certificate)
-        - [Connection to new network](#connection-to-new-network)
-        - [Certificate Revocation](#certificate-revocation)
-    - [TODO:](#todo)
-    - [Security Considerations](#security-considerations)
-    - [Further Reading](#further-reading)
-
-<!-- /TOC -->
+* A markdown unordered list which will be replaced with the ToC, excluding the "Contents header" from above
+{:toc}
 
 ## Scope
 
@@ -206,11 +167,11 @@ The EST Server MUST return a TLS Certificate with the Extended Key Usage set for
 
 The EST Server MAY support the server side generated key endpoint `/serverkeygen`, which SHOULD be implemented in accordance with [RFC 7030](https://tools.ietf.org/html/rfc7030#section-4.4). This endpoint allows devices unable to generate their own key pair with the required entropy, to request a TLS certificate.
 
-If server side generated key endpoint is supported, the EST Server MUST perform client authentication and authorisation as per [EST Server - Client Authentication](#est-server---client-authentication).
+If the server side generated key endpoint is supported the EST Server MUST perform client authentication and authorisation as per [EST Server - Client Authentication](#est-server---client-authentication).
 
 If the EST Client is authenticated and authorised, the EST Server MUST return the TLS Certificate and private key used to sign the certificate.
 
-If requested by the EST Client, the EST Server's MUST encrypt the returned private key.
+If requested by the EST Client, the EST Server MUST encrypt the returned private key.
 
 The EST Server SHOULD generate a key of an appropriate length.
 
@@ -226,7 +187,7 @@ An EST Client SHOULD allow manual configuration of the EST Server's Hostname, Po
 
 An EST Client SHOULD allow explicit trust of EST server to be disable, to prevent the EST Client from requesting a TLS Certificate from a rogue server. The default value SHOULD be explicit trust of EST Server **Enabled**. More information about explicit trust of an EST Server can be found in the [Get Root CA](#get-root-ca) section.
 
-An EST Client MAY allow externally generated keys to be loaded and used to sign the CSR's, this is to support devices that are unable to generate their own key pairs. Care SHOULD be taken to maintain the confidentiality of the private keys externally generated and loaded on the device.
+An EST Client MAY allow an externally generated private keys to be loaded and used to sign CSR's, this is intended to support low power devices that are unable to generate their own private key. Care SHOULD be taken to maintain the confidentiality of the private keys externally generated and loaded on the device.
 
 An EST Client MAY maintain a database of implicitly trusted Certificate Authorities, used to verify the identity of the EST Server. It MUST be possible to update this database of implicitly trusted Certificate Authorities. This database needs to be carefully managed to reduce the chance of a third-party CA with poor certification practices from being trusted.
 
@@ -268,11 +229,15 @@ The CSR request SHOULD include information specific to the current authenticated
 
 For each generated CSR the EST Client SHOULD make a HTTPS request containing the CSR to the `/simpleenroll` endpoint of the EST Server. The EST Client SHOULD include the manufacturer installed TLS Client Certificate if present and valid during the TLS handshake with the EST Server. If the TLS certificate is no longer valid, the [Expired Manufacturer Issued TLS Client Certificate](#Expired-Manufacturer-Issued-TLS-Client-Certificate) workflow should be followed.
 
-If the EST Server returns a HTTP 200 response the certificate request was successful and the EST Client should use the returned TLS Certificate and its chain of trust for all further requests to NMOS APIs.
+#### Certificate Request Response
+
+If the EST Server returns a HTTP 200 response the certificate request was successful and the EST Client should use the returned TLS Certificate and its chain of trust for all further requests to NMOS APIs. The EST Client MUST remove any previously issued TLS Certificates and keys.
 
 If the EST Server returns a HTTP 202, the request was accepted, but the certificate has not been processed yet. The response SHOULD include a `Retry-After` header and the EST Client MUST not attempt re-sending the request before the defined time has expired. If the TLS session is renegotiated and the CSR includes identity linking information, the CSR will need to be re-generated. The EST Client SHOULD attempt resending the request an appropriate number times before aborting the certificate request and attempting with an a alternative EST Server. [RFC 7030 Section 4.2.3](https://tools.ietf.org/html/rfc7030#section-4.2.3)
 
 If the EST Server returns any other HTTP response, the request has been unsuccessful, this could be caused by a malformed request, server side error or the EST Client not being authorised. The EST Client SHOULD restart the EST workflow with an alternative EST Server if present, else the EST Client SHOULD implement an exponential backoff algorithm, with a staring period of 1 second before retrying.
+
+If the EST Client is performing a renewal and the request is unsuccessful, the EST Client SHOULD carry on using the existing TLS Certificate if still valid and re-attempt renewal after half of the remaining period of validity has elapsed. If the remaining validity is less than 1 day, the EST Client SHOULD implement an exponential backoff algorithm, with a staring period of 1 second before retrying.
 
 ### Certificate Renewal
 
@@ -280,11 +245,7 @@ Renewal of the TLS Certificate SHOULD be attempted no sooner than 50% of the cer
 
 The EST Client SHOULD generate a new CSR matching the TLS certificate it is being used to replace. The EST Client MAY use the existing key pair to sign the CSR, if the private key has been compromised the EST Client MUST generate a new pair to sign the CSR. The EST Client SHOULD make a HTTPS request containing the CSR to the `/simplereenroll` endpoint of the EST Server. The EST Client MUST include the TLS Certificate being renewed during the TLS handshake with the EST Server.
 
-If the EST Server returns a HTTP 200 response the certificate request was successful and the EST Client SHOULD use the returned TLS Certificate and its chain of trust for all further requests to its NMOS APIs. The EST Client MUST remove any previously issued TLS Certificates and keys.
-
-If the EST Server returns a HTTP 202, the request was accepted, but the certificate has not been processed yet. The response SHOULD include a `Retry-After` header and the EST Client MUST not attempt re-sending the request before the defined time has expired. If the TLS session is renegotiated and the CSR includes identity linking information, the CSR will need to be re-generated. The EST Client SHOULD attempt resending the request an appropriate number times before aborting the certificate request and attempting with an a alternative EST Server. [RFC 7030 Section 4.2.3](https://tools.ietf.org/html/rfc7030#section-4.2.3)
-
-If the EST Server returns any other HTTP response, the request has been unsuccessful. The EST Client SHOULD re-submit the request to an alternative EST Server if present. Otherwise the EST Client SHOULD carry on using the existing TLS Certificate if still valid and re-attempt renewal after half of the remaining period of validity has elapsed.
+EST Client SHOULD handle the EST Server's response as per [Certificate Request Response](#certificate-request-response).
 
 ### Root Certificate Authority Renewal
 
@@ -301,11 +262,7 @@ The EST Client SHOULD request that the returned private key is encrypted using e
 
 The EST Client SHOULD include the manufacturer installed TLS Client Certificate if present and valid during the TLS handshake with the EST Server. If the TLS certificate is no longer valid, the [Expired Manufacturer Issued TLS Client Certificate](#Expired-Manufacturer-Issued-TLS-Client-Certificate) workflow should be followed.
 
-If the EST Server returns a HTTP 200 response the certificate request was successful and the EST Client SHOULD use the returned TLS Certificate and its chain of trust for all further requests to its NMOS APIs. The EST Client MUST remove any previously issued TLS Certificates and keys.
-
-If the EST Server returns a HTTP 202, the request was accepted, but the certificate has not been processed yet. The response SHOULD include a `Retry-After` header and the EST Client MUST not attempt re-sending the request before the defined time has expired. The EST Client SHOULD attempt resending the request an appropriate number times before aborting the certificate request and attempting with an a alternative EST Server. [RFC 7030 Section 4.2.3](https://tools.ietf.org/html/rfc7030#section-4.2.3)
-
-If the EST Server returns any other HTTP response, the request has been unsuccessful. The EST Client SHOULD re-submit the request to an alternative EST Server if present. Otherwise the EST Client SHOULD carry on using the existing TLS Certificate if still valid and re-attempt renewal after half of the remaining period of validity has elapsed.
+EST Client SHOULD handle the EST Server's response as per [Certificate Request Response](#certificate-request-response).
 
 The EST Client SHOULD be capable of using a TLS Certificate generated using any Digital Signature algorithm, but MUST be capable of using a TLS Certificate signed using an RSA key.
 
@@ -330,14 +287,14 @@ On start up or on change of network state the EST Client MUST attempt to discove
 An EST Client SHOULD periodically check the revocation status of both the Root CA and their TLS Certificates using [OCSP][RFC-6960] and [CRL][RFC-5280]. If a TLS Certificate is revoked, the EST Client MUST stop using the revoked certificate immediately and follow [Initial Certificate Provisioning](#initial-certificate-provisioning) workflow to replace the certificate.
 
 ## TODO:
-* Support for EST Server side generation of keys?
-    * EST can optionally support EST Server side generation of keys
-    * For low power devices, this could be useful, but should only be added if really necessary as not supported by many EST Servers
-* Consider using using TLS Client Certificates when using NMOS API, for use with BCP-003-02 OAuth
-* Consider including unique information in the manufacturer client certificate, such as MAC address, so the EST Server can validate that the client certificate presented was for the device in question (eg. the firmware has not been loaded onto a fake device)
-* Use of 802.1AR - secure device identity for a distinct PKI for client Auth
-* Define EST Client support for the CSR endpoint
-* Define the use of Root CA Key Update, for Root CA rollover/renewal
+- Support for EST Server side generation of keys?
+  - EST can optionally support EST Server side generation of keys
+  - For low power devices, this could be useful, but should only be added if really necessary as not supported by many EST Servers
+- Consider using using TLS Client Certificates when using NMOS API, for use with BCP-003-02 OAuth
+- Consider including unique information in the manufacturer client certificate, such as MAC address, so the EST Server can validate that the client certificate presented was for the device in question (eg. the firmware has not been loaded onto a fake device)
+- Use of 802.1AR - secure device identity for a distinct PKI for client Auth
+- Define EST Client support for the CSR endpoint
+- Define the use of Root CA Key Update, for Root CA rollover/renewal
 
 
 ## Security Considerations
@@ -349,6 +306,7 @@ Boostrap Distribution of CA Certificate
     * If an EST Client is provisioned an incorrect CA Certificate by the rogue EST Server the EST Client would trust NMOS Node or NMOS registries. It would not divulge sensitive information, but quite clearly not work.
     * If an EST CLient is provisioned with a TLS Certificate by the rogue EST Server, the EST Client would not be trusted by other NMOS Nodes and Controller on the network, and therefore not work correctly.
     * This dispensation should not be applied to NMOS Controllers, as if they have the incorrect CA installed they would trust rogue devices.
+
 
 ## Further Reading
 

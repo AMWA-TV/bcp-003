@@ -78,14 +78,14 @@ To enable zero-configuration TLS Certificate provisioning, NMOS implementations 
 1. Before the NMOS Node(EST Client) is shipped from the factory it must be provisioned with a unique TLS Client Certificate, signed by the manufacturer's Certificate Authority
 2. When the EST Client is connected to the target environment's network, it will first discover the location of the EST Server using Unicast DNS-SD.
 3. The EST Client should then request the Root CA for the target network, from the EST Server
-     * The EST Client should assume the EST server found using DNS-SD is trusted and need not perform TLS authentication of the EST Server for this initial transaction.
-    * Using the Root CA returned to secure further communications with the EST Server and NMOS Servers
+    - The EST Client should assume the EST server found using DNS-SD is trusted and need not perform TLS authentication of the EST Server for this initial transaction.
+    - Using the Root CA returned to secure further communications with the EST Server and NMOS Servers
 4. The EST Client must generate a Certificate Signing Request(CSR) for all supported digital signature algorithms with appropriate key lengths
-    * Included in the CSR must be the DNS resolvable name for the current domain of the EST Client
-    * Appropriate values for the remaining CSR fields should be used
+    - Included in the CSR must be the DNS resolvable name for the current domain of the EST Client
+    - Appropriate values for the remaining CSR fields should be used
 5. The EST Client should send each CSR to the EST Server
-    * The EST Client must provide the manufacturer issued certificate during the TLS handshake, if valid
-    * The EST Server will use the TLS Client Certificate to authenticate and then authorise whether the EST Client. If the EST Client meets the local CA's security policy, it will be issued with a TLS Server Certificate.
+    - The EST Client must provide the manufacturer issued certificate during the TLS handshake, if valid
+    - The EST Server will use the TLS Client Certificate to authenticate and then authorise whether the EST Client. If the EST Client meets the local CA's security policy, it will be issued with a TLS Server Certificate.
 6. The EST Client should provide the returned TLS Certificate and the corresponding chain of trust in all future responses returned by its NMOS APIs
 
 The workflow if no valid manufacturer TLS Client Certificate is present or if EST Client is moved to a new network are covered in detail in the following [sections](#est-client).
@@ -300,12 +300,12 @@ An EST Client SHOULD periodically check the revocation status of both the Root C
 ## Security Considerations
 
 Boostrap Distribution of CA Certificate
-* It has been decided that EST Clients will implicitly trust EST Server's found using DNS-SD, no authentication of its TLS Certificate automatic or manual, needs to be performed.
-* However EST Clients MUST use the CA returned by the EST Server endpoint `/cacerts` to establish an Explict Trust Anchor database used to for subsequent TLS authentication of the EST Server.
-* This deviation from the EST specification has been allowed due to the minimal risk around trusting a rogue EST Server
-    * If an EST Client is provisioned an incorrect CA Certificate by the rogue EST Server the EST Client would trust NMOS Node or NMOS registries. It would not divulge sensitive information, but quite clearly not work.
-    * If an EST CLient is provisioned with a TLS Certificate by the rogue EST Server, the EST Client would not be trusted by other NMOS Nodes and Controller on the network, and therefore not work correctly.
-    * This dispensation should not be applied to NMOS Controllers, as if they have the incorrect CA installed they would trust rogue devices.
+- It has been decided that EST Clients will implicitly trust EST Server's found using DNS-SD, no authentication of its TLS Certificate automatic or manual, needs to be performed.
+- However EST Clients MUST use the CA returned by the EST Server endpoint `/cacerts` to establish an Explict Trust Anchor database used to for subsequent TLS authentication of the EST Server.
+- This deviation from the EST specification has been allowed due to the minimal risk around trusting a rogue EST Server
+  - If an EST Client is provisioned an incorrect CA Certificate by the rogue EST Server the EST Client would trust NMOS Node or NMOS registries. It would not divulge sensitive information, but quite clearly not work.
+  - If an EST CLient is provisioned with a TLS Certificate by the rogue EST Server, the EST Client would not be trusted by other NMOS Nodes and Controller on the network, and therefore not work correctly.
+  - This dispensation should not be applied to NMOS Controllers, as if they have the incorrect CA installed they would trust rogue devices.
 
 
 ## Further Reading

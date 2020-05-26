@@ -11,7 +11,7 @@ This is based on best practice used for RESTful APIs, and is intended to promote
 
 Use of insecure communication (plain HTTP etc.) is forbidden within the scope of this document.
 
-Implementation of [BCP-003-01](best-practice-secure-comms.md) is recommended alongside implementing this document.
+Implementation of [BCP-003-01][] is recommended alongside implementing this document.
 
 ## Use of Normative Language
 
@@ -68,7 +68,7 @@ The entity that is using the NMOS API, for example:
 
 This document covers the automated provisioning of TLS Certificates to NMOS Servers, which are then used to secure communications between NMOS Servers and NMOS Clients.
 
-This document is not concerned with the security of the connection used to carry out provisioning of the TLS Certificate, but for the mechanism described in this document to be effective the connection must be secured, ideally using the recommendation covered in [BCP-003-01](best-practice-secure-comms.md).
+This document is not concerned with the security of the connection used to carry out provisioning of the TLS Certificate, but for the mechanism described in this document to be effective the connection must be secured, ideally using the recommendation covered in [BCP-003-01][].
 
 ## Automated Certificate Provisioning Flow (informative)
 
@@ -270,6 +270,8 @@ The IETF RFCs referenced here provide much more information.
 [RFC 6960][RFC-6960] - X.509 Internet Public Key Infrastructure Online Certificate Status Protocol - OCSP
 
 [RFC 7030][RFC-7030] - Enrollment over Secure Transport
+
+[BCP-003-01]: bcp-003-01-securing-communications.md
 
 [RFC-2119]: https://tools.ietf.org/html/rfc2119
 

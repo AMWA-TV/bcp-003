@@ -9,6 +9,6 @@ Our approach is based on TLS 1.2/1.3, X.509 PKI, OAuth 2.0 and JSON Web Tokens.
 
 ## Best Current Practices
 
-- [AMWA BCP-003-01: Securing Communications in NMOS Systems](best-practice-secure-comms.md)
-- [AMWA BCP-003-02 (Work In Progress): Authorization in NMOS Systems](best-practice-authorization.md)
-- [AMWA BCP-003-03 (Work in progress): Certificate Provisioning in NMOS Systems](best-practice-certificate-provisioning.md)
+- [AMWA BCP-003-01: Securing Communications in NMOS Systems](bcp-003-01-securing-communications.md)
+- [AMWA BCP-003-02 (Work In Progress): Authorization in NMOS Systems](bcp-003-02-authorization.md)
+- [AMWA BCP-003-03 (Work in progress): Certificate Provisioning in NMOS Systems](bcp-003-03-certificate-provisioning.md)

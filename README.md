@@ -7,9 +7,8 @@ and authorization for [AMWA NMOS APIs](https://amwa-tv.github.io/nmos).
 
 Our approach is based on TLS 1.2/1.3, X.509 PKI, OAuth 2.0 and JSON Web Tokens.
 
-## Documentation
+## Best Current Practices
 
-- [AMWA BCP-003-01: Securing communications in NMOS APIs](best-practice-secure-comms.md)
-- [future BCP-003-02: Authorization for NMOS APIs](best-practice-authorization.md)
-- [work in progress: Automated TLS Certificate Provisioning for NMOS APIs](best-practice-certificate-provisioning.md)
-- [Initial Security Proposal (for info only)](security-proposal.md)
+- [AMWA BCP-003-01: Securing Communications in NMOS Systems](best-practice-secure-comms.md)
+- [AMWA BCP-003-02 (Work In Progress): Authorization in NMOS Systems](best-practice-authorization.md)
+- [AMWA BCP-003-03 (Work in progress): Certificate Provisioning in NMOS Systems](best-practice-certificate-provisioning.md)

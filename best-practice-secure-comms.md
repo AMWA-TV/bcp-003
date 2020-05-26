@@ -1,4 +1,4 @@
-# AMWA BCP-003-01: Securing communications in NMOS APIs
+# AMWA BCP-003-01: Securing Communications in NMOS Systems
 {:.no_toc}
 
 * A markdown unordered list which will be replaced with the ToC, excluding the "Contents header" from above

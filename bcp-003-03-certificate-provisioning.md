@@ -299,12 +299,12 @@ An EST Client SHOULD periodically check the revocation status of both the Root C
 
 ## Security Considerations
 
-Boostrap Distribution of CA Certificate
+Bootstrap Distribution of CA Certificate
 - It has been decided that EST Clients will implicitly trust EST Server's found using DNS-SD, no authentication of its TLS Certificate automatic or manual, needs to be performed.
 - However EST Clients MUST use the CA returned by the EST Server endpoint `/cacerts` to establish an Explicit Trust Anchor database used to for subsequent TLS authentication of the EST Server.
 - This deviation from the EST specification has been allowed due to the minimal risk around trusting a rogue EST Server
   - If an EST Client is provisioned an incorrect CA Certificate by the rogue EST Server the EST Client would trust NMOS Node or NMOS registries. It would not divulge sensitive information, but quite clearly not work.
-  - If an EST CLient is provisioned with a TLS Certificate by the rogue EST Server, the EST Client would not be trusted by other NMOS Nodes and Controller on the network, and therefore not work correctly.
+  - If an EST Client is provisioned with a TLS Certificate by the rogue EST Server, the EST Client would not be trusted by other NMOS Nodes and Controller on the network, and therefore not work correctly.
   - This dispensation should not be applied to NMOS Controllers, as if they have the incorrect CA installed they would trust rogue devices.
 
 ## Further Reading

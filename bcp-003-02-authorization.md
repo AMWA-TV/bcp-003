@@ -1,4 +1,4 @@
-# \[Work In Progress\] Best Practice Authorization
+# AMWA BCP-003-02: Authorization in NMOS Systems \[Work In Progress\]
 
 Please see the IS-10 Specification at [NMOS Authorization][IS-10] for further details regarding implementing
 authorization with the NMOS suite of APIs.

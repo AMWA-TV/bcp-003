@@ -1,4 +1,4 @@
-# \[Work In Progress\] Best Practice Certificate Provisioning
+# AMWA BCP-003-03: Certificate Provisioning in NMOS Systems \[Work In Progress\]
 {:.no_toc}
 
 * A markdown unordered list which will be replaced with the ToC, excluding the "Contents header" from above
@@ -12,7 +12,7 @@ This is based on best practice used for RESTful APIs, and is intended to promote
 
 Use of insecure communication (plain HTTP etc.) is forbidden within the scope of this document.
 
-Implementation of [BCP-003-01](best-practice-secure-comms.md) is recommended alongside implementing this document.
+Implementation of [BCP-003-01][] is recommended alongside implementing this document.
 
 ## Use of Normative Language
 
@@ -69,7 +69,7 @@ The entity that is using the NMOS API, for example:
 
 This document covers the automated provisioning of TLS Certificates to NMOS Servers, which are then used to secure communications between NMOS Servers and NMOS Clients.
 
-This document is not concerned with the security of the connection used to carry out provisioning of the TLS Certificate, but for the mechanism described in this document to be effective the connection must be secured, ideally using the recommendations covered in [BCP-003-01](best-practice-secure-comms.md).
+This document is not concerned with the security of the connection used to carry out provisioning of the TLS Certificate, but for the mechanism described in this document to be effective the connection must be secured, ideally using the recommendations covered in [BCP-003-01][].
 
 ## Automated Certificate Provisioning Flow (informative)
 
@@ -299,12 +299,12 @@ An EST Client SHOULD periodically check the revocation status of both the Root C
 
 ## Security Considerations
 
-Boostrap Distribution of CA Certificate
+Bootstrap Distribution of CA Certificate
 - It has been decided that EST Clients will implicitly trust EST Server's found using DNS-SD, no authentication of its TLS Certificate automatic or manual, needs to be performed.
 - However EST Clients MUST use the CA returned by the EST Server endpoint `/cacerts` to establish an Explicit Trust Anchor database used to for subsequent TLS authentication of the EST Server.
 - This deviation from the EST specification has been allowed due to the minimal risk around trusting a rogue EST Server
   - If an EST Client is provisioned an incorrect CA Certificate by the rogue EST Server the EST Client would trust NMOS Node or NMOS registries. It would not divulge sensitive information, but quite clearly not work.
-  - If an EST CLient is provisioned with a TLS Certificate by the rogue EST Server, the EST Client would not be trusted by other NMOS Nodes and Controller on the network, and therefore not work correctly.
+  - If an EST Client is provisioned with a TLS Certificate by the rogue EST Server, the EST Client would not be trusted by other NMOS Nodes and Controller on the network, and therefore not work correctly.
   - This dispensation should not be applied to NMOS Controllers, as if they have the incorrect CA installed they would trust rogue devices.
 
 ## Further Reading
@@ -332,6 +332,8 @@ The IETF RFCs referenced here provide much more information.
 [RFC 6960][RFC-6960] - X.509 Internet Public Key Infrastructure Online Certificate Status Protocol - OCSP
 
 [RFC 7030][RFC-7030] - Enrollment over Secure Transport
+
+[BCP-003-01]: bcp-003-01-securing-communications.md
 
 [RFC-2119]: https://tools.ietf.org/html/rfc2119
 

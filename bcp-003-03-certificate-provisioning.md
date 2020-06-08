@@ -106,7 +106,7 @@ _nmos-certs._tcp
 
 The hostname and port of the EST Server MUST be identified via the DNS-SD advertisement, with the full HTTPS path then being resolved via the use of the path-prefix of `/.well-known/` as defined in [RFC 5785][RFC-5785] and the registered name of `est`. Thus, a valid example EST server URI path begins with `https://www.example.com/.well-known/est/`. A DNS A record MUST be provided to allow the hostname to be resolved.
 
-Multiple DNS-SD advertisements for the same API are permitted where the API is exposed via multiple ports, protocols and/or arbitrary label.
+Multiple DNS-SD advertisements for the same API are permitted where the API is exposed via multiple ports, protocols and/or arbitrary labels.
 
 EST Clients MUST support discovering the EST Server through use of unicast DNS-SD service discovery, as described in [RFC 6763][RFC-6763].
 
@@ -287,7 +287,7 @@ On start up or on change of network state the EST Client MUST attempt to discove
 
 An EST Client SHOULD periodically check the revocation status of both the Root CA and their TLS Certificates using [OCSP][RFC-6960] and [CRL][RFC-5280]. If a TLS Certificate is revoked, the EST Client MUST stop using the revoked certificate immediately and follow [Initial Certificate Provisioning](#initial-certificate-provisioning) workflow to replace the certificate.
 
-## Notes to Implementors
+## Notes to Implementers
 
 - The certificate returned by the EST Server MAY not be valid until sometime in the future
   - The 'Not Before' date MUST be checked before using the certificate
@@ -296,10 +296,10 @@ An EST Client SHOULD periodically check the revocation status of both the Root C
 ## Security Considerations
 
 Bootstrap Distribution of CA Certificate:
-- It has been decided that EST Clients MAY implicitly trust the EST Server found using DNS-SD, so no authentication of its TLS Certificate automatic or manual MUST to be performed when using the `/cacerts` endpoint.
+- EST Clients SHOULD implicitly trust the EST Server found using DNS-SD. EST Clients SHOULD NOT validate the trust chain for the EST Server's TLS Certificate when using the `/cacerts` endpoint.
 - EST Clients MUST use the CA returned by the EST Server endpoint `/cacerts` to establish an Explicit Trust Anchor database used for subsequent TLS authentication of the EST Server and NMOS devices.
 - This deviation from the EST specification has been allowed due to the minimal risk around trusting a rogue EST Server
-  - If an EST Client is provisioned with an incorrect CA Certificate by the rogue EST Server the EST Client would trust not NMOS Nodes or NMOS Registries and therefore not divulge sensitive information.
+  - If an EST Client is provisioned with an incorrect CA Certificate by the rogue EST Server the EST Client would not trust NMOS Nodes or NMOS Registries and therefore not divulge sensitive information.
   - If an EST Client is provisioned with a TLS Certificate by the rogue EST Server, the EST Client would not be trusted by other NMOS Nodes and Controllers on the network.
   - This dispensation MUST not be applied to NMOS Controllers, as if they have the incorrect CA installed they would trust rogue devices.
 

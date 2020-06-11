@@ -244,7 +244,7 @@ If the EST Client is performing a renewal and the request is unsuccessful, the E
 
 Renewal of the TLS Certificate SHOULD be attempted no sooner than 50% of the certificate's expiry time or before the 'Not Before' date on the certificate. It is RECOMMENDED that certificate renewal is performed after 80% of the expiry time. If the EST Client's TLS Certificate is no longer valid then the [Initial Certificate Provisioning](#initial-certificate-provisioning) workflow should be followed.
 
-The EST Client SHOULD generate a new CSR matching the TLS certificate it is being used to replace. The EST Client MAY use the existing key pair to sign the CSR, if the private key has been compromised the EST Client MUST generate a new pair to sign the CSR. The EST Client SHOULD make a HTTPS request containing the CSR to the `/simplereenroll` endpoint of the EST Server. The EST Client MUST include the TLS Certificate being renewed during the TLS handshake with the EST Server.
+The EST Client MUST generate a new key pair and CSR matching the TLS certificate it is being used to replace. The EST Client SHOULD make a request containing the CSR to the `/simplereenroll` endpoint of the EST Server. The EST Client MUST include the TLS Certificate being renewed during the TLS handshake with the EST Server.
 
 EST Client SHOULD handle the EST Server's response as per [Certificate Request Response](#certificate-request-response).
 

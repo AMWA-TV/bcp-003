@@ -249,6 +249,10 @@ Servers SHALL NOT accept or respond to plain HTTP requests.
 Servers SHOULD use the Strict-Transport-Security header as per [RFC 6797][RFC-6797]
 to declare that they only will communicate with secure connections.
 
+When using Strict-Transport-Security it is RECOMMENDED that Servers utilise a
+minimum 'max-age' value of '31536000' (12 months) in production deployments.
+Servers SHOULD allow this header to be adjusted or disabled via user configuration.
+
 Servers SHALL reject all requests not explicitly allowed by the API
 with HTTP response code 405 Method not allowed.
 

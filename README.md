@@ -1,15 +1,11 @@
-# AMWA NMOS API Security Recommendations
+# AMWA BCP-003 NMOS API Security Recommendations
 
-This repository is used to document best practice and recommendations,
-as produced by AMWA's API Security group.
-We are looking at confidentiality, identification, integrity, authentication
-and authorization for [AMWA NMOS APIs](https://amwa-tv.github.io/nmos).
+The AMWA BCP-003 suite specifies best practice for security in [NMOS](https://amwa-tv.github.io/nmos) Systems:
 
-Our approach is based on TLS 1.2/1.3, X.509 PKI, OAuth 2.0 and JSON Web Tokens.
 
-## Best Current Practices
-
-- [AMWA BCP-003-01: Securing Communications in NMOS Systems](bcp-003-01-securing-communications.md)
-- [AMWA BCP-003-02 (Work In Progress): Authorization in NMOS Systems](bcp-003-02-authorization.md)
-- [AMWA BCP-003-03 (Work In Progress): Certificate Provisioning in NMOS Systems](bcp-003-03-certificate-provisioning.md)
+Id | Name  | Spec Status | Version(s) | Repository
+:--:|:---:|:---:|:---:|:--:
+BCP-003-01 | [Securing Communications in NMOS Systems](https://amwa-tv.github.io/nmos-secure-communication) | AMWA Specification | | [nmos-secure-communication](https://github.com/AMWA-TV/nmos-secure-communication)
+BCP-003-02 | [Authorization in NMOS Systems](https://amwa-tv.github.io/nmos-authorization-practice) | Work In Progress | | [nmos-authorization-practice](https://github.com/AMWA-TV/nmos-authorization-practice)
+BCP-003-03 | [Certificate Provisioning in NMOS Systems](https://amwa-tv.github.io/nmos-certificate-provisioning) | Work In Progress | | [nmos-certificate-provisioning](https://github.com/AMWA-TV/nmos-certificate-provisioning)
 

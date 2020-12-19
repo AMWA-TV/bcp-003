@@ -1,5 +1,9 @@
 # AMWA BCP-003 NMOS API Security Recommendations
 
+
+<a href="https://github.com/AMWA-TV/nmos-api-security/actions?query=workflow%3ALint"><img src="https://github.com/AMWA-TV/nmos-api-security/workflows/Lint/badge.svg" width="100"/></a> 
+<a href="https://github.com/AMWA-TV/nmos-api-security/actions?query=workflow%3ARender"><img src="https://github.com/AMWA-TV/nmos-api-security/workflows/Render/badge.svg" width="100"/></a> 
+
 The AMWA BCP-003 suite specifies best practice for security in [NMOS](https://amwa-tv.github.io/nmos) Systems:
 
 

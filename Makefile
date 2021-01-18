@@ -1,9 +1,12 @@
 -include .scripts/scripts.mk
 
-.PHONY: build-tools distclean
+.PHONY: lint-tools build-tools distclean
+
+lint-tools:
+	./.init-scripts/make-lint-tools.sh
 
 build-tools:
-	.init-scripts/make-build-tools.sh
+	./.init-scripts/make-build-tools.sh
 
 distclean:
-	.init-scripts/make-distclean.sh
+	./.init-scripts/make-distclean.sh

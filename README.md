@@ -1,13 +1,26 @@
 # AMWA BCP-003 NMOS API Security Recommendations
 
-
 [![Lint Status](https://github.com/AMWA-TV/nmos-api-security/workflows/Lint/badge.svg)](https://github.com/AMWA-TV/nmos-api-security/actions?query=workflow%3ALint)
 [![Render Status](https://github.com/AMWA-TV/nmos-api-security/workflows/Render/badge.svg)](https://github.com/AMWA-TV/nmos-api-security/actions?query=workflow%3ARender)
+[//]: # "INTRO-START"
 
-The AMWA BCP-003 suite specifies best practice for security in [NMOS](https://specs.amwa.tv/nmos) Systems:
+### What does it do?
 
-Id | Name  | Spec Status | Version(s) | Repository
-:--:|:---:|:---:|:---:|:--:
-BCP-003-01 | [Secure Communication in NMOS Systems](https://specs.amwa.tv/bcp-003-01) | AMWA Specification | | [nmos-secure-communication](https://github.com/AMWA-TV/nmos-secure-communication)
-BCP-003-02 | [Authorization in NMOS Systems](https://specs.amwa.tv/bcp-003-02) | Work In Progress | | [nmos-authorization-practice](https://github.com/AMWA-TV/nmos-authorization-practice)
-BCP-003-03 | [Certificate Provisioning in NMOS Systems](https://specs.amwa.tv/bcp-003-03) | Work In Progress | | [nmos-certificate-provisioning](https://github.com/AMWA-TV/nmos-certificate-provisioning)
+- Documents best practice and recommendations for securing AMWA NMOS APIs.
+
+### Why does it matter?
+
+- A secure control plane is essential.
+- These recommendations allow interoperability using widely adopted open technologies.
+
+### How does it work?
+
+- [BCP-003-01](https://specs.amwa.tv/bcp-003-01) recommends securing API communication using TLS 1.2 or better.
+- [BCP-003-02](https://specs.amwa.tv/bcp-003-02) recommends using OAuth 2.0 authorisation using JWT, as per [IS-10](https://specs.amwa.tv/is-10).
+- [BCP-003-03](https://specs.amwa.tv/bcp-003-03) recommends using Enrollment over Secure Transport for certificate provisioning.
+
+[//]: # "INTRO-END"
+
+## Getting started
+
+There is more information about the NMOS Specifications and their GitHub repos at <https://specs.amwa.tv/nmos>.

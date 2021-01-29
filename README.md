@@ -2,6 +2,7 @@
 
 [![Lint Status](https://github.com/AMWA-TV/nmos-api-security/workflows/Lint/badge.svg)](https://github.com/AMWA-TV/nmos-api-security/actions?query=workflow%3ALint)
 [![Render Status](https://github.com/AMWA-TV/nmos-api-security/workflows/Render/badge.svg)](https://github.com/AMWA-TV/nmos-api-security/actions?query=workflow%3ARender)
+
 [//]: # "INTRO-START"
 
 ### What do the recommendations do?

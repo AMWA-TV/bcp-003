@@ -3,7 +3,7 @@
 [![Lint Status](https://github.com/AMWA-TV/nmos-api-security/workflows/Lint/badge.svg)](https://github.com/AMWA-TV/nmos-api-security/actions?query=workflow%3ALint)
 [![Render Status](https://github.com/AMWA-TV/nmos-api-security/workflows/Render/badge.svg)](https://github.com/AMWA-TV/nmos-api-security/actions?query=workflow%3ARender)
 
-[//]: # "INTRO-START"
+<!-- INTRO-START -->
 
 ### What do the recommendations do?
 
@@ -20,7 +20,7 @@
 - [BCP-003-02](https://specs.amwa.tv/bcp-003-02) recommends using OAuth 2.0 authorisation using JWT, as per [IS-10](https://specs.amwa.tv/is-10).
 - [BCP-003-03](https://specs.amwa.tv/bcp-003-03) recommends using Enrollment over Secure Transport for certificate provisioning.
 
-[//]: # "INTRO-END"
+<!-- INTRO-END -->
 
 ## Getting started
 

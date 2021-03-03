@@ -17,7 +17,9 @@
 ### What are the recommendations?
 
 - [BCP-003-01](https://specs.amwa.tv/bcp-003-01) recommends securing API communication using TLS 1.2 or better.
-- [BCP-003-02](https://specs.amwa.tv/bcp-003-02) recommends using OAuth 2.0 authorisation using JWT, as per [IS-10](https://specs.amwa.tv/is-10).
+- [BCP-003-02](https://specs.amwa.tv/bcp-003-02) recommends using OAuth 2.0 authorisation using JWT.
+  - [IS-10](https://specs.amwa.tv/is-10) details how to do this.
+  - [INFO-002](https://specs.amwa.tv/info-002) provides guidance for implementers.
 - [BCP-003-03](https://specs.amwa.tv/bcp-003-03) recommends using Enrollment over Secure Transport for certificate provisioning.
 
 <!-- INTRO-END -->

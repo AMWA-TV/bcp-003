@@ -1,0 +1,9 @@
+amwa_id: BCP-003
+url: https://specs.amwa.tv/bcp-003
+name: Security Recommendations
+status: Suite
+repo_name: bcp-003
+alt_repo_name: nmos-security
+repo_url: https://github.com/AMWA-TV/bcp-003
+default_branch: main
+show_in_index: false

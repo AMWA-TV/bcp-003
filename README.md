@@ -1,7 +1,7 @@
 # AMWA BCP-003 NMOS API Security Recommendations
 
-[![Lint Status](https://github.com/AMWA-TV/nmos-api-security/workflows/Lint/badge.svg)](https://github.com/AMWA-TV/nmos-api-security/actions?query=workflow%3ALint)
-[![Render Status](https://github.com/AMWA-TV/nmos-api-security/workflows/Render/badge.svg)](https://github.com/AMWA-TV/nmos-api-security/actions?query=workflow%3ARender)
+[![Lint Status](https://github.com/AMWA-TV/bcp-003/workflows/Lint/badge.svg)](https://github.com/AMWA-TV/bcp-003/actions?query=workflow%3ALint)
+[![Render Status](https://github.com/AMWA-TV/bcp-003/workflows/Render/badge.svg)](https://github.com/AMWA-TV/bcp-003/actions?query=workflow%3ARender)
 
 <!-- INTRO-START -->
 

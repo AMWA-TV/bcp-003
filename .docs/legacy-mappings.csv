@@ -1,0 +1,10 @@
+legacy_url,legacy_status,target_url,target_status_current,mapping_class,legacy_content_type,legacy_location,target_content_type,target_effective_url
+https://specs.amwa.tv/bcp-003,200,https://specs.amwa.tv/bcp-003/,200,confirmed-inventory,text/html,https://specs.amwa.tv/bcp-003/,text/html,https://specs.amwa.tv/bcp-003/
+https://specs.amwa.tv/bcp-003/,200,https://specs.amwa.tv/bcp-003/,200,confirmed-inventory,text/html,,text/html,https://specs.amwa.tv/bcp-003/
+https://specs.amwa.tv/bcp-003/assets/css/style.css?v=,200,,,no-target-rule,text/css,,,
+https://specs.amwa.tv/bcp-003/assets/images/NMOS-logo.png,200,,,no-target-rule,image/png,,,
+https://specs.amwa.tv/bcp-003/assets/images/from-AMWA-logo.png,200,,,no-target-rule,image/png,,,
+https://specs.amwa.tv/bcp-003/branches/main,200,,,no-target-rule,text/html,https://specs.amwa.tv/bcp-003/branches/main/,,
+https://specs.amwa.tv/bcp-003/branches/main/docs/Overview.html,200,,,no-target-rule,text/html,,,
+https://specs.amwa.tv/bcp-003/docs/Overview.html,404,,,no-target-rule,text/html,,,
+https://specs.amwa.tv/bcp-003/releases/*,404,,,no-target-rule,text/html,,,
